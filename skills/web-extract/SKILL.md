@@ -37,8 +37,8 @@ is out of credits or refuses, fall back without comment (host fetch, then Waybac
    means escalate the same URL to Firecrawl.
 2. Use Firecrawl immediately when JavaScript rendering is already known to be required, or for
    public PDFs, `-Q` structured extraction and interactive pages.
-3. Live discovery: use the host's native web search. Use `firecrawl search` only when the user
-   asks for it or the host has no search tool; it spends credits the scrapes need.
+3. Live discovery: use the host's native web search. Use Firecrawl search (CLI or MCP) only when
+   the user asks for it or the host has no search tool; it spends credits the scrapes need.
 4. Raw `curl` is a diagnostic, not the reading path: it is fast but commonly returns navigation,
    scripts and embedded application state instead of readable evidence.
 
