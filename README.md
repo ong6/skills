@@ -119,7 +119,7 @@ CI fails when they drift.
 <!-- SKILL INDEX START -->
 | Skill | What I use it for |
 |---|---|
-| [`web-extract`](skills/web-extract/SKILL.md) | Read and scrape difficult web pages, escalating to Firecrawl. |
+| [`web-extract`](skills/web-extract/SKILL.md) | Web search and page reads, spending Firecrawl credits first. |
 | [`youtube-transcript`](skills/youtube-transcript/SKILL.md) | Fetch clean captions from a YouTube video. |
 | [`save-video`](skills/save-video/SKILL.md) | File a YouTube video as a searchable note with takeaways, category and tags. |
 | [`datastore`](skills/datastore/SKILL.md) | Keep structured records as append-only JSONL with a local SQLite cache for SQL. |
@@ -155,7 +155,7 @@ _Getting text and data out of the web and video._
 
 | Skill | Does |
 |---|---|
-| [`web-extract`](skills/web-extract/SKILL.md) | Read or extract a web page with a local readability fetch first, escalating to Firecrawl only for JavaScript shells, blocked/thin results, public PDFs, structured extraction or browser interaction. Not for web search (use the host's native search), YouTube (youtube-transcript) or LinkedIn (off-limits). |
+| [`web-extract`](skills/web-extract/SKILL.md) | Search the web and read or extract pages, spending Firecrawl's monthly credits first and switching to the host's native search and a local readability fetch while they are at zero. Use for web searches, reading a URL, JavaScript-heavy or Cloudflare pages, public PDFs, structured extraction or page interaction. Not for YouTube (youtube-transcript) or LinkedIn (off-limits). |
 | [`youtube-transcript`](skills/youtube-transcript/SKILL.md) | Fetch clean transcripts or captions from YouTube URLs or video IDs. Use when the user shares a YouTube link or asks to transcribe, summarize, cite, or read a video. |
 | [`save-video`](skills/save-video/SKILL.md) | Save a YouTube video into the video library of the host repo as a note with overview, key takeaways, category and tags, indexed for later search. Use for "save this video", "add this to my videos", a YouTube link with "keep/remember/save", or "what videos do I have on X" (search the library). Not for a one-off summary the owner only wants to read now (youtube-transcript alone). |
 | [`datastore`](skills/datastore/SKILL.md) | Keep structured, queryable records in a git repository as a SQLite-backed dataset: append-only JSONL logs committed to git are the truth, and a local SQLite cache gives fast SQL. Use when data is many rows with the same fields that will be filtered, joined, deduplicated or trended over time ("track X over time", "store these as a table", "query my jobs/prices/workouts", a script that ingests records daily), or when a workflow needs durable machine state. Not for prose notes, one-off lists that fit in a Markdown table, or secrets. |

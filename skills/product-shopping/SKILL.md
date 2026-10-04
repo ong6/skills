@@ -87,7 +87,7 @@ exists. In order:
    (Google Shopping, PriceSpy, PriceRunner, Idealo) and trackers (Keepa, camelcamelcamel). Stable,
    no walls, history for free.
 2. **Live web search** across the region's major retailers.
-3. **`web-extract`** (Firecrawl) for prices behind JS; it costs credits, so try WebFetch first.
+3. **`web-extract`** for prices behind JS; it picks Firecrawl or a plain fetch by credit balance.
 4. **Your own logged-in session** (Playwright) where the owner has an account. Legitimate access,
    not evasion.
 
@@ -126,7 +126,7 @@ or counterfeit).
   coupons. No leaked keys, dubious grey-market, coupon fraud, or scraping against a site's terms.
 
 # Companion skills
-- **`web-extract`**: Firecrawl for pages a plain fetch can't read; honors its own hard stop.
+- **`web-extract`**: web search and page reads, Firecrawl first while its credits last.
 - **`youtube-transcript`**: mine video reviews for real-world failure modes (Track A).
 - **`compare-price`**: the same product across SG, US and other countries in SGD.
 

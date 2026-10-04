@@ -33,7 +33,7 @@ carries everything the logged-in view does:
 ```bash
 firecrawl scrape "https://realsmart.sg/p/<slug>" -f markdown,json --only-main-content
 ```
-Slug unknown? Use the host's web search for `site:realsmart.sg/p <project name>` rather than
+Slug unknown? Search `site:realsmart.sg/p <project name>` through `web-extract` rather than
 enumerating the sitemap. The page carries REALSCORE, annualized profit, % profitable,
 transaction counts, holding period, rental psf/yield, unit-size mix, per-block section and
 nearest-MRT. Only fall back to the
