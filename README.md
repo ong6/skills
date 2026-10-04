@@ -119,7 +119,7 @@ CI fails when they drift.
 <!-- SKILL INDEX START -->
 | Skill | What I use it for |
 |---|---|
-| [`web-extract`](skills/web-extract/SKILL.md) | Read, search and scrape difficult web pages through Firecrawl. |
+| [`web-extract`](skills/web-extract/SKILL.md) | Read and scrape difficult web pages, escalating to Firecrawl. |
 | [`youtube-transcript`](skills/youtube-transcript/SKILL.md) | Fetch clean captions from a YouTube video. |
 | [`save-video`](skills/save-video/SKILL.md) | File a YouTube video as a searchable note with takeaways, category and tags. |
 | [`datastore`](skills/datastore/SKILL.md) | Keep structured records as append-only JSONL with a local SQLite cache for SQL. |

@@ -32,9 +32,9 @@ developer stock, not a subsale.
 carries everything the logged-in view does:
 ```bash
 firecrawl scrape "https://realsmart.sg/p/<slug>" -f markdown,json --only-main-content
-# slug unknown? search the site rather than enumerating its sitemap:
-firecrawl search "site:realsmart.sg/p <project name>" --limit 3
 ```
+Slug unknown? Use the host's web search for `site:realsmart.sg/p <project name>` rather than
+enumerating the sitemap.
 This carries REALSCORE, annualized profit, % profitable, transaction counts, holding period,
 rental psf/yield, unit-size mix, per-block section and nearest-MRT. Only fall back to the
 login-walled map SPA (`/map?id=<PROJECT>&mode=c`) through the Playwright MCP browser, with the
