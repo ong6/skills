@@ -57,6 +57,9 @@ equal this host's (`os`, `model`, `hostname` prefix, `wsl`, `user`):
   `scope: user` links into those two home folders instead.
 - `root` holds the checkouts `<root>/skills` and `<root>/skills-private` (default `~/Sideproject`). <!-- public-guard: allow -->
 - `enable` and `disable` take skill names, globs and `category:<key>`.
+- `readonly: true` is for a machine that can read the checkouts but never push them (an agent user on a
+  read-only deploy key): `up` pulls and links, records no usage, never tidies, and resets a clean
+  checkout to origin, dropping any local commit, so it keeps fast-forwarding; `autosync` does nothing.
 - No matching machine means project scope, `--repo` only, public skills only.
 - Only symlinks that point into the two checkouts are ever created or removed. Anything else in a
   link folder is left alone and reported as a conflict.

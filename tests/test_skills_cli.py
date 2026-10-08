@@ -895,11 +895,13 @@ class TidyTests(Sandbox):
         self.assertTrue(os.path.isdir(os.path.join(self.private, "skills", "handoff")))
 
 
-class ReadOnlyTests(TidyTests):
+class ReadOnlyTests(Sandbox):
     """`readonly: true` (an agent user on a read-only deploy key): pull and link, never commit or push."""
 
     def setUp(self):
         super().setUp()
+        self.public_bare = self.make_remote(self.public, "skills")
+        self.private_bare = self.make_remote(self.private, "skills-private")
         self.write_machines({"root": self.root, "private": True, "repos": [self.store], "readonly": True})
 
     def test_background_sync_records_no_usage_and_pushes_nothing(self):

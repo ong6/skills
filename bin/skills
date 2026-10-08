@@ -281,7 +281,7 @@ def rule_matches(rule, facts):
 
 
 def default_profile():
-    return {"scope": "project", "root": DEFAULT_ROOT, "private": False, "repos": [],
+    return {"scope": "project", "root": DEFAULT_ROOT, "private": False, "readonly": False, "repos": [],
             "enable": ["*"], "disable": [], "mcp": []}
 
 
@@ -316,6 +316,7 @@ def load_profile(machines, facts):
         if isinstance(raw.get("root"), str) and raw["root"].strip():
             profile["root"] = raw["root"]
         profile["private"] = raw.get("private") is True
+        profile["readonly"] = raw.get("readonly") is True
         for key in ("repos", "enable", "disable", "mcp"):
             if key in raw:
                 profile[key] = str_list(raw[key], profile[key])
@@ -343,6 +344,7 @@ class Context(object):
         self.public = os.path.join(self.root, PUBLIC)
         self.private = os.path.join(self.root, PRIVATE)
         self.use_private = self.profile["private"]
+        self.readonly = self.profile["readonly"]
         repos = [expand(r) for r in (getattr(args, "repo", None) or [])]
         repos += [expand(r) for r in self.profile["repos"]]
         self.repos = dedupe_paths(repos)
@@ -1025,10 +1027,11 @@ def only_tidy_commits(checkout):
     return bool(subjects) and all(TIDY_SUBJECT.match(line) for line in subjects.splitlines())
 
 
-def sync_one(checkout):
+def sync_one(checkout, readonly=False):
     """The pull flow: fetch; fast-forward, or rebase local commits, when the tree is clean; push
     commits an auto-sync, tidy or usage scan left behind. A dirty tree is left for the Stop
-    hook's `autosync`, which commits first. (moved, error)"""
+    hook's `autosync`, which commits first. Read-only (a machine that can't push) resets a clean
+    tree to upstream instead, dropping any local commit, so it keeps fast-forwarding. (moved, error)"""
     with file_lock(checkout_lock_path(checkout), blocking=False) as got:
         if not got:
             return False, None
@@ -1041,6 +1044,11 @@ def sync_one(checkout):
         if status is None or status:
             return False, None
         ahead, behind = ahead_behind(checkout)
+        if readonly:
+            if not (ahead or behind):
+                return False, None
+            r = git(checkout, "reset", "--quiet", "--hard", "@{u}")
+            return True, (None if r is not None and r.returncode == 0 else "reset failed: " + last_line(r))
         moved = False
         if behind:
             if ahead:
@@ -1082,7 +1090,7 @@ def sync_checkouts(ctx, relink=True, maintain=True):
         touch(stamp("attempted"))
         changed, errors = False, []
         if os.path.isdir(ctx.public):
-            moved, err = sync_one(ctx.public)
+            moved, err = sync_one(ctx.public, ctx.readonly)
         else:
             moved, err = clone(os.environ.get("SKILLS_PUBLIC_URL") or PUBLIC_URL, ctx.public)
         changed = changed or moved
@@ -1091,7 +1099,7 @@ def sync_checkouts(ctx, relink=True, maintain=True):
             errors.append("public: " + err)
         if ctx.use_private:
             if os.path.isdir(ctx.private):
-                moved, err = sync_one(ctx.private)
+                moved, err = sync_one(ctx.private, ctx.readonly)
             else:
                 url = private_url()
                 moved, err = clone(url, ctx.private) if url else (False, "no non-interactive access")
@@ -1100,7 +1108,7 @@ def sync_checkouts(ctx, relink=True, maintain=True):
                 errors.append("private: " + err)
         if public_ok:
             touch(stamp("fetched"))
-        if maintain and maintain_due():
+        if maintain and not ctx.readonly and maintain_due():
             touch(stamp("maintained"))
             notes, committed = maintain_checkouts(ctx)
             errors.extend(notes)
@@ -1823,7 +1831,8 @@ def cmd_doctor(args):
         return 1 if problems else 0
     say("machine  {} ({})".format(ctx.machine or UNMATCHED,
                                  "skills profile" if ctx.has_profile else "default profile"))
-    say("scope    {} · root {} · private {}".format(ctx.scope, short(ctx.root), "yes" if ctx.use_private else "no"))
+    say("scope    {} · root {} · private {}{}".format(ctx.scope, short(ctx.root), "yes" if ctx.use_private else "no",
+                                                  " · read-only" if ctx.readonly else ""))
     say("repos    " + (", ".join(short(r) for r in ctx.repos) or "(none)"))
     for label, state in sorted(report["checkouts"].items()):
         if state["exists"]:
@@ -2307,6 +2316,8 @@ def cmd_autosync(args):
     push failed for a transient reason, 0 otherwise. Prints nothing when nothing changed."""
     ctx = Context(args)
     code = 0
+    if ctx.readonly:
+        return code  # nothing leaves a read-only machine
     for checkout in ctx.checkouts():
         if not os.path.isdir(os.path.join(checkout, ".git")) or settled(checkout):
             continue
