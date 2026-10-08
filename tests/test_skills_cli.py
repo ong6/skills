@@ -895,6 +895,48 @@ class TidyTests(Sandbox):
         self.assertTrue(os.path.isdir(os.path.join(self.private, "skills", "handoff")))
 
 
+class ReadOnlyTests(TidyTests):
+    """`readonly: true` (an agent user on a read-only deploy key): pull and link, never commit or push."""
+
+    def setUp(self):
+        super().setUp()
+        self.write_machines({"root": self.root, "private": True, "repos": [self.store], "readonly": True})
+
+    def test_background_sync_records_no_usage_and_pushes_nothing(self):
+        heads = {b: self.git(b, "rev-parse", "main") for b in (self.public_bare, self.private_bare)}
+        r = self.cli("_sync", "--repo", self.store, "--machines", self.machines,
+                     env={"SKILLS_MAINTAIN_INTERVAL": "0"})
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertFalse(os.path.exists(os.path.join(self.private, "usage", "test-box.json")))
+        for bare, head in heads.items():
+            self.assertEqual(self.git(bare, "rev-parse", "main"), head)
+        self.assertEqual(self.git(self.private, "rev-parse", "HEAD"), heads[self.private_bare])
+
+    def test_a_stranded_local_commit_is_dropped_so_upstream_still_arrives(self):
+        self.git(self.private, "commit", "-q", "--allow-empty", "-m", "Record skill usage on Test box")
+        other = os.path.join(self.tmp, "other")
+        self.git(self.tmp, "clone", "-q", self.private_bare, other)
+        self.add_skill(other, "cv", "Remote body.\n")
+        self.git(other, "commit", "-qam", "remote edit")
+        self.git(other, "push", "-q", "origin", "HEAD:main")
+        r = self.up("--wait")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertEqual(self.git(self.private, "rev-parse", "HEAD"), self.git(self.private_bare, "rev-parse", "main"))
+        self.assertNotIn("Record skill usage", self.git(self.private_bare, "log", "--format=%s", "main"))
+
+    def test_autosync_publishes_nothing(self):
+        head = self.git(self.public_bare, "rev-parse", "main")
+        write(os.path.join(self.public, "skills", "handoff", "notes.md"), "More.\n")
+        r = self.cli("autosync", "--repo", self.store, "--machines", self.machines)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertEqual(self.git(self.public_bare, "rev-parse", "main"), head)
+        self.assertEqual(self.git(self.public, "rev-parse", "HEAD"), head)
+
+    def test_doctor_shows_read_only(self):
+        r = self.cli("doctor", "--repo", self.store, "--machines", self.machines)
+        self.assertIn("read-only", r.stdout)
+
+
 class StubTests(Sandbox):
     def shelve(self, checkout, name):
         os.makedirs(os.path.join(checkout, "rarely-used"), exist_ok=True)
