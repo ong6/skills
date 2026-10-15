@@ -134,6 +134,9 @@ Check these on every render, alongside clipping:
   for a different idea.
 - **Small text survives a screen share.** Diagram labels, footers and kickers stay at 16px or more
   on a 1920 stage, with readable contrast; split a diagram rather than shrink it.
+- **Borrow the audience's own figure style.** When the customer's site has a recognisable card
+  and illustration style (panel colour, numbering, label pills, framing), mirror it rather than
+  inventing one; check a screenshot of their site side by side with a rendered slide.
 - **Audience text only.** Reminders to yourself ("wait a minute", "switch it back") go in the
   notes, not on the slide.
 - **Numbers a listener can check.** Table columns must add up when read aloud; if two numbers
