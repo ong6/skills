@@ -117,7 +117,8 @@ Check these on every render, alongside clipping:
 - **Align across a row.** Cards side by side share their row lines: labels, illustrations,
   headlines and subtitles each start at the same height, so a headline that wraps to two lines
   never pushes its subtitle out of line. In HTML, use CSS subgrid
-  (`grid-template-rows: subgrid`) with the headline aligned to the bottom of its row.
+  (`grid-template-rows: subgrid`) with the headline aligned to the bottom of its row. Never cap the grid's height: a squeezed row lets a two-line headline grow up into the
+  illustration. Size the headline row `minmax(max-content, 1fr)` and check the longest headline.
 - **Fill the frame.** Content that sits in the top half of a slide reads as unfinished: let cards
   stretch to the available height, or enlarge the type, rather than leave the bottom empty.
 - **Give empty card space a job.** A simple line illustration in the deck's palette (one stroke
