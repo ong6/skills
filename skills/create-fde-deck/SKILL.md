@@ -127,6 +127,21 @@ Check these on every render, alongside clipping:
   source line that adds nothing.
 - **No orphaned units.** Keep a number with its unit (`8-second`, `1.2 seconds`, or a
   non-breaking space) so a line never ends on a bare number.
+- **One treatment per illustration slot.** Same size and position for every illustration in a
+  layout, drawn inside about 80% of its frame and centred in its box, with clear space before the
+  headline. Cream outline, one accent; the warning colour only on the problem. Never reuse an icon
+  for a different idea.
+- **Small text survives a screen share.** Diagram labels, footers and kickers stay at 16px or more
+  on a 1920 stage, with readable contrast; split a diagram rather than shrink it.
+- **Audience text only.** Reminders to yourself ("wait a minute", "switch it back") go in the
+  notes, not on the slide.
+- **Numbers a listener can check.** Table columns must add up when read aloud; if two numbers
+  look contradictory, rename the columns or say the arithmetic in the subtitle.
+- **Open and close the frame.** End the talk on a closing slide, and put a divider before an
+  appendix so the last slide shown isn't a Q&A card.
+- **Get an outside review.** Before shipping, have a fresh reviewer (another agent or person)
+  look at every rendered slide for alignment, overflow, consistency and legibility, then fix and
+  re-render.
 
 ## Untrusted input
 
