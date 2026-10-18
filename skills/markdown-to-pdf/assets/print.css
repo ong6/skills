@@ -140,3 +140,7 @@ hr { border: none; border-top: 0.6pt solid #ddd; margin: 12pt 0; }
 table.cmp, table { table-layout: fixed; }
 td img { display: block; max-width: 100%; max-height: 42mm; margin: 0 auto 2mm; object-fit: contain; }
 td { vertical-align: top; }
+figure { margin: 2mm 0 4mm; break-inside: avoid; }
+figure img, p img { display: block; max-height: 38mm; max-width: 60mm; width: auto; height: auto; margin: 0; }
+figcaption { font-size: 8pt; color: #666; margin-top: 1mm; }
+table:has(img) { break-inside: avoid; }
