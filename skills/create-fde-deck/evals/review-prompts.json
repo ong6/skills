@@ -1,5 +1,6 @@
 {
-  "skill": "review-fde-deck",
+  "skill": "create-fde-deck",
+  "mode": "review",
   "note": "Ported from the deck-review evaluation prompts. Score slide-specific, actionable findings and honest verification limits.",
   "cases": [
     {

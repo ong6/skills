@@ -13,8 +13,8 @@ Report what changed, what is still unknown, and what decision the evidence permi
 
 Proof-of-concept readouts, pilot scorecards, executive outcome reviews, evaluation summaries and
 go/no-go recommendations. Usually 5–7 slides: decision headline, pilot scope, measured outcomes,
-failures and limitations, alternatives or gates, next steps. When the pilot is kept with the
-track-pilot-evidence skill, build only from its customer-safe handover, never from internal records.
+failures and limitations, alternatives or gates, next steps. When the pilot record mixes
+customer-visible and internal entries, build only from the customer-visible ones.
 
 ## Workflow
 

@@ -1,12 +1,10 @@
 ---
 name: skill-search
 description: >-
-  Find out whether a skill exists for a job, including skills that are not loaded: rarely used
-  skills (idle a month, so not linked), retired skills in the private archive, and external
-  skills the catalog lists from saved videos and repos. Use for "do we have a skill for...",
-  "find a skill that...", "is there a skill like X", "see if we have a skill like this", or when
-  a manual or the user names a skill that is not in the loaded list. Not for writing or revising
-  a skill (skillsmith), and not for running a skill that is already loaded.
+  Find whether a skill exists for a job, including unloaded ones: rarely used, retired (private
+  archive) and external skills in the catalog. Use for "do we have a skill for...", "is there a
+  skill like X", or a skill named but not loaded. Not for: writing or revising a skill
+  (skillsmith).
 ---
 
 # Skill search

@@ -1,6 +1,6 @@
 ---
 name: write-a-brief
-description: Write or tighten a one-to-two-page meeting brief for a professional (contractor, consultant, doctor, vendor). Use for "meeting brief", "prep doc", "questions to ask", or fixing a brief that is too long or AI-sounding; not for email drafts or general notes.
+description: Write or tighten a one-to-two-page meeting brief for a professional (contractor, consultant, doctor, vendor), including what to ask about their quote. Use for "meeting brief", "prep doc", "questions to ask", "check this quote", or fixing a brief that is too long or AI-sounding; not for email drafts or general notes.
 ---
 
 # Write Brief
@@ -42,6 +42,23 @@ minutes, and buries the questions that matter. Over ~8 questions, cut; don't ref
 
 **Name the one question that matters most and say why**, one line under the list. It's what
 the owner falls back on when the meeting runs short.
+
+## When the meeting is about a quote
+
+Before sorting questions, check the commercial frame; it decides which line items are worth asking
+about. Trace every number to the quote's extracted text (`pdftotext -layout`), never memory.
+
+- **Allowance:** quote against the budget line or PC sum, with GST stated in or out.
+- **Who keeps a saving:** under a PC sum it may credit the main contract, not the owner. Unknown
+  means it is the first question.
+- **Bundle terms:** a bundle-conditional discount means ask for a revised bundle quote, never
+  delete lines. A price exactly list × discount is a spec question, not a discount one.
+- **Timeline:** validity against the decision date and lead times. A quote lapsing first is an ask.
+- **Like for like:** compare items by function, not price bracket, and check finishes against the
+  packages already decided.
+
+Only decisions and blocking questions go in *Ask them*. Typos, stale rates and payment terms are
+parked in the background note until the revised quote arrives.
 
 ## Step 2: write it like a person
 

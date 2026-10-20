@@ -1,12 +1,10 @@
 ---
 name: skillsmith
 description: >-
-  Make an agent skill grounded in the current repository, then prove it beats the
-  same model without it: gate whether a skill is the right mechanism, inventory
-  existing skills and conventions, draft and lint, run a blinded baseline-versus-skill
-  evaluation, and keep or retire. Use whenever asked to add, create, write, revise,
-  install, review, or prove a skill for Claude Code or Codex; not for typo-only
-  edits, AGENTS.md rules, hooks, or prompts that do not change a skill.
+  Make or revise an agent skill grounded in the current repo, then prove it beats the same model
+  without it: gate, inventory, draft, lint, blinded baseline-vs-skill eval, keep or retire. Use to
+  add, write, revise, merge, review or prove a skill. Not for: typo-only edits, AGENTS.md rules,
+  hooks.
 ---
 
 # Skillsmith

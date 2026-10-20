@@ -1,13 +1,10 @@
 ---
 name: ux-design
 description: >-
-  Audit or design the user experience of a web page or app: navigation, states, touch targets,
-  focus, contrast, motion, responsive layout, copy in the interface. Runs a checklist pass
-  against its bundled UX guidelines, then hands the visual direction to the frontend-design
-  plugin skill. Use for "UX pass", "audit the UX", "does this page feel right", "make this
-  usable on mobile", "accessibility check", or any new UI before it ships. Not for the
-  aesthetic alone (frontend-design), charts (dataviz), diagrams (system-diagram), or adding a
-  case-study page.
+  Audit or design a page or app's UX against a usability checklist (navigation, states, touch
+  targets, focus, contrast, motion, mobile), then hand visuals to frontend-design. Use for "UX
+  pass", "audit the UX", "make this usable on mobile", "accessibility check". Not for: aesthetics
+  alone (frontend-design), charts (dataviz).
 ---
 
 # Design UX

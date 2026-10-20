@@ -1,14 +1,10 @@
 ---
 name: decide
 description: >-
-  Help the user make a hard, consequential choice and commit to it: reframe the real decision,
-  find the option they did not list, put rough numbers on what decides it, check the downside,
-  pre-mortem the pick, and end with one recommendation, the fact that would flip it and a tripwire
-  set in advance. Use for "should I X or Y", "help me decide", "I can't decide between", "is it
-  worth quitting / switching / rewriting / moving", "what would you do", "stress-test this
-  decision", job offers, quit-or-stay, build-or-rewrite, buy-or-wait, where to spend months of
-  effort. Not for picking a product or model to buy (product-shopping), evaluating a property
-  listing, trivial reversible preferences, or factual questions.
+  Make a hard, consequential choice and commit: reframe it, find the unlisted option, rough
+  numbers, downside, pre-mortem, one pick, the fact that flips it and a tripwire. Use for "should
+  I X or Y", "help me decide", "is it worth quitting / switching", job offers. Not for: what to
+  buy (product-shopping), trivial or factual questions.
 ---
 
 # Decide

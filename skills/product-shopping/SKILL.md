@@ -1,16 +1,25 @@
 ---
 name: product-shopping
-description: Recommend what product to buy, or find the best legitimate price for a chosen model in the buyer's own region. Use for comparisons, shortlists, "is X worth it", "which X should I get", cheapest price, deal checks, or price history; not for cross-country SG-vs-US comparisons in SGD (compare-price) or just listing which shops carry an item.
+description: >-
+  Recommend what product to buy, find the best legitimate price for a chosen model, compare its
+  landed cost across countries (SG vs US and others, in SGD), or say where to buy it. Use for "which
+  X should I get", "is X worth it", cheapest price, deal checks, price history, "should I buy this
+  overseas", "where can I buy X". Not for: property (evaluate-condo).
 ---
 
 # Compare Products
 
-Decide **what** to get (Track A), then find the best **price** (Track B). Run whichever the ask needs.
+Decide **what** to get (Track A), then find the best **price** (Track B), or compare it **across
+countries** (Track C). Run whichever the ask needs.
 
 - **Model not pinned down** ("what should I get", "compare these", "is X worth it") → Track A,
   which hands the winner to Track B for the **Before you buy** line.
 - **Exact model known** ("where's it cheapest", "is this deal good", "price history", "good time
   to buy") → Track B directly. Skip Track A's interview.
+- **Several countries** ("SG vs US price", "where in the world is it cheapest", "should I buy this
+  overseas", a trip abroad) → Track C: read
+  [references/cross-country.md](references/cross-country.md) and follow it.
+- **"Where can I buy X"** → Where to buy, below; then offer Track A or B.
 
 Before shortlisting, read the owner's **brand exclusions** in the host repo's shopping notes (its
 folder manual, e.g. `AGENTS.md`, says where notes go) and never recommend an excluded brand, even
@@ -116,6 +125,22 @@ or counterfeit).
 - **Watch-outs:** fake "was" prices, expired or region-locked coupons, refurb vs new, model-year
   confusion (`REFERENCE.md` §6.2–6.3).
 
+# Where to buy
+
+List the venues that fit the item and the buyer's region, not a generic web search.
+- Start from the host repo's venue directory (the shopping notes above). If it has none, say so
+  and offer to start one; if nothing in it fits, say so and search broadly (Track B step 3).
+- Pin the item category and where they will buy (home, online to home, a trip). Ask one short
+  question only if either is unclear.
+- Order venues by fit for this item, each with what it is best for and the practical note
+  (location for a shop; shipping, warranty or authenticity caveat online). For
+  authenticity-critical items, prefer brand stores and authorised retailers over marketplaces.
+- Give the trade-off in one line ("marketplace cheapest but slow and no warranty; brand store
+  faster with returns"). Respect timing: never suggest an overseas shop for something needed at
+  home next week.
+- When the buyer names a new venue worth keeping, add it to the directory. Never invent an
+  address or a detail; leave a `TODO:`.
+
 # Rules
 
 - Honor the buyer's region, currency, and what's actually available to them.
@@ -128,7 +153,7 @@ or counterfeit).
 # Companion skills
 - **`web-extract`**: web search and page reads, Firecrawl first while its credits last.
 - **`youtube-transcript`**: mine video reviews for real-world failure modes (Track A).
-- **`compare-price`**: the same product across SG, US and other countries in SGD.
 
-See [REFERENCE.md](REFERENCE.md): §1 dimension checklist, §2 category blind spots, §3 source
+See [references/cross-country.md](references/cross-country.md) for Track C and
+[REFERENCE.md](REFERENCE.md): §1 dimension checklist, §2 category blind spots, §3 source
 rubric, §4 output template, §5 worked example, §6 pricing reference.

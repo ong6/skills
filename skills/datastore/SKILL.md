@@ -1,12 +1,10 @@
 ---
 name: datastore
 description: >-
-  Keep structured, queryable records in a git repository as a SQLite-backed dataset: append-only
-  JSONL logs committed to git are the truth, and a local SQLite cache gives fast SQL. Use when data is
-  many rows with the same fields that will be filtered, joined, deduplicated or trended over time
-  ("track X over time", "store these as a table", "query my jobs/prices/workouts", a script that
-  ingests records daily), or when a workflow needs durable machine state. Not for prose notes,
-  one-off lists that fit in a Markdown table, or secrets.
+  Keep many same-shaped rows as a git-backed dataset: append-only JSONL as truth, a local SQLite
+  cache for SQL. Use for "track X over time", "store these as a table", "query my
+  jobs/prices/workouts", daily ingest scripts or durable machine state. Not for: prose notes,
+  small Markdown tables, secrets.
 ---
 
 # Manage Records

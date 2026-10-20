@@ -1,14 +1,10 @@
 ---
 name: interview-prep
 description: >-
-  Run interview practice grounded in the candidate's own resume and target-company notes: mock
-  interviews, behavioral STAR answers, number defense, walkthroughs of systems they built,
-  stakeholder simulations, reference system-design walkthroughs, timed DSA coding rounds and plan
-  reps graded and scheduled by due pattern, and debriefs of real interviews that queue what broke.
-  Use for "interview prep", "mock interview", "run a DSA rep", "give me a rep", "what's due",
-  "walk me through a system design", "I just had an interview", "log my onsite"; not for editing a
-  resume or cover letter, finding or applying to jobs, answering recruiters, or building a
-  customer presentation.
+  Interview practice from the candidate's own resume and target-company notes: mocks, STAR
+  answers, system-design walkthroughs, timed DSA reps by due pattern, debriefs of real interviews.
+  Use for "mock interview", "give me a rep", "what's due", "I just had an interview". Not for:
+  live rounds (interview-live), resumes (cv), job hunting.
 ---
 
 # Interview prep

@@ -1,6 +1,10 @@
 ---
 name: feedback-loop
-description: Capture the owner's feedback about how the agent, a skill, a hook, a rule, or a reply behaved, log it in feedback.md, and patch whatever it targets in the same session so the behaviour changes by default. Fires on "don't do X", "stop doing", "why does it", "next time", "I prefer", "that was wrong", "that's annoying", "can I turn this off", "always" or "never" about agent behaviour, or a correction to a reply; not for feedback on the owner's own writing, on other people, or a one-off instruction for the current task.
+description: >-
+  Log the owner's feedback on how the agent, a skill, hook, rule or reply behaved in feedback.md,
+  and patch its target in the same session. Fires on "don't do X", "stop doing", "next time", "I
+  prefer", "that was wrong", "always"/"never" about the agent. Not for: feedback on the owner's
+  writing or a one-off instruction.
 ---
 
 # Feedback loop
@@ -16,7 +20,7 @@ owner never repeats feedback and never maintains the log.
    | Feedback is about | Target | What "applied" means |
    |---|---|---|
    | What a skill did or failed to do | that skill's `SKILL.md` | smallest edit that changes behaviour: a checklist line, a ❌/✅ row, a trigger phrase in `description` |
-   | How every reply should read, or a rule for the whole repo | `CLAUDE.md` (or `AGENTS.md` if that is canonical) | one line in the section that already covers it |
+   | How every reply should read, or a rule for the whole repo | the root `AGENTS.md` (never create a `CLAUDE.md` for it) | one line in the section that already covers it |
    | Something that should happen automatically on an event | the hook script and its registration | edit script, mirror registration for every client, run its tests |
    | A tool's own behaviour (Claude Code, the IDE, a CLI) | that tool's config | make the config change; note if it is per-machine |
    | This loop itself | this `SKILL.md` | same as any skill |
@@ -24,19 +28,24 @@ owner never repeats feedback and never maintains the log.
 
 3. **Apply it.** Edit the target now. Do not ask permission for in-repo edits. Do not add a
    "feedback" section to a skill; fold the change into the step it affects. If the new feedback
-   contradicts an earlier entry, apply the new one and mark the old entry `superseded`.
+   contradicts an earlier entry, apply the new one and mark every entry in that supersede chain
+   `superseded by YYYY-MM-DD` (the new entry's date).
 4. **Verify.** Run the repo's skill validator (the `skillsmith` linter, or whatever check the repo's
    agent manual names) after a skill edit, the hook tests after a hook edit. A failing check means go back to step 3.
-5. **Log it** in `feedback.md` at the repo root, appended in date order. Create the file from the
-   skeleton below if it is missing. Never rewrite or delete earlier entries.
-6. **Reply in one or two lines:** what changed and the absolute path of the file.
+5. **Log it** in `feedback.md` at the repo root: append the entry in date order and add its row
+   to the **Live rules** table. Create the file from the skeleton below if it is missing. Never
+   alter the owner's quoted words.
+6. **Keep it lean.** Move superseded entries, and entries applied more than 30 days ago, verbatim
+   to `archive/feedback/YYYY-MM.md` (the entry's month) in the host repo. **Live rules** keeps one
+   row per rule still in force, wherever its entry now sits; a superseded entry loses its row.
+7. **Reply in one or two lines:** what changed and the absolute path of the file.
 
 ## Log entry
 
 ```markdown
 ## YYYY-MM-DD · short label
 - **Said:** "owner's words"
-- **About:** target from the table (skill name, CLAUDE.md, hook name, tool)
+- **About:** target from the table (skill name, AGENTS.md, hook name, tool)
 - **Applied:** what was edited, one line; or "nothing, one-off"
 - **Status:** applied | pending | superseded by YYYY-MM-DD
 ```
@@ -50,7 +59,15 @@ locked file). Say so in the reply and leave the entry pending until it is done.
 # Feedback log
 
 What the owner said about how the agent, a skill, a hook, or a reply behaved, and what changed
-because of it. Append-only; the `feedback-loop` skill writes here.
+because of it. The `feedback-loop` skill writes here; superseded and older applied entries move to
+`archive/feedback/`.
+
+## Live rules
+
+| Date | Rule | Where it lives | Status |
+|---|---|---|---|
+
+## Entries
 ```
 
 Add the repo's usual frontmatter above the heading if its notes require one.

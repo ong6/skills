@@ -1,17 +1,18 @@
 ---
 name: create-fde-deck
 description: >-
-  Draft a customer-facing field-engineering deck from supplied evidence: a discovery narrative, a
-  technical architecture walkthrough, or a pilot readout with a stop, extend or expand
-  recommendation. Writes a Markdown slide deck (rendered to slides or HTML with whatever tool the
-  host has) in which every claim is labelled evidence, assumption or proposal, held to slide-density
-  limits and checked by a script. Use for "make a discovery deck", "turn these customer notes into
-  slides", "architecture deck for the customer", "pilot readout slides", "POC results deck",
-  "go/no-go deck"; not for critiquing a deck that already exists (review-fde-deck), keeping a
-  pilot's criteria and evidence record (track-pilot-evidence), or interview practice.
+  Draft or review a customer-facing field-engineering deck: discovery, architecture or pilot
+  readout, every claim labelled evidence, assumption or proposal. Use for "turn these notes into
+  slides", "pilot readout", "go/no-go deck", "review this deck", "fact-check my slides". Not for:
+  interview practice.
 ---
 
-# Create an FDE deck
+# Create or review an FDE deck
+
+Two modes. **Create** (below) drafts a deck from supplied evidence. **Review** audits a deck that
+already exists (Markdown, HTML, a slide export or pasted text) before it is shared: read
+[references/review.md](references/review.md) and follow it instead of the create workflow. A
+request to review and then fix runs review first, then its fix loop.
 
 A deck is a decision aid. Every slide advances one decision, and every claim says whether it is
 observed, inferred or proposed. Never invent a number, quote, customer name or guarantee to complete
@@ -159,5 +160,5 @@ any external tool or publishing a deck.
 ## Evaluation
 
 `evals/eval-prompts.json` holds realistic, sparse-evidence and injection cases for each deck type,
-with the checks each answer must pass. Use it when proving or revising this skill; never put the
+and `evals/review-prompts.json` the review cases, with the checks each answer must pass. Use it when proving or revising this skill; never put the
 rubric in customer output.

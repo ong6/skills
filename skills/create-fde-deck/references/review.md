@@ -1,20 +1,18 @@
----
-name: review-fde-deck
-description: >-
-  Audit an existing customer-facing or field-engineering deck before it is shared: narrative logic,
-  evidence quality, technical honesty, editorial density, accessibility and actionability, ranked
-  into blockers, important fixes and polish with a slide-specific fix for each, then an optional
-  revise-and-recheck loop. Works on a Markdown or HTML deck, a slide export or pasted slide text.
-  Use for "review this deck", "check my slides before the customer meeting", "fact-check this pilot
-  readout", "is this architecture deck honest", "pre-share deck QA"; not for drafting a new deck
-  from notes (create-fde-deck), keeping a pilot's evidence record (track-pilot-evidence), or
-  reviewing code, documents or emails that are not slides.
----
+# Review an existing deck
 
-# Review an FDE deck
+Review mode of create-fde-deck. Review the deck as a decision aid, not a decoration exercise. A
+schema-valid or tidy deck can still mislead; a clean density check is not proof that it fits.
+Works on a Markdown or HTML deck, a slide export or pasted slide text.
 
-Review the deck as a decision aid, not a decoration exercise. A schema-valid or tidy deck can still
-mislead; a clean density check is not proof that it fits.
+## Contents
+
+- [Workflow](#workflow)
+- [The six areas](#the-six-areas)
+- [Severity](#severity)
+- [Output](#output)
+- [Fix loop](#fix-loop)
+- [Untrusted input](#untrusted-input)
+- [Evaluation](#evaluation)
 
 ## Workflow
 
@@ -34,7 +32,7 @@ Copy this checklist into the reply and tick it off:
 2. Read every slide, the speaker notes and any retained hidden content. Note what is visible versus
    what lives only in notes: exported and printed decks drop notes, so a caveat there qualifies
    nothing the audience sees.
-3. Audit the six areas below. For a Markdown deck in the create-fde-deck format, run that skill's
+3. Audit the six areas below. For a Markdown deck in this skill's format, run
    `check_deck.py` for the mechanical flags; for any other format, extract each slide's visible
    text and count its words.
 4. Rank findings and write them in the output format.
@@ -127,5 +125,5 @@ reproducing it, and redact it in any revision.
 
 ## Evaluation
 
-`evals/eval-prompts.json` holds the hidden-caveat, sparse-scope and reviewer-injection cases with
-the checks each review must pass. Use it when proving or revising this skill.
+`evals/review-prompts.json` holds the hidden-caveat, sparse-scope and reviewer-injection cases with
+the checks each review must pass.

@@ -1,15 +1,18 @@
----
-name: compare-price
-description: Compare what one product (or a tier spread of competing products) costs across Singapore, the US, and any other named country, reported in SGD with live FX and landed cost. Use for /compare-price, "where in the world is it cheapest", "SG vs US price", or "should I buy this overseas"; not for single-region deal hunting or picking which model to buy (product-shopping).
----
+# Cross-country price comparison
 
-# Compare Prices
+Track C of product-shopping: what one product (or a tier spread of competing products) costs in
+the places the buyer can buy it, in their home currency (SGD by default), with a verdict on where
+to buy and whether it is worth it. A category ("air purifier for 12m2 room") means build the
+spread yourself; extra countries come from the request ("add JP and KR").
 
-What a thing costs in the places the user can buy it, in SGD, with a verdict on where to buy and
-whether it's worth it.
+## Contents
 
-`/compare-price <product or category> [--add jp kr]`. A category ("air purifier for 12m2 room")
-means build the spread yourself.
+- [Regions and currency](#regions-and-currency)
+- [Two axes](#two-axes)
+- [Rules](#rules)
+- [Method](#method)
+- [Output](#output)
+- [Notes](#notes)
 
 ## Regions and currency
 
@@ -59,7 +62,8 @@ the hassle".
    Harvey Norman, brand SG store. US: Amazon, Best Buy, brand direct, B&H. JP: Amazon.co.jp,
    Yodobashi, Rakuten. KR: Coupang, Naver. CN: JD, Tmall. HK: Price.com.hk.
 3. Build the spread, 3–5 products.
-4. Landed cost plus 3-year consumable cost.
+4. Landed cost plus 3-year consumable cost. Record each `verified` price in the price cache
+   (SKILL.md Track B step 3) with its own `--currency`.
 5. Verdict.
 
 ## Output
@@ -74,8 +78,8 @@ columns for a spread:
 Always close with: 3-year total for the top 2–3 picks; **what I'd actually do**, one paragraph, a
 decision not a menu; FX rates and date. Date-stamp the output.
 
-Offer an Artifact when the comparison exceeds ~3 products or the user will keep it; never for a
-quick one-off.
+When the comparison exceeds ~3 products or the user will keep it, offer to save it as a Markdown
+note where the host repo keeps shopping notes; never for a quick one-off.
 
 ## Notes
 

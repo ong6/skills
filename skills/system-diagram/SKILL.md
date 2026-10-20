@@ -1,11 +1,10 @@
 ---
 name: system-diagram
 description: >-
-  Draw a polished system or architecture diagram as hand-authored inline SVG: request flows, RAG
-  and agent pipelines, ingest queues, service maps, before/after comparisons. Use for "system
-  diagram", "architecture diagram", "draw the flow", "diagram how X works", or a figure for
-  a website, a case study, a README, or a research note. Not for charts of data (dataviz), UI
-  mockups (design), or a one-hop relationship that a sentence explains faster.
+  Draw a polished system or architecture diagram as hand-authored inline SVG: request flows, agent
+  pipelines, queues, service maps, before/after. Use for "system diagram", "architecture diagram",
+  "draw the flow", a figure for a site, README or note. Not for: data charts (dataviz), UI
+  mockups, one-hop relationships.
 ---
 
 # System diagram
@@ -15,7 +14,8 @@ reader sees the mechanism in ten seconds, and nothing on the canvas is there for
 
 Built-in `artifact-diagramming` covers the basics (draw the mechanism, label arrows, `currentColor`,
 markers, `viewBox`). This skill adds the taste spec, the workflow, and the output targets used
-here. Read that skill too when it is available; do not restate it.
+here. Read that skill too when it is available, for its SVG technique only (the output still goes
+to the targets below, never an Artifact unasked); do not restate it.
 
 ## Workflow
 
@@ -88,7 +88,8 @@ relative image link. `currentColor` does not inherit through `<img>`, so set exp
 text fill for a light page and keep them readable on GitHub's dark theme (mid greys, not pure
 black).
 
-**Artifacts.** Inline `<svg>` in the HTML page per `artifact-diagramming`.
+**A hosted HTML page** (only when the host supports one and the user asks for it). Inline
+`<svg>` in the page; never offer this route unprompted.
 
 ## Review
 
