@@ -135,6 +135,7 @@ CI fails when they drift.
 | [`ux-design`](skills/ux-design/SKILL.md) | Audit or design a page's UX against a usability checklist before visual polish. |
 | [`3d-design`](skills/3d-design/SKILL.md) | Choose the right authoring and browser workflow for a 3D object or animation. |
 | [`blender-authoring`](skills/blender-authoring/SKILL.md) | Build, animate, render and export Blender scenes with Python. |
+| [`decide`](skills/decide/SKILL.md) | Commit to a hard choice with the numbers, a pre-mortem, a flip fact and a tripwire. |
 | [`trip-planner`](rarely-used/trip-planner/SKILL.md) _(rarely used)_ | Plan or replan a trip with live research on routes, hours, parking and food. |
 | [`product-shopping`](skills/product-shopping/SKILL.md) | Decide what to buy, or find the best legitimate price for a chosen model. |
 | [`compare-price`](skills/compare-price/SKILL.md) | Compare one product's landed cost across countries in a single currency. |
@@ -228,10 +229,11 @@ Elsewhere:
 
 ### Life
 
-_Trips, shopping, property and learning._
+_Trips, shopping, property, learning and hard choices._
 
 | Skill | Does |
 |---|---|
+| [`decide`](skills/decide/SKILL.md) | Help the user make a hard, consequential choice and commit to it: reframe the real decision, find the option they did not list, put rough numbers on what decides it, check the downside, pre-mortem the pick, and end with one recommendation, the fact that would flip it and a tripwire set in advance. Use for "should I X or Y", "help me decide", "I can't decide between", "is it worth quitting / switching / rewriting / moving", "what would you do", "stress-test this decision", job offers, quit-or-stay, build-or-rewrite, buy-or-wait, where to spend months of effort. Not for picking a product or model to buy (product-shopping), evaluating a property listing, trivial reversible preferences, or factual questions. |
 | [`trip-planner`](rarely-used/trip-planner/SKILL.md) _(rarely used)_ | Plan or replan trips using live research for routes, hours, parking, food, tolls, and pacing. Use for itineraries and on-the-road questions about stops, parking, or eating. |
 | [`product-shopping`](skills/product-shopping/SKILL.md) | Recommend what product to buy, or find the best legitimate price for a chosen model in the buyer's own region. Use for comparisons, shortlists, "is X worth it", "which X should I get", cheapest price, deal checks, or price history; not for cross-country SG-vs-US comparisons in SGD (compare-price) or just listing which shops carry an item. |
 | [`compare-price`](skills/compare-price/SKILL.md) | Compare what one product (or a tier spread of competing products) costs across Singapore, the US, and any other named country, reported in SGD with live FX and landed cost. Use for /compare-price, "where in the world is it cheapest", "SG vs US price", or "should I buy this overseas"; not for single-region deal hunting or picking which model to buy (product-shopping). |

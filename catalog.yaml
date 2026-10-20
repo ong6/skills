@@ -21,6 +21,7 @@ skill_summaries:
   product-shopping: Decide what to buy, or find the best legitimate price for a chosen model.
   compare-price: Compare one product's landed cost across countries in a single currency.
   evaluate-condo: Evaluate a Singapore condo listing or development and file a cited verdict.
+  decide: Commit to a hard choice with the numbers, a pre-mortem, a flip fact and a tripwire.
   teach: Run a stateful, multi-session course on a topic in a learning workspace.
   interview-prep: Mock interviews from your own resume, with spoken-plan grading, drills, debriefs, system design.
   create-fde-deck: "Write evidence-labelled field-engineering decks: discovery, architecture, pilot readout."
@@ -223,8 +224,8 @@ categories:
         from_url: https://www.youtube.com/watch?v=_SVU3oC4JX8
   - key: life
     title: Life
-    blurb: Trips, shopping, property and learning.
-    skills: [trip-planner, product-shopping, compare-price, evaluate-condo, teach]
+    blurb: Trips, shopping, property, learning and hard choices.
+    skills: [decide, trip-planner, product-shopping, compare-price, evaluate-condo, teach]
     links: []
   - key: career
     title: Career
