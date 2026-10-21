@@ -53,6 +53,12 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("untrusted quoted data", self.skill)
         self.assertIn("minimum_delta_lower_bound", self.contract)
 
+    def test_gate_revision_two_is_documented(self):
+        self.assertIn("Student t interval", self.skill_flat)
+        self.assertIn("blinding.redact", self.skill_flat)
+        self.assertIn("## Gate revision 2", self.contract)
+        self.assertIn("max_active_agents", self.contract)
+
     def test_make_phase_gates_grounds_and_defines_cases_first(self):
         self.assertIn("Decide whether this needs a skill at all", self.skill)
         self.assertIn("scripts/inventory.py", self.skill)

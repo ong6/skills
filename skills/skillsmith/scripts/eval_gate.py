@@ -621,7 +621,7 @@ def prepare_v1(data: dict, seed: str) -> tuple[dict, dict]:
 
 def prepare_v2(data: dict, seed: str) -> tuple[dict, dict]:
     rng = random.Random(seed)
-    terms = data.get("blinding", {}).get("redact", [])
+    terms = data.get("blinding", {}).get("redact", []) if data["version"] >= 3 else []
     bases = {}
     comparisons = []
     for case in data["cases"]:
@@ -973,7 +973,8 @@ def validate_judgment_v2(packet: dict, key: dict, judgment: dict) -> None:
     for judge in actual:
         if isinstance(judge, dict):
             require_text(judge.get("judge_id"), "judgment judge_id")
-            for comparison in judge.get("comparisons") or []:
+            comparisons = judge.get("comparisons")
+            for comparison in comparisons if isinstance(comparisons, list) else []:
                 if isinstance(comparison, dict):
                     require_text(comparison.get("comparison_id"), f"judge {judge['judge_id']} comparison_id")
     actual_ids = [j.get("judge_id") for j in actual if isinstance(j, dict)]
@@ -1048,7 +1049,8 @@ def validate_judgment_v2(packet: dict, key: dict, judgment: dict) -> None:
             if not isinstance(results, list):
                 raise Invalid(f"judge {judge.get('judge_id')} calibration results must be an array")
             actual_calibration = {
-                item.get("id"): item.get("winner") for item in results if isinstance(item, dict)
+                require_text(item.get("id"), f"judge {judge.get('judge_id')} calibration id"): item.get("winner")
+                for item in results if isinstance(item, dict)
             }
             if (set(actual_calibration) != set(expected_calibration) or len(results) != len(expected_calibration)
                     or any(winner not in ("A", "B", "tie") for winner in actual_calibration.values())):
@@ -1441,7 +1443,8 @@ def decide_v2(packet: dict, key: dict, judgment: dict) -> dict:
             "results": trigger_results, "heldout_failures": heldout_trigger_failures,
         },
         "judge_agreement": agreement_report(winners, judge_ids, heldout_ids),
-        "paired_delta": {field: round(value, 2) for field, value in paired_delta.items()},
+        "paired_delta": {field: round(value, 2) if isinstance(value, float) else value
+                         for field, value in paired_delta.items()},
         "efficiency": efficiency_summary(list(metrics_by_comparison.values())) if efficiency is not None else None,
         "execution_provenance": {
             "policy": key["execution_policy"],

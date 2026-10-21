@@ -70,8 +70,9 @@ in [references/research.md](references/research.md).
   independent judges and three or more for broad, costly, or safety-critical skills. Calibrate every
   judge on frozen reference comparisons before accepting its scores. Judges are repeated
   measurements of a comparison, not independent task trials: average judges within each unique
-  baseline/treatment comparison, compute uncertainty across unique comparisons, and require at
-  least two unique heldout comparisons. Never use judge count as the uncertainty sample size.
+  baseline/treatment comparison, compute a Student t interval across unique comparisons, and
+  require at least two distinct heldout cases. Never use judge count as the uncertainty sample
+  size. Include at least one A and one B correct winner in the calibration set.
 - Preserve failed runs and unknown measurements. Record verbatim transcripts and final outcomes;
   judges must inspect both. Never manufacture an output or score.
 - Give counterbalanced anonymous packets to fresh judge agents. The author and runners do not
@@ -113,10 +114,12 @@ in [references/research.md](references/research.md).
    controlled. Before preparing packets, inspect the host agent tree and process list, then retain
    the native agent/context IDs in each run's provenance; each runner's direct parent is the
    coordinator. Treat any `codex exec`, `claude -p`, or equivalent CLI launch as contamination and
-   replace every affected run.
+   replace every affected run. The helper also rejects runs whose receipt start times and elapsed
+   times show more runners active at once than execution_policy.max_active_agents.
 6. **Blind the comparisons.** Put verbatim transcripts and outcomes into a version 3 input for
-   scripts/eval_gate.py prepare. It emits one packet per judge and counterbalances A/B position
-   for every trial. Keep the key and full packet bundle away from judges; give each judge only its
+   scripts/eval_gate.py prepare. List the text that names the candidate in a transcript (its skill
+   listing line, description, folder path) under blinding.redact so judges cannot tell which run
+   loaded it. It emits one packet per judge and counterbalances A/B position for every trial. Keep the key and full packet bundle away from judges; give each judge only its
    own entry under judge_packets.
 7. **Judge independently.** Spawn fresh judges and require each to pass the frozen calibration set. It then uses only its packet and the contract in
    references/judge-contract.md. It scores every criterion with an exact evidence quote from that
@@ -162,6 +165,8 @@ contents list, references SKILL.md does not link directly, and script dependenci
 line.
 
 Evaluation version 3 is the default for new evaluations. Versions 1 and 2 remain accepted for existing bundles.
+New v3 bundles carry gate revision 2 (t interval, concurrency cap, calibration balance, optional
+redaction; see the contract); bundles prepared earlier replay under the rules they were decided by.
 
     python3 scripts/eval_gate.py prepare \
       --input evaluation-input.json \
