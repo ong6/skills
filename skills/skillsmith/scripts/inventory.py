@@ -13,7 +13,8 @@ sys.path.insert(0, str(Path(__file__).absolute().parent))
 from lint_skill import parse_frontmatter  # noqa: E402
 
 
-REPO_SKILL_ROOTS = (".claude/skills", ".agents/skills", ".codex/skills")
+# Agent discovery folders, plus the layout of a skills checkout (core and shelved tiers).
+REPO_SKILL_ROOTS = (".claude/skills", ".agents/skills", ".codex/skills", "skills", "rarely-used")
 GLOBAL_SKILL_GLOBS = (
     ".claude/skills/*/SKILL.md",
     ".agents/skills/*/SKILL.md",
@@ -34,6 +35,13 @@ def tokens(text: str) -> set[str]:
     """Crude prefix stems, so evaluate and evaluation or create and creation still match."""
     words = re.findall(r"[a-z0-9]+", text.lower())
     return {word[:STEM] for word in words if word not in STOPWORDS and len(word) > 2}
+
+
+def shared_terms(wanted: set[str], have: set[str]) -> set[str]:
+    """Query stems the skill covers; a stem of four or more letters also matches its own prefix,
+    so eval meets evalu(ate) and test meets tests."""
+    return {word for word in wanted if word in have or len(word) >= 4 and any(
+        len(other) >= 4 and (other.startswith(word) or word.startswith(other)) for other in have)}
 
 
 def nested_manuals(repo: Path) -> list[str]:
@@ -80,8 +88,9 @@ def rank(skills: list[dict[str, str]], query: str) -> list[dict[str, object]]:
     ranked = []
     for skill in skills:
         have = tokens(f"{skill['name']} {skill['description']}")
-        score = round(len(wanted & have) / len(wanted), 3) if wanted else 0.0
-        ranked.append({**skill, "overlap": score, "shared_terms": sorted(wanted & have)})
+        shared = shared_terms(wanted, have)
+        score = round(len(shared) / len(wanted), 3) if wanted else 0.0
+        ranked.append({**skill, "overlap": score, "shared_terms": sorted(shared)})
     return sorted(ranked, key=lambda item: (-item["overlap"], item["name"]))
 
 

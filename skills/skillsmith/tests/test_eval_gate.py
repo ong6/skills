@@ -18,12 +18,17 @@ SPEC.loader.exec_module(gate)
 _context_counter = 0
 
 
+def staggered_timestamp(index):
+    """One agent start per second: well inside the four-agent cap for 100 ms runs."""
+    return f"2026-09-21T12:{index // 60:02d}:{index % 60:02d}Z"
+
+
 def native_receipt(agent_id, context_id):
     agent_tree = f"agent={agent_id};context={context_id};parent=root"
     process_snapshot = f"scope=evaluator-descendants;agent={agent_id};processes=none"
     return {
         "host": "trae", "agent_id": agent_id, "context_id": context_id,
-        "event_id": f"event-{context_id}", "issued_at": "2026-09-21T12:00:00Z",
+        "event_id": f"event-{context_id}", "issued_at": staggered_timestamp(_context_counter),
         "launcher": "host-collaboration-api", "coordinator_id": "root",
         "parent_agent_id": "root", "agent_tree_snapshot": agent_tree,
         "agent_tree_sha256": gate.digest(agent_tree), "process_snapshot": process_snapshot,
@@ -767,6 +772,222 @@ class RetainedEvidenceTests(unittest.TestCase):
         receipt["process_snapshot_sha256"] = gate.digest(receipt["process_snapshot"])
         with self.assertRaisesRegex(gate.Invalid, "recursive AI CLI"):
             gate.prepare(data, "seed")
+
+
+def held_scores(treatment_by_comparison):
+    """Equal per-criterion scores: a run scored x on both criteria weighs 20 * x points."""
+    return {comparison_id: {"baseline": (3, 3), "treatment": (value, value)}
+            for comparison_id, value in treatment_by_comparison.items()}
+
+
+def runner_receipts(data):
+    return [trial[role]["provenance"]["native_receipt"]
+            for case in data["cases"] for trial in case["trials"] for role in ("baseline", "treatment")]
+
+
+def as_legacy(packet, key):
+    """Strip the gate revision, as in bundles prepared before it existed."""
+    packet.pop("gate_revision")
+    key["packet_hash"] = gate.digest(packet)
+    return packet, key
+
+
+class GateRevisionTests(unittest.TestCase):
+    """Rules added with gate_revision 2; bundles without it replay unchanged."""
+
+    SPREAD = {"held-negative::trial-1": 5, "held-negative::trial-2": 4.5, "held-positive::trial-1": 4}
+
+    def test_new_bundles_carry_gate_revision_and_decisions_report_it(self):
+        packet, key = gate.prepare(v3_input(), "seed")
+        self.assertEqual(2, packet["gate_revision"])
+        for judge_packet in packet["judge_packets"]:
+            self.assertNotIn("gate_revision", judge_packet)
+        result = gate.decide(packet, key, judgment_for(packet, key))
+        self.assertEqual(2, result["gate_revision"])
+        self.assertEqual("student-t", result["paired_delta"]["method"])
+
+    def test_t_critical_values_match_tables(self):
+        for df, expected in ((1, 12.706), (2, 4.303), (7, 2.365), (30, 2.042), (40, 2.021), (120, 1.980)):
+            self.assertAlmostEqual(expected, gate.t_critical_95(df), places=3)
+
+    def test_small_sample_interval_uses_student_t_not_normal(self):
+        data = v3_input()
+        data["gate"]["minimum_delta_lower_bound"] = 10
+        packet, key = gate.prepare(data, "seed")
+        judgment = judgment_for(packet, key, held_scores(self.SPREAD))
+        result = gate.decide(packet, key, judgment)
+        # Deltas 40, 30, 20: mean 30, sd 10, n 3, t(2) = 4.303.
+        self.assertEqual(30, result["paired_delta"]["mean"])
+        self.assertEqual(round(30 - 4.302653 * 10 / 3 ** 0.5, 2), result["paired_delta"]["lower_95"])
+        self.assertEqual("retire", result["decision"])
+        self.assertTrue(any("lower bound" in reason for reason in result["reasons"]))
+
+    def test_legacy_bundle_keeps_its_normal_interval_and_output_shape(self):
+        data = v3_input()
+        data["gate"]["minimum_delta_lower_bound"] = 10
+        packet, key = as_legacy(*gate.prepare(data, "seed"))
+        result = gate.decide(packet, key, judgment_for(packet, key, held_scores(self.SPREAD)))
+        self.assertEqual("keep", result["decision"])
+        self.assertEqual(round(30 - 1.96 * 10 / 3 ** 0.5, 2), result["paired_delta"]["lower_95"])
+        for field in ("gate_revision", "runner_concurrency", "case_paired_delta"):
+            self.assertNotIn(field, result)
+        self.assertNotIn("method", result["paired_delta"])
+
+    def test_case_level_interval_is_reported(self):
+        packet, key = gate.prepare(v3_input(), "seed")
+        result = gate.decide(packet, key, judgment_for(packet, key, held_scores(self.SPREAD)))
+        # held-negative averages its two trials (35); held-positive is 20.
+        self.assertEqual(2, result["case_paired_delta"]["count"])
+        self.assertEqual(27.5, result["case_paired_delta"]["mean"])
+
+    def test_prepare_rejects_runners_over_the_concurrency_cap(self):
+        data = v3_input()
+        for receipt in runner_receipts(data)[:5]:
+            receipt["issued_at"] = "2026-09-21T12:00:00Z"
+        with self.assertRaisesRegex(gate.Invalid, "5 runners were active at once.*max_active_agents 4"):
+            gate.prepare(data, "seed")
+
+    def test_four_overlapping_or_back_to_back_runners_are_allowed(self):
+        data = v3_input()
+        receipts = runner_receipts(data)
+        for receipt in receipts[:4]:
+            receipt["issued_at"] = "2026-09-21T12:00:00Z"
+        # A fifth run that starts exactly when the others end does not overlap them.
+        receipts[4]["issued_at"] = "2026-09-21T12:00:00.100Z"
+        packet, key = gate.prepare(data, "seed")
+        result = gate.decide(packet, key, judgment_for(packet, key))
+        self.assertEqual(4, result["runner_concurrency"]["peak_active_runners"])
+
+    def test_prepare_rejects_unparseable_receipt_timestamp(self):
+        data = v3_input()
+        runner_receipts(data)[0]["issued_at"] = "yesterday"
+        with self.assertRaisesRegex(gate.Invalid, "issued_at must be an ISO-8601 timestamp"):
+            gate.prepare(data, "seed")
+
+    def test_unmeasured_runs_are_reported_not_guessed(self):
+        data = v3_input()
+        for case in data["cases"]:
+            for trial in case["trials"]:
+                for role in ("baseline", "treatment"):
+                    trial[role]["metrics"]["elapsed_ms"] = None
+                    trial[role]["metrics"]["unavailable"] = {"elapsed_ms": "Host hides timing"}
+        packet, key = gate.prepare(data, "seed")
+        concurrency = gate.decide(packet, key, judgment_for(packet, key))["runner_concurrency"]
+        self.assertEqual(8, concurrency["unmeasured_runs"])
+        self.assertEqual(0, concurrency["measured_runs"])
+
+    def test_decide_rechecks_concurrency_only_for_revised_bundles(self):
+        packet, key = gate.prepare(v3_input(), "seed")
+        for item in key["runner_provenance"]:
+            for role in ("baseline", "treatment"):
+                item[role]["native_receipt"]["issued_at"] = "2026-09-21T12:00:00Z"
+        with self.assertRaisesRegex(gate.Invalid, "max_active_agents"):
+            gate.decide(packet, key, judgment_for(packet, key))
+        packet, key = as_legacy(packet, key)
+        self.assertEqual("keep", gate.decide(packet, key, judgment_for(packet, key))["decision"])
+
+    def test_calibration_must_contain_both_positions(self):
+        data = v3_input()
+        for case in data["judge_calibration"]["cases"]:
+            case["correct_winner"] = "A"
+        with self.assertRaisesRegex(gate.Invalid, "both an A and a B"):
+            gate.prepare(data, "seed")
+
+    def test_one_sided_legacy_calibration_remains_replayable(self):
+        packet, key = gate.prepare(v3_input(), "seed")
+        for answer in key["judge_calibration"]["answers"]:
+            answer["correct_winner"] = "A"
+        with self.assertRaisesRegex(gate.Invalid, "both an A and a B"):
+            gate.decide(packet, key, judgment_for(packet, key))
+        packet, key = as_legacy(packet, key)
+        self.assertEqual("keep", gate.decide(packet, key, judgment_for(packet, key))["decision"])
+
+    def test_prepare_requires_two_distinct_heldout_cases(self):
+        data = v3_input()
+        data["cases"][2]["split"] = "development"
+        with self.assertRaisesRegex(gate.Invalid, "two distinct heldout cases"):
+            gate.prepare(data, "seed")
+
+    def test_per_metric_efficiency_budget(self):
+        data = v3_input()
+        data["gate"]["maximum_efficiency_regression_percent"] = {
+            "elapsed_ms": 150, "input_tokens": 25, "output_tokens": 25, "tool_calls": 25, "errors": 0,
+        }
+        for case in data["cases"]:
+            for trial in case["trials"]:
+                trial["treatment"]["metrics"]["elapsed_ms"] = 200
+        packet, key = gate.prepare(data, "seed")
+        self.assertEqual("keep", gate.decide(packet, key, judgment_for(packet, key))["decision"])
+        for case in data["cases"]:
+            for trial in case["trials"]:
+                trial["treatment"]["metrics"]["elapsed_ms"] = 300
+        packet, key = gate.prepare(data, "seed")
+        result = gate.decide(packet, key, judgment_for(packet, key))
+        self.assertIn("heldout elapsed_ms efficiency regression exceeds 150 percent", result["reasons"])
+
+    def test_per_metric_budget_must_name_every_metric(self):
+        data = v3_input()
+        data["gate"]["maximum_efficiency_regression_percent"] = {"elapsed_ms": 150}
+        with self.assertRaisesRegex(gate.Invalid, "every metric"):
+            gate.prepare(data, "seed")
+
+    def test_blinding_terms_are_redacted_from_every_judge_packet(self):
+        data = v3_input()
+        data["blinding"] = {"redact": ["treat-held", "treat-dev"]}
+        packet, key = gate.prepare(data, "seed")
+        text = json.dumps(packet["judge_packets"])
+        self.assertNotIn("treat-held", text)
+        self.assertNotIn("treat-dev", text)
+        self.assertIn("[redacted]", text)
+        self.assertEqual(["treat-held", "treat-dev"], key["blinding"]["redact"])
+        self.assertEqual("keep", gate.decide(packet, key, judgment_for(packet, key))["decision"])
+
+    def test_decide_rejects_a_packet_that_still_shows_a_blinding_term(self):
+        data = v3_input()
+        data["blinding"] = {"redact": ["treat-held"]}
+        packet, key = gate.prepare(data, "seed")
+        judgment = judgment_for(packet, key)
+        for judge_packet in packet["judge_packets"]:
+            for comparison in judge_packet["comparisons"]:
+                for answer in comparison["answers"]:
+                    answer["outcome"] = answer["outcome"].replace("[redacted]", "treat-held")
+        key["packet_hash"] = gate.digest(packet)
+        with self.assertRaisesRegex(gate.Invalid, "blinding term"):
+            gate.decide(packet, key, judgment)
+
+    def test_blinding_terms_must_be_specific(self):
+        data = v3_input()
+        data["blinding"] = {"redact": ["a"]}
+        with self.assertRaisesRegex(gate.Invalid, "at least 3 characters"):
+            gate.prepare(data, "seed")
+
+    def test_non_text_judge_identifier_is_a_clear_error(self):
+        packet, key = gate.prepare(v3_input(), "seed")
+        judgment = judgment_for(packet, key)
+        judgment["judgments"][0]["judge_id"] = ["judge-1"]
+        with self.assertRaisesRegex(gate.Invalid, "judge_id must be non-empty text"):
+            gate.decide(packet, key, judgment)
+        judgment = judgment_for(packet, key)
+        judgment["judgments"][0]["comparisons"][0]["comparison_id"] = {"id": 1}
+        with self.assertRaisesRegex(gate.Invalid, "comparison_id must be non-empty text"):
+            gate.decide(packet, key, judgment)
+
+    def test_cli_decide_prints_the_failure_reasons(self):
+        data = v3_input()
+        data["gate"]["minimum_delta_lower_bound"] = 10
+        packet, key = gate.prepare(data, "seed")
+        judgment = judgment_for(packet, key, held_scores(self.SPREAD))
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name, value in (("packet", packet), ("key", key), ("judgment", judgment)):
+                (root / f"{name}.json").write_text(json.dumps(value), encoding="utf-8")
+            command = [sys.executable, str(SCRIPT), "decide", "--packet", str(root / "packet.json"),
+                       "--key", str(root / "key.json"), "--judgment", str(root / "judgment.json"),
+                       "--output", str(root / "decision.json")]
+            result = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(0, result.returncode)
+        self.assertTrue(result.stdout.startswith("retire\n"))
+        self.assertIn("lower bound", result.stdout)
 
 
 class V1CompatibilityTests(unittest.TestCase):

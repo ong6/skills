@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter, defaultdict
+from datetime import datetime, timedelta, timezone
 import hashlib
 import json
 import math
@@ -17,6 +18,16 @@ import sys
 
 SHA256_LENGTH = 64
 METRIC_FIELDS = ("elapsed_ms", "input_tokens", "output_tokens", "tool_calls", "errors")
+# Rules that newly prepared v3 bundles opt into. Bundles without the marker replay with the rules
+# they were decided under, so retained decisions and lifecycle replays stay reproducible.
+GATE_REVISION = 2
+REDACTED = "[redacted]"
+# Two-sided 95% Student t critical values by degrees of freedom.
+T_95 = (
+    12.7062, 4.3027, 3.1824, 2.7764, 2.5706, 2.4469, 2.3646, 2.3060, 2.2622, 2.2281,
+    2.2010, 2.1788, 2.1604, 2.1448, 2.1314, 2.1199, 2.1098, 2.1009, 2.0930, 2.0860,
+    2.0796, 2.0739, 2.0687, 2.0639, 2.0595, 2.0555, 2.0518, 2.0484, 2.0452, 2.0423,
+)
 RECURSIVE_AI_CLI = tuple(
     re.compile(pattern, re.I | re.S)
     for pattern in (
@@ -100,6 +111,93 @@ def require_sha256(value: object, field: str) -> str:
     if len(value) != SHA256_LENGTH or any(character not in "0123456789abcdef" for character in value):
         raise Invalid(f"{field} must be a lowercase SHA-256 digest")
     return value
+
+
+def t_critical_95(df: int) -> float:
+    if df < 1:
+        raise Invalid("an interval needs at least two paired values")
+    if df <= len(T_95):
+        return T_95[df - 1]
+    # Cornish-Fisher expansion around the normal quantile; within 0.001 of tables past 30 df.
+    z = 1.959964
+    return z + (z ** 3 + z) / (4 * df) + (5 * z ** 5 + 16 * z ** 3 + 3 * z) / (96 * df ** 2)
+
+
+def parse_timestamp(value: object, field: str) -> datetime:
+    text = require_text(value, field)
+    try:
+        moment = datetime.fromisoformat(text[:-1] + "+00:00" if text.endswith("Z") else text)
+    except ValueError as exc:
+        raise Invalid(f"{field} must be an ISO-8601 timestamp, got {text!r}") from exc
+    return moment if moment.tzinfo else moment.replace(tzinfo=timezone.utc)
+
+
+def runner_concurrency(runs: list[tuple[str, dict, object]], maximum: int) -> dict:
+    """Peak simultaneous runners from receipt start times plus elapsed_ms.
+
+    Each run occupies [issued_at, issued_at + elapsed_ms); back-to-back runs do not overlap. Runs
+    whose host hid elapsed time are counted as unmeasured rather than guessed.
+    """
+    intervals = []
+    for label, provenance, metrics in runs:
+        start = parse_timestamp(provenance["native_receipt"].get("issued_at"),
+                                f"{label}.provenance.native_receipt.issued_at")
+        elapsed = metrics.get("elapsed_ms") if isinstance(metrics, dict) else None
+        if elapsed is not None:
+            end = start + max(timedelta(milliseconds=elapsed), timedelta(microseconds=1))
+            intervals.append((start, end, label))
+    peak, busiest = 0, []
+    for start, _, _ in intervals:
+        active = [label for other_start, other_end, label in intervals if other_start <= start < other_end]
+        if len(active) > peak:
+            peak, busiest = len(active), active
+    result = {
+        "max_active_agents": maximum, "peak_active_runners": peak,
+        "measured_runs": len(intervals), "unmeasured_runs": len(runs) - len(intervals),
+    }
+    if peak > maximum:
+        raise Invalid(
+            f"{peak} runners were active at once, above execution_policy max_active_agents {maximum}; "
+            f"replace the runs that broke the cap: {', '.join(sorted(busiest))}"
+        )
+    return result
+
+
+def validate_blinding(value: object) -> list[str]:
+    if not isinstance(value, dict) or set(value) != {"redact"}:
+        raise Invalid("blinding must be an object with only a redact array")
+    terms = value["redact"]
+    if not isinstance(terms, list) or not terms:
+        raise Invalid("blinding.redact must be a non-empty array")
+    for term in terms:
+        if not isinstance(term, str) or len(term.strip()) < 3:
+            raise Invalid("each blinding.redact term must be text of at least 3 characters")
+        if REDACTED in term:
+            raise Invalid(f"blinding.redact terms cannot contain {REDACTED}")
+    if len(set(terms)) != len(terms):
+        raise Invalid("blinding.redact terms must be unique")
+    return terms
+
+
+def redact(text: str, terms: list[str]) -> str:
+    for term in sorted(terms, key=len, reverse=True):
+        text = text.replace(term, REDACTED)
+    return text
+
+
+def efficiency_limit(budget: object, field: str) -> float:
+    return budget[field] if isinstance(budget, dict) else budget
+
+
+def validate_efficiency_budget(budget: object) -> None:
+    field = "maximum_efficiency_regression_percent"
+    if isinstance(budget, dict):
+        if set(budget) != set(METRIC_FIELDS):
+            raise Invalid(f"{field} object must give a budget for every metric: {', '.join(METRIC_FIELDS)}")
+        for name, value in budget.items():
+            require_number(value, f"{field}.{name}", minimum=0)
+    else:
+        require_number(budget, field, minimum=0)
 
 
 def validate_rubric(data: dict) -> None:
@@ -424,7 +522,7 @@ def validate_judge_calibration_config(data: dict) -> None:
         raise Invalid("judge_calibration.reference_set_sha256 does not match calibration cases")
 
 
-def validate_input_v3(data: dict) -> None:
+def validate_input_v3(data: dict, *, strict: bool = False) -> None:
     validate_common(data)
     validate_execution_policy(data)
     condition_hash, baseline_hash, treatment_hash = validate_condition_manifest(data)
@@ -432,10 +530,9 @@ def validate_input_v3(data: dict) -> None:
     validate_judge_calibration_config(data)
     gate = data.get("gate", {})
     require_number(gate.get("minimum_delta_lower_bound", 0), "minimum_delta_lower_bound", minimum=-100, maximum=100)
-    require_number(
-        gate.get("maximum_efficiency_regression_percent", 50),
-        "maximum_efficiency_regression_percent", minimum=0,
-    )
+    validate_efficiency_budget(gate.get("maximum_efficiency_regression_percent", 50))
+    if "blinding" in data:
+        validate_blinding(data["blinding"])
     # Reuse the v2 structural checks, then add receipt, parity, and metrics requirements.
     shadow = dict(data)
     shadow["version"] = 2
@@ -462,16 +559,34 @@ def validate_input_v3(data: dict) -> None:
     }
     if len(coordinator_ids) != 1:
         raise Invalid("all v3 runners must be direct children of one coordinator")
+    if strict:
+        validate_revision_rules(data)
 
 
-def validate_input(data: dict) -> None:
+def validate_revision_rules(data: dict) -> None:
+    """Gate revision 2: rules that make a keep harder to reach by luck, bias, or overload."""
+    heldout_cases = {case["id"] for case in data["cases"] if case["split"] == "heldout"}
+    if len(heldout_cases) < 2:
+        raise Invalid("v3 requires at least two distinct heldout cases; extra trials of one prompt "
+                      "measure run noise, not whether the skill generalizes")
+    winners = {case["correct_winner"] for case in data["judge_calibration"]["cases"]}
+    if not {"A", "B"} <= winners:
+        raise Invalid("judge_calibration needs both an A and a B correct_winner, or a judge that "
+                      "always picks one position passes")
+    runner_concurrency([
+        (f"case {case['id']} trial {trial['id']} {role}", trial[role]["provenance"], trial[role]["metrics"])
+        for case in data["cases"] for trial in case["trials"] for role in ("baseline", "treatment")
+    ], data["execution_policy"]["max_active_agents"])
+
+
+def validate_input(data: dict, *, strict: bool = False) -> None:
     version = data.get("version")
     if version == 1:
         validate_input_v1(data)
     elif version == 2:
         validate_input_v2(data)
     elif version == 3:
-        validate_input_v3(data)
+        validate_input_v3(data, strict=strict)
     else:
         raise Invalid("input version must be 1, 2, or 3")
 
@@ -506,6 +621,7 @@ def prepare_v1(data: dict, seed: str) -> tuple[dict, dict]:
 
 def prepare_v2(data: dict, seed: str) -> tuple[dict, dict]:
     rng = random.Random(seed)
+    terms = data.get("blinding", {}).get("redact", [])
     bases = {}
     comparisons = []
     for case in data["cases"]:
@@ -537,6 +653,15 @@ def prepare_v2(data: dict, seed: str) -> tuple[dict, dict]:
                     field: run[field] for field in ("transcript", "outcome", "grader_result")
                     if field in run
                 }
+                if terms:
+                    shown = blinded_runs[label]
+                    for field in ("transcript", "outcome"):
+                        shown[field] = redact(shown[field], terms)
+                    if "grader_result" in shown:
+                        shown["grader_result"] = {
+                            **shown["grader_result"],
+                            "details": redact(shown["grader_result"]["details"], terms),
+                        }
             item = {
                 "comparison_id": comparison_id,
                 "case_id": case["id"],
@@ -571,6 +696,8 @@ def prepare_v2(data: dict, seed: str) -> tuple[dict, dict]:
         "distribution_instruction": "Give each judge only its matching entry from judge_packets. Never give a judge this bundle or the key.",
         "judge_packets": judge_packets,
     }
+    if data["version"] >= 3:
+        packet["gate_revision"] = GATE_REVISION
     runner_provenance = [
         {
             "comparison_id": comparison_id,
@@ -589,6 +716,8 @@ def prepare_v2(data: dict, seed: str) -> tuple[dict, dict]:
     }
     if data["version"] >= 3:
         key["condition_manifest"] = data["condition_manifest"]
+        if "blinding" in data:
+            key["blinding"] = data["blinding"]
         key["client_coverage"] = data["client_coverage"]
         key["judge_calibration"] = {
             "reference_set_sha256": data["judge_calibration"]["reference_set_sha256"],
@@ -610,7 +739,7 @@ def prepare_v2(data: dict, seed: str) -> tuple[dict, dict]:
 
 
 def prepare(data: dict, seed: str) -> tuple[dict, dict]:
-    validate_input(data)
+    validate_input(data, strict=True)
     return prepare_v1(data, seed) if data["version"] == 1 else prepare_v2(data, seed)
 
 
@@ -689,6 +818,9 @@ def index_records(value: object, id_field: str, field: str) -> dict:
 
 def validate_retained_bundle(packet: dict, key: dict) -> None:
     """Revalidate retained evidence; the packet hash alone does not validate the key."""
+    revision = packet.get("gate_revision")
+    if revision is not None and (packet.get("version") != 3 or revision != GATE_REVISION):
+        raise Invalid(f"packet gate_revision must be {GATE_REVISION} on a v3 packet")
     judges = index_records(packet.get("judge_packets"), "judge_id", "judge_packets")
     if len(judges) < 2:
         raise Invalid("packet must contain at least two judge packets")
@@ -802,7 +934,18 @@ def validate_retained_bundle(packet: dict, key: dict) -> None:
         )
         if any("correct_winner" in case for case in public_cases.values()):
             raise Invalid("calibration packet must not expose correct_winner")
-    validate_input(data)
+        if "blinding" in key:
+            data["blinding"] = key["blinding"]
+            terms = validate_blinding(key["blinding"])
+            for judge in judges.values():
+                for comparison in judge["comparisons"]:
+                    for answer in comparison["answers"]:
+                        shown = [answer["transcript"], answer["outcome"]]
+                        if "grader_result" in answer:
+                            shown.append(answer["grader_result"]["details"])
+                        if any(term in text for term in terms for text in shown):
+                            raise Invalid("a judge packet still shows a blinding term")
+    validate_input(data, strict=revision == GATE_REVISION)
 
 
 def validate_judgment_v2(packet: dict, key: dict, judgment: dict) -> None:
@@ -827,6 +970,12 @@ def validate_judgment_v2(packet: dict, key: dict, judgment: dict) -> None:
             raise Invalid(f"judge packet {judge_id} has malformed or duplicate comparisons")
         expected[judge_id] = {comparison["comparison_id"]: comparison for comparison in comparisons}
     actual = judgment["judgments"]
+    for judge in actual:
+        if isinstance(judge, dict):
+            require_text(judge.get("judge_id"), "judgment judge_id")
+            for comparison in judge.get("comparisons") or []:
+                if isinstance(comparison, dict):
+                    require_text(comparison.get("comparison_id"), f"judge {judge['judge_id']} comparison_id")
     actual_ids = [j.get("judge_id") for j in actual if isinstance(j, dict)]
     if set(actual_ids) != set(expected) or len(actual_ids) != len(expected):
         raise Invalid("judgment must contain every judge packet exactly once")
@@ -1007,7 +1156,13 @@ def summary(values: list[float]) -> dict:
     }
 
 
-def paired_delta_summary(baseline: list[float], treatment: list[float], *, rounded: bool = True) -> dict:
+def paired_delta_summary(baseline: list[float], treatment: list[float], *, rounded: bool = True,
+                         student_t: bool = False) -> dict:
+    """Treatment-minus-baseline mean with a two-sided 95% interval.
+
+    student_t is the correct small-sample interval and is used by gate revision 2. The normal
+    approximation (z = 1.96) is kept only so bundles decided before that revision replay exactly.
+    """
     if len(baseline) != len(treatment) or not baseline:
         raise Invalid("paired score series must be non-empty and equal length")
     values = [right - left for left, right in zip(baseline, treatment)]
@@ -1015,9 +1170,13 @@ def paired_delta_summary(baseline: list[float], treatment: list[float], *, round
     if len(values) == 1:
         margin = 0.0
     else:
-        margin = 1.96 * statistics.stdev(values) / math.sqrt(len(values))
+        critical = t_critical_95(len(values) - 1) if student_t else 1.96
+        margin = critical * statistics.stdev(values) / math.sqrt(len(values))
     values = {"count": len(values), "mean": mean, "lower_95": mean - margin, "upper_95": mean + margin}
-    return {field: round(value, 2) if rounded else value for field, value in values.items()}
+    result = {field: round(value, 2) if rounded else value for field, value in values.items()}
+    if student_t:
+        result["method"] = "student-t"
+    return result
 
 
 def efficiency_summary(metrics: list[dict], *, rounded: bool = True) -> dict:
@@ -1217,8 +1376,10 @@ def decide_v2(packet: dict, key: dict, judgment: dict) -> dict:
         ]
         for role in ("baseline", "treatment")
     }
+    revised = packet.get("gate_revision") == GATE_REVISION
     paired_delta = paired_delta_summary(
-        heldout_comparison_means["baseline"], heldout_comparison_means["treatment"], rounded=False
+        heldout_comparison_means["baseline"], heldout_comparison_means["treatment"], rounded=False,
+        student_t=revised,
     )
     minimum = key.get("gate", {}).get("minimum_overall_delta", 5)
     core_deltas = [
@@ -1263,13 +1424,12 @@ def decide_v2(packet: dict, key: dict, judgment: dict) -> dict:
             validate_metrics(item.get("baseline"), "run_metrics.baseline")
             validate_metrics(item.get("treatment"), "run_metrics.treatment")
         efficiency = efficiency_summary(list(metrics_by_comparison.values()), rounded=False)
-        maximum_regression = key.get("gate", {}).get("maximum_efficiency_regression_percent", 50)
+        budget = key.get("gate", {}).get("maximum_efficiency_regression_percent", 50)
         for field, regression in efficiency["treatment_regression_percent"].items():
-            if regression is None or regression > maximum_regression:
-                reasons.append(
-                    f"heldout {field} efficiency regression exceeds {maximum_regression} percent"
-                )
-    return {
+            limit = efficiency_limit(budget, field)
+            if regression is None or regression > limit:
+                reasons.append(f"heldout {field} efficiency regression exceeds {limit} percent")
+    result = {
         "version": packet["version"], "decision": "keep" if not reasons else "retire", "reasons": reasons,
         "gate_scope": "heldout_only", "minimum_overall_delta": minimum,
         "overall_scores": heldout_means, "treatment_delta": delta,
@@ -1293,6 +1453,29 @@ def decide_v2(packet: dict, key: dict, judgment: dict) -> dict:
         },
         "packet_hash": digest(packet),
     }
+    if revised:
+        case_means = defaultdict(lambda: {"baseline": [], "treatment": []})
+        for (split, comparison_id), values in comparison_scores.items():
+            if split == "heldout":
+                case_id = mapping_by_id[(judge_ids[0], comparison_id)]["case_id"]
+                for role in ("baseline", "treatment"):
+                    case_means[case_id][role].append(statistics.mean(values[role]))
+        ordered = [case_means[case_id] for case_id in sorted(case_means)]
+        metrics = {item["comparison_id"]: item for item in key["run_metrics"]}
+        result.update(
+            gate_revision=GATE_REVISION,
+            # Reported, not gated: the interval with each heldout prompt as one sample, i.e. how
+            # sure the gain is across tasks rather than across repeated runs of the same tasks.
+            case_paired_delta=paired_delta_summary(
+                [statistics.mean(item["baseline"]) for item in ordered],
+                [statistics.mean(item["treatment"]) for item in ordered], student_t=True,
+            ),
+            runner_concurrency=runner_concurrency([
+                (f"{item['comparison_id']} {role}", item[role], metrics[item["comparison_id"]][role])
+                for item in key["runner_provenance"] for role in ("baseline", "treatment")
+            ], key["execution_policy"]["max_active_agents"]),
+        )
+    return result
 
 
 def decide(packet: dict, key: dict, judgment: dict) -> dict:
@@ -1335,6 +1518,8 @@ def main() -> int:
             result = decide(read_object(args.packet), read_object(args.key), read_object(args.judgment))
             write_new(args.output, result)
             print(result["decision"])
+            for reason in result["reasons"]:
+                print(f"- {reason}")
         return 0
     except (Invalid, KeyError, TypeError) as exc:
         print(f"error: {exc}", file=sys.stderr)

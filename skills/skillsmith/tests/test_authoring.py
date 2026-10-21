@@ -196,6 +196,23 @@ class InventoryTests(unittest.TestCase):
         self.assertIn("email", ranked[0]["shared_terms"])
         self.assertEqual(0.0, ranked[1]["overlap"])
 
+    def test_finds_skills_in_a_skills_checkout_layout(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repo = Path(directory)
+            write_skill(repo / "skills", "decide", "name: decide\ndescription: Make a hard choice.")
+            write_skill(repo / "rarely-used", "teach", "name: teach\ndescription: Run a course.")
+            found, _ = inventory.collect(repo, include_global=False, home=repo)
+        self.assertEqual({"decide", "teach"}, {skill["name"] for skill in found})
+
+    def test_short_and_long_forms_of_a_word_match(self):
+        skills = [
+            {"name": "skillsmith", "description": "Prove a skill with a blinded eval.", "path": "x", "scope": "repo"},
+            {"name": "evaluate-condo", "description": "Evaluate a condo listing.", "path": "y", "scope": "repo"},
+        ]
+        ranked = {row["name"]: row["overlap"] for row in inventory.rank(skills, "eval prove")}
+        self.assertEqual(1.0, ranked["skillsmith"])
+        self.assertEqual(0.5, ranked["evaluate-condo"])
+
 
 if __name__ == "__main__":
     unittest.main()
