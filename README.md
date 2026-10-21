@@ -42,6 +42,11 @@ A single-file, stdlib-only Python CLI (3.7+). It never starts a model session.
 | `tidy --repo R --machines M [--dry-run]` | shelve idle core skills and restore used shelved ones, then push |
 | `shelve` / `restore NAME...` | move skills between `skills/` and `rarely-used/` by hand, then push |
 
+With `--machines` omitted, the registry is `$SKILLS_MACHINES`, else `life/tech/machines.json` or
+`machines.json` inside `--repo` or the working directory's repo (which then becomes the `--repo`).
+Commands that link, clone or push (`up`, `link`, `unlink`, `autosync`, `tidy`, `shelve`, `restore`)
+exit 2 when neither a registry nor a repo is found, instead of acting on the default profile.
+
 The profile is the `skills` object of the first machine in the registry whose `match` fields all
 equal this host's (`os`, `model`, `hostname` prefix, `wsl`, `user`):
 
