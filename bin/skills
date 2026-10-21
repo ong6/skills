@@ -33,7 +33,8 @@ Stdlib only, Python 3.7+. This tool never starts a model session: the only AI CL
 Environment: SKILLS_FACTS (JSON merged into the detected host facts, to simulate another
 machine), SKILLS_NO_FETCH=1, SKILLS_FETCH_INTERVAL (seconds, default 300),
 SKILLS_MAINTAIN_INTERVAL (seconds between usage scans and tidies, default 86400), SKILLS_TODAY
-(YYYY-MM-DD, tests), SKILLS_ROOT (guard), SKILLS_PUBLIC_URL, SKILLS_PRIVATE_URL, HOST_REPO
+(YYYY-MM-DD, tests), SKILLS_MACHINES (registry when --machines is omitted; otherwise
+<repo>/life/tech/machines.json or <repo>/machines.json of --repo or the working directory's repo), SKILLS_ROOT (guard), SKILLS_PUBLIC_URL, SKILLS_PRIVATE_URL, HOST_REPO
 (lint fallback), CLAUDE_CONFIG_DIR and CODEX_HOME (where transcripts live).
 """
 from __future__ import annotations
@@ -76,6 +77,10 @@ USAGE_DIR = "usage"
 EXCLUDE_START = "# >>> skills links (managed by bin/skills)"
 EXCLUDE_END = "# <<< skills links"
 UNMATCHED = "unregistered machine"
+# Where a host repo keeps its machines registry, tried in order when --machines is omitted.
+REGISTRY_PATHS = ("life/tech/machines.json", "machines.json")
+# Commands that change links, clone or push: never run them on the bare default profile.
+MUTATING = ("up", "link", "unlink", "autosync", "tidy", "shelve", "restore", "_sync")
 
 
 # ---------------------------------------------------------------------------------------- basics
@@ -2615,6 +2620,42 @@ def add_profile_args(p):
     p.add_argument("--machines", metavar="M", help="machines registry JSON (e.g. machines.json)")
 
 
+def git_toplevel(path):
+    try:
+        r = subprocess.run(["git", "-C", path, "rev-parse", "--show-toplevel"], stdin=subprocess.DEVNULL,
+                           stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, universal_newlines=True,
+                           timeout=10)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return r.stdout.strip() if r.returncode == 0 and r.stdout.strip() else None
+
+
+def find_registry(repos):
+    """First registry inside the given repos, or the repo holding the working directory."""
+    for repo in [expand(r) for r in repos] or [git_toplevel(os.getcwd())]:
+        for rel in REGISTRY_PATHS if repo else ():
+            path = os.path.join(repo, rel)
+            if os.path.isfile(path):
+                return repo, path
+    return None, None
+
+
+def fill_profile_args(args):
+    """A bare `skills link` run from a host repo used to fall back to the default profile:
+    wrong root, project scope, a background clone. Fill --machines (and --repo, when the
+    working directory supplied the registry) from $SKILLS_MACHINES or the repo instead."""
+    if not hasattr(args, "machines") or args.machines:
+        return
+    if os.environ.get("SKILLS_MACHINES"):
+        args.machines = os.environ["SKILLS_MACHINES"]
+        return
+    repo, path = find_registry(getattr(args, "repo", None) or [])
+    if path:
+        args.machines = path
+        if not getattr(args, "repo", None):
+            args.repo = [repo]
+
+
 def build_parser():
     parser = argparse.ArgumentParser(prog="skills", description=__doc__.split("\n\n")[0],
                                      formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -2671,6 +2712,11 @@ def main(argv=None):
         pass
     parser = build_parser()
     args = parser.parse_args(argv)
+    fill_profile_args(args)
+    if args.command in MUTATING and not args.machines and not args.repo:
+        say("skills {}: no machines registry and no repo; pass --repo R --machines M, set "
+            "SKILLS_MACHINES or run inside the host repo".format(args.command), sys.stderr)
+        return 2
     handlers = {"up": cmd_up, "link": cmd_link, "unlink": cmd_unlink, "doctor": cmd_doctor,
                 "guard": cmd_guard, "publish": cmd_publish, "autosync": cmd_autosync, "find": cmd_find,
                 "usage": cmd_usage, "tidy": cmd_tidy, "shelve": cmd_move, "restore": cmd_move,

@@ -253,6 +253,20 @@ class ProfileTests(Sandbox):
         self.assertEqual(self.links(os.path.join(self.home, ".agents/skills")), expected)
         self.assertEqual(self.store_links(), {})
 
+    def test_bare_command_finds_the_registry_of_the_working_directory_repo(self):
+        self.write_machines({"scope": "project", "root": self.root})
+        os.makedirs(os.path.join(self.store, "life", "tech"), exist_ok=True)
+        shutil.copy(self.machines, os.path.join(self.store, "life", "tech", "machines.json"))
+        self.git(self.store, "init", "-q")
+        r = self.cli("link", cwd=self.store)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertTrue(self.store_links())
+
+    def test_bare_mutating_command_without_registry_or_repo_refuses(self):
+        r = self.cli("link", cwd=self.tmp)
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("no machines registry", r.stderr)
+
     def test_machine_matching_uses_first_rule_hostname_prefix_and_user(self):
         registry = {"machines": [
             {"match": {"user": "agent"}, "name": "Agent box", "skills": {"scope": "user"}},
