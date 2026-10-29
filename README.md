@@ -131,7 +131,7 @@ CI fails when they drift.
 | [`youtube-transcript`](skills/youtube-transcript/SKILL.md) | Fetch clean captions from a YouTube video. |
 | [`save-video`](skills/save-video/SKILL.md) | File a YouTube video as a searchable note with takeaways, category and tags. |
 | [`datastore`](skills/datastore/SKILL.md) | Keep structured records as append-only JSONL with a local SQLite cache for SQL. |
-| [`refine`](skills/refine/SKILL.md) | Review and improve the work until its constraints and requested score pass. |
+| [`refine`](rarely-used/refine/SKILL.md) _(rarely used)_ | Review and improve the work until its constraints and requested score pass. |
 | [`write-a-brief`](skills/write-a-brief/SKILL.md) | Write or tighten a one-to-two-page brief for a meeting with a professional, quotes included. |
 | [`markdown-to-pdf`](skills/markdown-to-pdf/SKILL.md) | Turn a Markdown note into a checked, print-ready A4 PDF. |
 | [`system-diagram`](skills/system-diagram/SKILL.md) | Turn a real system flow into a polished, readable SVG figure. |
@@ -176,7 +176,7 @@ _How replies, briefs and documents read._
 
 | Skill | Does |
 |---|---|
-| [`refine`](skills/refine/SKILL.md) | Explicit-only. Improve the latest deliverable (draft, code, plan, note, design) through fresh independent reviewer agents until it meets the requested score and all explicit constraints, or three refinement rounds pass. Use for "/refine", "refine this", "run the refine loop", "auto-improve this". Not for a single quick edit, a PR or diff review (code-review), or feedback about agent behaviour (feedback-loop). |
+| [`refine`](rarely-used/refine/SKILL.md) _(rarely used)_ | Explicit-only. Improve the latest deliverable (draft, code, plan, note, design) through fresh independent reviewer agents until it meets the requested score and all explicit constraints, or three refinement rounds pass. Use for "/refine", "refine this", "run the refine loop", "auto-improve this". Not for a single quick edit, a PR or diff review (code-review), or feedback about agent behaviour (feedback-loop). |
 | [`write-a-brief`](skills/write-a-brief/SKILL.md) | Write or tighten a one-to-two-page meeting brief for a professional (contractor, consultant, doctor, vendor), including what to ask about their quote. Use for "meeting brief", "prep doc", "questions to ask", "check this quote", or fixing a brief that is too long or AI-sounding; not for email drafts or general notes. |
 | [`markdown-to-pdf`](skills/markdown-to-pdf/SKILL.md) | Convert a markdown note into a verified, print-ready A4 PDF. Use for printable notes, meeting handouts, or rebuilding generated PDFs; not for editing existing PDFs or building a LaTeX document. |
 
