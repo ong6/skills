@@ -141,7 +141,7 @@ CI fails when they drift.
 | [`decide`](skills/decide/SKILL.md) | Commit to a hard choice with the numbers, a pre-mortem, a flip fact and a tripwire. |
 | [`trip-planner`](skills/trip-planner/SKILL.md) | Plan or replan a trip with live research on routes, hours, parking and food. |
 | [`product-shopping`](skills/product-shopping/SKILL.md) | Decide what to buy, find its best legitimate price, or compare it across countries. |
-| [`evaluate-condo`](skills/evaluate-condo/SKILL.md) | Evaluate a Singapore condo listing or development and file a cited verdict. |
+| [`evaluate-condo`](rarely-used/evaluate-condo/SKILL.md) _(rarely used)_ | Evaluate a Singapore condo listing or development and file a cited verdict. |
 | [`teach`](skills/teach/SKILL.md) | Run a stateful, multi-session course on a topic in a learning workspace. |
 | [`interview-prep`](skills/interview-prep/SKILL.md) | Mock interviews from your own resume, with spoken-plan grading, drills, debriefs, system design. |
 | [`create-fde-deck`](skills/create-fde-deck/SKILL.md) | Write or review evidence-labelled field-engineering decks: discovery, architecture, pilot readout. |
@@ -234,7 +234,7 @@ _Trips, shopping, property, learning and hard choices._
 | [`decide`](skills/decide/SKILL.md) | Make a hard, consequential choice and commit: reframe it, find the unlisted option, rough numbers, downside, pre-mortem, one pick, the fact that flips it and a tripwire. Use for "should I X or Y", "help me decide", "is it worth quitting / switching", job offers. Not for: what to buy (product-shopping), trivial or factual questions. |
 | [`trip-planner`](skills/trip-planner/SKILL.md) | Plan or replan trips using live research for routes, hours, parking, food, tolls, and pacing. Use for itineraries and on-the-road questions about stops, parking, or eating. |
 | [`product-shopping`](skills/product-shopping/SKILL.md) | Recommend what product to buy, find the best legitimate price for a chosen model, compare its landed cost across countries (SG vs US and others, in SGD), or say where to buy it. Use for "which X should I get", "is X worth it", cheapest price, deal checks, price history, "should I buy this overseas", "where can I buy X". Not for: property (evaluate-condo). |
-| [`evaluate-condo`](skills/evaluate-condo/SKILL.md) | Evaluate a Singapore condo listing or development and file a cited Buy/Neutral/Avoid note. Use for PropertyGuru, 99.co, EdgeProp, "evaluate this condo", or "is this unit worth it". |
+| [`evaluate-condo`](rarely-used/evaluate-condo/SKILL.md) _(rarely used)_ | Evaluate a Singapore condo listing or development and file a cited Buy/Neutral/Avoid note. Use for PropertyGuru, 99.co, EdgeProp, "evaluate this condo", or "is this unit worth it". |
 | [`teach`](skills/teach/SKILL.md) | Create a stateful, multi-session course in the learning workspace. Use only when the user invokes teach or asks to start structured learning of a topic. Explicit-only; not for one-off explanations or research reports. |
 
 ### Career
