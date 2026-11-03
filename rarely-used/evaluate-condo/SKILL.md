@@ -1,6 +1,6 @@
 ---
 name: evaluate-condo
-description: Turn a Singapore condo listing or development into a cited Buy/Neutral/Avoid verdict with a maximum buy price, filed in the host repo. Use for a PropertyGuru, 99.co or EdgeProp link, "evaluate this condo", "is this unit worth it", "what should I offer", "max price for this unit". Not for finding listings or running weekly scans, HDB flats, or non-property purchases (product-shopping).
+description: Turn a Singapore condo listing or development into a cited Buy/Neutral/Avoid verdict with a maximum buy price, filed in the host repo. Use for a PropertyGuru, 99.co or EdgeProp link, "evaluate this condo", "is this unit worth it", "what should I offer", "max price for this unit". Only during a condo hunt; a property-finder flow or the weekly scan hands Buy and near-Buy units to it. Not for finding listings or running weekly scans, HDB flats, or non-property purchases (product-shopping).
 ---
 
 # Evaluate Condo
@@ -16,6 +16,10 @@ to pay. What this adds over plain web research:
   valuation tool when it has one, never web research alone.
 - **Remembered.** The note, research-list row and re-look trigger are filed and cross-linked
   (§5), so a "no" stays findable and reopens at the right price.
+
+**Called from a property-finder flow or the weekly scan?** That run already holds the listing
+facts and the valuation: reuse them, skip the matching parts of §2–3, and go straight to §4's
+checks and §5's filing.
 
 ## 1 · Buyer context first
 
