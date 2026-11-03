@@ -29,6 +29,9 @@ Only Critical, High and Medium rules on the relevant platform are in scope by de
    - contrast: compute muted-text and link ratios against their actual background, 4.5:1 body
    - anchors under a sticky header: `scroll-margin-top` set
    - `prefers-reduced-motion` honoured for anything that moves on its own
+   - polish (owner standard): elements a reader points at answer hover (120–160ms, stroke/fill/
+     opacity, no glow), diagrams rise in once on scroll, both off under reduced motion; uipack's
+     `docs/design-direction.md` "Interaction polish" is the reference. Missing polish is a Medium.
    - images: alt, intrinsic size, lazy below the fold
    - text under 12 px; body lines over ~80 ch
    Skip categories the page has no surface for (Forms on a page without forms).
