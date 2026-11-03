@@ -1,12 +1,21 @@
 ---
 name: evaluate-condo
-description: Evaluate a Singapore condo listing or development and file a cited Buy/Neutral/Avoid note. Use for PropertyGuru, 99.co, EdgeProp, "evaluate this condo", or "is this unit worth it".
+description: Turn a Singapore condo listing or development into a cited Buy/Neutral/Avoid verdict with a maximum buy price, filed in the host repo. Use for a PropertyGuru, 99.co or EdgeProp link, "evaluate this condo", "is this unit worth it", "what should I offer", "max price for this unit". Not for finding listings or running weekly scans, HDB flats, or non-property purchases (product-shopping).
 ---
 
 # Evaluate Condo
 
-The full candidate-evaluation loop. Rule: condo research always pairs live listing data with a
-structured valuation pass, never web research alone.
+From one listing link to a decision the buyer can act on: a verdict, a confidence, and the most
+to pay. What this adds over plain web research:
+
+- **A number, not a vibe.** A buy-price ladder (§4) solves the entry price at which the bear case
+  breaks even and the base case beats T-bills, net of stamp duty, agent fees and legal costs.
+- **Fair comps.** GFA harmonisation, same-size-band prints and the nearest completed project,
+  the comparisons plain search gets wrong.
+- **Live data plus structure.** Listing JSON-LD and realsmart project data go through the host's
+  valuation tool when it has one, never web research alone.
+- **Remembered.** The note, research-list row and re-look trigger are filed and cross-linked
+  (§5), so a "no" stays findable and reopens at the right price.
 
 ## 1 · Buyer context first
 
