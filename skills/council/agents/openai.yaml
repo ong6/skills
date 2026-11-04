@@ -1,0 +1,7 @@
+interface:
+  display_name: "Council"
+  short_description: "Fresh reviewers pick metrics, score out of 10 and drive fix rounds to a target"
+  default_prompt: "Use $council to put the latest deliverable through the council until it reaches 8/10."
+
+policy:
+  allow_implicit_invocation: false
