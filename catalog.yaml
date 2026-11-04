@@ -5,6 +5,7 @@
 skill_summaries:
   web-extract: Web search and page reads, spending Firecrawl credits first.
   youtube-transcript: Fetch clean captions from a YouTube video.
+  uipack-design: Build slides, pages and figures in the UiPack design system, swapping its styles cleanly.
   system-diagram: Turn a real system flow into a polished, readable SVG figure.
   3d-design: Choose the right authoring and browser workflow for a 3D object or animation.
   blender-authoring: Build, animate, render and export Blender scenes with Python.
@@ -55,7 +56,7 @@ categories:
   - key: design
     title: Design
     blurb: Diagrams, interfaces, 3D and visual judgment.
-    skills: [system-diagram, ux-design, 3d-design, blender-authoring]
+    skills: [uipack-design, system-diagram, ux-design, 3d-design, blender-authoring]
     links:
       - repo: tt-a1i/archify
         note: Turns a codebase or a description into interactive architecture and sequence diagrams as self-contained HTML.

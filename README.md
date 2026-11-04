@@ -134,6 +134,7 @@ CI fails when they drift.
 | [`refine`](rarely-used/refine/SKILL.md) _(rarely used)_ | Review and improve the work until its constraints and requested score pass. |
 | [`write-a-brief`](skills/write-a-brief/SKILL.md) | Write or tighten a one-to-two-page brief for a meeting with a professional, quotes included. |
 | [`markdown-to-pdf`](skills/markdown-to-pdf/SKILL.md) | Turn a Markdown note into a checked, print-ready A4 PDF. |
+| [`uipack-design`](skills/uipack-design/SKILL.md) | Build slides, pages and figures in the UiPack design system, swapping its styles cleanly. |
 | [`system-diagram`](skills/system-diagram/SKILL.md) | Turn a real system flow into a polished, readable SVG figure. |
 | [`ux-design`](skills/ux-design/SKILL.md) | Audit or design a page's UX against a usability checklist before visual polish. |
 | [`3d-design`](skills/3d-design/SKILL.md) | Choose the right authoring and browser workflow for a 3D object or animation. |
@@ -192,6 +193,7 @@ _Diagrams, interfaces, 3D and visual judgment._
 
 | Skill | Does |
 |---|---|
+| [`uipack-design`](skills/uipack-design/SKILL.md) | Build or restyle a visual in the owner's UiPack design system: slides or a talk deck, a landing or product page, a diagram for a site or article, a motion explainer or a 3D hero. Use for "make slides", "landing page", "in our style", "on brand", "use uipack", "swap the style", "make it not look AI-generated", or any visual in a repo that depends on uipack. Not for: data charts alone (dataviz), a UX audit alone (ux-design), Blender installs. |
 | [`system-diagram`](skills/system-diagram/SKILL.md) | Draw a polished system or architecture diagram as hand-authored inline SVG: request flows, agent pipelines, queues, service maps, before/after. Use for "system diagram", "architecture diagram", "draw the flow", a figure for a site, README or note. Not for: data charts (dataviz), UI mockups, one-hop relationships. |
 | [`ux-design`](skills/ux-design/SKILL.md) | Audit or design a page or app's UX against a usability checklist (navigation, states, touch targets, focus, contrast, motion, mobile), then hand visuals to frontend-design. Use for "UX pass", "audit the UX", "make this usable on mobile", "accessibility check". Not for: aesthetics alone (frontend-design), charts (dataviz). |
 | [`3d-design`](skills/3d-design/SKILL.md) | Choose and run a 3D workflow (Blender, Three.js, CSS, model-viewer and others) for illustrations, models, character animation and interactive web scenes. Use for "3D design", "model this", "Blender or Three.js", "seamless loop", "make the movement natural". Not for: page layout, 2D diagrams, Blender install issues. |
@@ -234,7 +236,7 @@ _Trips, shopping, property, learning and hard choices._
 | [`decide`](skills/decide/SKILL.md) | Make a hard, consequential choice and commit: reframe it, find the unlisted option, rough numbers, downside, pre-mortem, one pick, the fact that flips it and a tripwire. Use for "should I X or Y", "help me decide", "is it worth quitting / switching", job offers. Not for: what to buy (product-shopping), trivial or factual questions. |
 | [`trip-planner`](skills/trip-planner/SKILL.md) | Plan or replan trips using live research for routes, hours, parking, food, tolls, and pacing. Use for itineraries and on-the-road questions about stops, parking, or eating. |
 | [`product-shopping`](skills/product-shopping/SKILL.md) | Recommend what product to buy, find the best legitimate price for a chosen model, compare its landed cost across countries (SG vs US and others, in SGD), or say where to buy it. Use for "which X should I get", "is X worth it", cheapest price, deal checks, price history, "should I buy this overseas", "where can I buy X". Not for: property (evaluate-condo). |
-| [`evaluate-condo`](rarely-used/evaluate-condo/SKILL.md) _(rarely used)_ | Evaluate a Singapore condo listing or development and file a cited Buy/Neutral/Avoid note. Use for PropertyGuru, 99.co, EdgeProp, "evaluate this condo", or "is this unit worth it". |
+| [`evaluate-condo`](rarely-used/evaluate-condo/SKILL.md) _(rarely used)_ | Turn a Singapore condo listing or development into a cited Buy/Neutral/Avoid verdict with a maximum buy price, filed in the host repo. Use for a PropertyGuru, 99.co or EdgeProp link, "evaluate this condo", "is this unit worth it", "what should I offer", "max price for this unit". Only during a condo hunt; a property-finder flow or the weekly scan hands Buy and near-Buy units to it. Not for finding listings or running weekly scans, HDB flats, or non-property purchases (product-shopping). |
 | [`teach`](skills/teach/SKILL.md) | Create a stateful, multi-session course in the learning workspace. Use only when the user invokes teach or asks to start structured learning of a topic. Explicit-only; not for one-off explanations or research reports. |
 
 ### Career
