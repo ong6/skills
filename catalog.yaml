@@ -11,7 +11,7 @@ skill_summaries:
   blender-authoring: Build, animate, render and export Blender scenes with Python.
   markdown-to-pdf: Turn a Markdown note into a checked, print-ready A4 PDF.
   feedback-loop: Record feedback and patch the skill or rule that caused it in the same session.
-  refine: Review and improve the work until its constraints and requested score pass.
+  council: Put work through fresh reviewer agents that pick metrics and score it until it meets the target.
   save-video: File a YouTube video as a searchable note with takeaways, category and tags.
   datastore: Keep structured records as append-only JSONL with a local SQLite cache for SQL.
   write-a-brief: Write or tighten a one-to-two-page brief for a meeting with a professional, quotes included.
@@ -44,8 +44,8 @@ categories:
         note: Neural web search and page fetch as an MCP server.
   - key: writing
     title: Writing
-    blurb: How replies, briefs and documents read.
-    skills: [refine, write-a-brief, markdown-to-pdf]
+    blurb: How replies, briefs and documents read, and getting any work reviewed.
+    skills: [council, write-a-brief, markdown-to-pdf]
     links:
       - repo: JuliusBrussee/caveman
         note: Compressed "caveman" prose for agents; cuts output tokens by about two thirds while keeping code and commands exact.
