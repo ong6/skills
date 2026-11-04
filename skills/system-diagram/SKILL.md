@@ -36,16 +36,16 @@ to the targets below, never an Artifact unasked); do not restate it.
 
 ## Taste spec
 
-Numbers are for a `viewBox` roughly 960 wide. Scale proportionally.
+When the target uses UiPack, its `docs/system/style.md#diagrams` and `layout.md#diagrams` are canonical and win over this table. This table matches them for figures drawn without UiPack. Numbers are for a `viewBox` roughly 960 wide. Scale proportionally.
 
 | Element | Rule |
 |---|---|
 | Grid | 8px base. Node x/y, widths, and gaps are multiples of 8. Columns share x; rows share y. |
-| Node | `rect` with `rx="6"`, stroke 1.25 `currentColor` at 0.55 opacity, no fill (or the page surface token). Height 56 for a single label, 72 with a sub-label. |
+| Node | `rect` with `rx="6"`, surface fill, stroke 1.25 `currentColor` at 0.7 opacity (accent at 1). Height 56 for a single label, 72 with a sub-label. |
 | Gap | 40 between nodes in a flow, 64 between groups. Never under 32; arrows need room for labels. |
 | Type | Label 13px, weight 600. Sub-label 11px monospace, 0.7 opacity. Arrow label 11px monospace. Group title 11px monospace uppercase, letter-spacing .08em. |
 | Arrows | `stroke-width 1.25`, `marker-end`, arrowhead 8 long. Straight or one right-angle bend. No curves unless a swimlane forces it. Label sits 6px above the line, centred, with a page-colour underlay so it never crosses the stroke. |
-| Groups | Dashed `rect` at 0.35 opacity, `rx="10"`, padding 24, title top-left inside. Use for an environment, a tenant boundary, an async region. |
+| Groups | Dashed `rect` at 0.4 opacity, `rx="10"`, dash `4 4`, padding 24, title top-left inside: an environment, a tenant boundary, an async region. A solid group is `rx="6"`. |
 | Accent | One hue, the site's theme accent, on the single path the claim is about. Everything else `currentColor`. |
 | Numbering | Small circled digits (r=9, 10px) on steps when order matters. Refer to them in the caption. |
 | Whitespace | 40px margin all round inside the `viewBox`. Crowded reads as careless. |
