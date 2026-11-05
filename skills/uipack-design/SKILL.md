@@ -39,7 +39,9 @@ Copy this checklist into the reply and tick it off:
    the line leadership should repeat a week later.
 2. **Writing.** Write the words as a typed object first (`DeckSlide[]`, a preset spec, a page
    content object). Then run the medium's checks. Decks go through `lintDeck` and `storylineOf`
-   from `uipack/deck`. Fix findings before layout.
+   from `uipack/deck`. Fix findings before layout. Words read as a person's: plain statements
+   and numbers, none of writing.md's AI tells (corrective "X, not Y", kickers, triads, inline
+   disclaimers).
 3. **Layout.** Choose from the medium's archetype or pattern table. A deck is a sequence of
    archetypes picked by slide role. A web page follows the section sequence its style recommends.
 4. **Style.** Pick from the style list in `style.md` and apply it with the `uiStyle` prop (`Figure`,

@@ -70,12 +70,20 @@ The failure mode is a doc that is correct and obviously machine-made. Fixes, by 
 - **Kill decoration.** ✅/🚩 legends, emoji headers, "The Three Numbers" capital-letter framing.
 - **A table needs two real columns.** A second column of sentences is a list in costume.
   Numbers, ranges and comparisons stay in tables; reasoning becomes prose.
-- **Vary sentence length.** Follow a long sentence with a short one.
+- **Let length follow content.** Most lines short; a longer one where the reasoning needs it. A
+  short line carries a fact or a position, never a slogan.
 - **Short Anglo-Saxon words.** Use not utilise, start not commence, buy not procure. Cut just,
   really, simply, actually, basically.
 - **Say it once.** A fact in the background note and the brief stays in one.
 - **Contractions are fine.** This is the owner talking to themselves.
-- **Em dashes: at most one or two on the page.** Most become a period.
+- **Positions as plain statements.** "Keeping the existing boiler." beats an argued paragraph. Cut
+  corrective framing ("it's a timing question, not a price one"), triads where one item carries
+  it, and a neat closing line.
+- **A gap is a fact about the paper, said once.** "The quote doesn't say whether
+  disposal is included" goes under *Ask them*; never a disclaimer like "to be transparent" or "we can't
+  confirm".
+- **Dashes aren't the problem.** Use them where they read naturally; don't swap each one for a
+  hyphen.
 
 ## Step 3: standard shape
 
@@ -85,7 +93,7 @@ Adapt freely, but this order works:
 Title, date, what this is                    2 lines
 Walk out with:                               1 sentence, the artefacts
 Link to the background note                  1 line; brief ≠ background
-Where I stand                                3–5 bullets
+Where I stand                                as many bullets as decisions
 The numbers to check their sums against      small table, only if there are numbers
 Ask them                                     ≤8 numbered, + which one matters most
 Time-critical / expires on <event>           the reason the meeting is now
