@@ -113,8 +113,9 @@ Bring                                        plain list, only what isn't already
 - **Headings in the owner's own plain words.** No slot labels ("Settles:", "Expires",
   "Also worth saying", "Matters most:" lines). An expiry lives in the question or position it
   affects ("pre-authorisation needs 10 working days, so for a December date who submits it
-  today?"). For a quote meeting, add one line or short paragraph of what should be in the quote
-  anyway; skip it otherwise.
+  today?"). For a quote meeting, add one line of things to check the quote covers, phrased as a
+  check ("check the S$X install line covers…"), never as a fact about their scope; skip it
+  otherwise. Name the checklist for where the meeting is ("Before he leaves" at home).
 - **Questions can talk to the professional** ("what would make you change your mind?"); they are
   read aloud.
 - **A slip in the background facts is fixed in place**, plainly ("physio since 6 Oct, so 7 weeks
