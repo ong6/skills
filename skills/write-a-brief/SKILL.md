@@ -12,8 +12,8 @@ you glance at, not a report.
 
 Answer three questions from the background note or by asking:
 
-1. **What does the owner walk out holding?** A quote, a drawing, a date, a decision. Name the
-   artefacts in the first three lines.
+1. **What does the owner walk out holding?** A quote, a drawing, a date, a decision. The
+   decision goes in the first three lines; the artefacts go in *Leave with*.
 2. **How good is this person?** Assume competent and experienced until shown otherwise.
 3. **What expires?** Anything that gets expensive or impossible after a date: a roof closing,
    a membrane going down, an application still open, a return window. Usually the real reason
@@ -25,9 +25,9 @@ This is the whole skill. Every candidate item goes in exactly one bucket:
 
 | Bucket | Contains | Written as |
 |---|---|---|
-| **Where I stand** | Decisions the owner has made and intends to hold, with the one-line reason. | Statements, not questions. Include what a pushback must contain to change the answer. |
+| **Where I stand** | Decisions the owner has made and intends to hold, with the one-line reason. | Plain statements, no bold lead-ins. Include what a pushback must contain to change the answer. Only decisions the owner actually stated; never a verdict they didn't give ("I wouldn't sign this"). |
 | **Ask them** | Only items passing the test below. | Numbered questions. **Hard cap ~8.** |
-| **Assume they handle it** | Everything a competent pro does by default. | One dense scan paragraph, prefaced with "not quizzing you on this, but it has to show up in the quote." |
+| **Should be in the quote anyway** | Everything a competent pro does by default, drawn from the quote or background, not a generic trade checklist. | One short paragraph the owner can scan; say it aloud only if an item is missing from the quote. |
 
 **A question earns a slot only if it is one of:**
 
@@ -40,13 +40,21 @@ Everything else is hand-holding. Reciting standards at a tradesperson signals di
 minutes, and buries the questions that matter. Over ~8 questions, cut; don't reformat. A
 30-question sheet is an unsorted one.
 
-**Name the one question that matters most and say why**, one line under the list. It's what
-the owner falls back on when the meeting runs short.
+**Name the one question that matters most and say why**, one plain line under the list, stating
+the consequence, not a verdict the owner hasn't given. It's what the owner falls back on when
+the meeting runs short.
 
 ## When the meeting is about a quote
 
 Before sorting questions, check the commercial frame; it decides which line items are worth asking
 about. Trace every number to the quote's extracted text (`pdftotext -layout`), never memory.
+
+- **Do the sums the owner would do in their head**, from the given figures only: price per unit
+  against the other quote, how much of their use an estimate covers, the gap in money between two
+  options. Show the inputs in the table. A benchmark or product fact from outside the papers goes
+  in as a question ("is 1,200 kWh per kWp realistic for this roof?"), never as a stated fact.
+- **Check the papers themselves**: weekday against date, totals against line items, units. A
+  mismatch is the first line of the brief, as a `TODO:`.
 
 - **Allowance:** quote against the budget line or PC sum, with GST stated in or out.
 - **Who keeps a saving:** under a PC sum it may credit the main contract, not the owner. Unknown
@@ -91,21 +99,22 @@ Adapt freely, but this order works:
 
 ```
 Title, date, what this is                    2 lines
-Walk out with:                               1 sentence, the artefacts
+The one decision this meeting settles        1 sentence
 Link to the background note                  1 line; brief ≠ background
 Where I stand                                as many bullets as decisions
-The numbers to check their sums against      small table, only if there are numbers
-Ask them                                     ≤8 numbered, + which one matters most
-Time-critical / expires on <event>           the reason the meeting is now
-Assume they handle it, flag if not           one paragraph + the 1–2 worth paying for
-Bring                                        tick-boxes
-Leave with                                   tick-boxes
-Also worth saying out loud                   adjacent issues, things that aren't theirs to fix
+The numbers                                  small table with the sums, only if there are numbers
+Ask them                                     ≤8 numbered, + which one matters most and why
+Expires on <event>                           one line if an Ask already covers it
+Should be in the quote anyway                one short paragraph
+Bring                                        tick-boxes, only what isn't already in the room
+Leave with                                   tick-boxes: the artefacts, listed once
 Related                                      links back to the background notes
 ```
 
-**Bring and Leave with survive contact with a real meeting.** Tick-boxes, kept last so a thumb
-finds them.
+**Each item appears once.** The artefacts live in *Leave with*, not also in a top line; the expiry
+lives in its question, with the block only saying why it's now. Drop any section with nothing real
+in it (no "Also worth saying" filler). **Leave with survives contact with a real meeting.**
+Tick-boxes, kept last so a thumb finds them. The whole brief fits about two phone screens.
 
 ## Step 4: check before handing over
 
@@ -113,7 +122,9 @@ Return to Step 1 on any fail.
 
 - [ ] Count the questions. Over 8 → cut, don't merge.
 - [ ] Every question passes one of the four tests. Any that don't → move to *Assume*.
-- [ ] The first three lines alone say what to walk out with.
+- [ ] The first three lines alone say what the meeting decides.
+- [ ] No item appears twice (top line, Ask, Expires, Leave with).
+- [ ] No bold lead-in bullets, no "X, not Y" line, no kicker after the "matters most" line.
 - [ ] Bold spans in the longest section ≤ ~5.
 - [ ] Every fact traces to the background note or a source. Never invent a price, a
       standard, a lead time.
