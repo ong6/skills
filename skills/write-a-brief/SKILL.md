@@ -40,9 +40,9 @@ Everything else is hand-holding. Reciting standards at a tradesperson signals di
 minutes, and buries the questions that matter. Over ~8 questions, cut; don't reformat. A
 30-question sheet is an unsorted one.
 
-**Name the one question that matters most and say why**, one plain line under the list, stating
-the consequence, not a verdict the owner hasn't given. It's what the owner falls back on when
-the meeting runs short.
+**Put the one question that matters most first and mark it "(ask first)"**, with its consequence
+in the same line if it isn't obvious, never a verdict the owner hasn't given. It's what the owner
+falls back on when the meeting runs short.
 
 ## When the meeting is about a quote
 
@@ -54,7 +54,7 @@ about. Trace every number to the quote's extracted text (`pdftotext -layout`), n
   options. Show the inputs in the table. A benchmark or product fact from outside the papers goes
   in as a question ("is 1,200 kWh per kWp realistic for this roof?"), never as a stated fact.
 - **Check the papers themselves**: weekday against date, totals against line items, units. A
-  mismatch is the first line of the brief, as a `TODO:`.
+  mismatch that changes an answer becomes a question; a plain slip is fixed in place.
 
 - **Allowance:** quote against the budget line or PC sum, with GST stated in or out.
 - **Who keeps a saving:** under a PC sum it may credit the main contract, not the owner. Unknown
@@ -93,38 +93,48 @@ The failure mode is a doc that is correct and obviously machine-made. Fixes, by 
 - **Dashes aren't the problem.** Use them where they read naturally; don't swap each one for a
   hyphen.
 
-## Step 3: standard shape
+## Step 3: shape
 
-Adapt freely, but this order works:
+Lean and in the order the meeting runs. A typical brief is four or five headed parts:
 
 ```
-Title, date, what this is                    2 lines
-The one decision this meeting settles        1 sentence
-Link to the background note                  1 line; brief ≠ background
-Where I stand                                as many bullets as decisions
+Who, when, where                             title line
+What I want from this meeting                one sentence: the decision and what I leave holding
+Where I am                                   the facts the conversation turns on, the document
+                                             wording that decides it quoted exactly, then my
+                                             decisions (Where I stand) as plain statements
 The numbers                                  small table with the sums, only if there are numbers
-Ask them                                     ≤8 numbered, + which one matters most and why
-Expires on <event>                           one line if an Ask already covers it
-Should be in the quote anyway                one short paragraph
-Bring                                        tick-boxes, only what isn't already in the room
-Leave with                                   tick-boxes: the artefacts, listed once
-Related                                      links back to the background notes
+Questions                                    ≤8, grouped in the order the decision unfolds; the
+                                             one that matters most comes first, marked "(ask first)"
+Before I leave                               tick-boxes: the artefacts and answers, listed once
+Bring                                        plain list, only what isn't already in the room
 ```
 
-**Each item appears once.** The artefacts live in *Leave with*, not also in a top line; the expiry
-lives in its question, with the block only saying why it's now. Drop any section with nothing real
-in it (no "Also worth saying" filler). **Leave with survives contact with a real meeting.**
-Tick-boxes, kept last so a thumb finds them. The whole brief fits about two phone screens.
+- **Headings in the owner's own plain words.** No slot labels ("Settles:", "Expires",
+  "Also worth saying", "Matters most:" lines). An expiry lives in the question or position it
+  affects ("pre-authorisation needs 10 working days, so for a December date who submits it
+  today?"). For a quote meeting, add one line or short paragraph of what should be in the quote
+  anyway; skip it otherwise.
+- **Questions can talk to the professional** ("what would make you change your mind?"); they are
+  read aloud.
+- **A slip in the background facts is fixed in place**, plainly ("physio since 6 Oct, so 7 weeks
+  by today"), never as a `TODO:` at the top. `TODO:` is only for an unknown that blocks the
+  meeting.
+- **Inferences are questions, not facts.** A timing or cost guess the papers don't state becomes a
+  question ("Does a December date clear the January busy period?").
+- **Each item appears once.** The whole brief fits about two phone screens. Link the background
+  note in one line under the title when there is one; a Related line at the end, if any.
 
 ## Step 4: check before handing over
 
 Return to Step 1 on any fail.
 
 - [ ] Count the questions. Over 8 → cut, don't merge.
-- [ ] Every question passes one of the four tests. Any that don't → move to *Assume*.
+- [ ] Every question passes one of the four tests. Any that don't → cut, or to the quote line.
 - [ ] The first three lines alone say what the meeting decides.
-- [ ] No item appears twice (top line, Ask, Expires, Leave with).
-- [ ] No bold lead-in bullets, no "X, not Y" line, no kicker after the "matters most" line.
+- [ ] No item appears twice; no slot-label headings; no `TODO:` for something already known.
+- [ ] No bold lead-in bullets, no "X, not Y" line, no kicker line under a position or question.
+- [ ] No inference stated as fact: guesses about timing or cost are questions.
 - [ ] Bold spans in the longest section ≤ ~5.
 - [ ] Every fact traces to the background note or a source. Never invent a price, a
       standard, a lead time.
