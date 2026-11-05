@@ -1,8 +1,18 @@
 # Authoring a skill
 
 The make half of Skillsmith: gate, ground, draft. Deeper references:
-[Anthropic's skill-authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
-and [OpenAI's Codex skill guide](https://developers.openai.com/codex/skills/).
+[Anthropic's skill-authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices),
+[The Complete Guide to Building Skills for Claude](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf),
+the [Agent Skills spec](https://agentskills.io/specification),
+[Claude Code skills](https://code.claude.com/docs/en/skills) and
+[OpenAI's Codex skill guide](https://developers.openai.com/codex/skills/).
+
+## Contents
+
+- [Gate: does this need a skill?](#gate-does-this-need-a-skill)
+- [Ground: what does this repo already have?](#ground-what-does-this-repo-already-have)
+- [Draft](#draft): folder, frontmatter, description, body rules
+- [Maintain](#maintain)
 
 ## Gate: does this need a skill?
 
@@ -37,13 +47,25 @@ query. Read the manuals and the top matches before drafting.
 
 ## Draft
 
-**Frontmatter.** Only `name` and `description`. `name`: lowercase letters, digits and hyphens, at
-most 64 characters, matching the folder. `description`: at most 1024 characters, no angle brackets,
-a YAML block scalar when punctuation could be misparsed.
+**Folder.** `SKILL.md` exactly, plus `scripts/` (run), `references/` (read on demand) and
+`assets/` (used in output) as needed. No `README.md` inside the skill: agent docs go in SKILL.md or
+`references/`, human docs in the repo README.
+
+**Frontmatter.** `name` and `description`, nothing else by default. `name`: lowercase letters,
+digits and single hyphens, at most 64 characters, matching the folder, never containing `claude` or
+`anthropic`. `description`: at most 1024 characters, no angle brackets, a YAML block scalar when
+punctuation could be misparsed. The spec's other fields (`license`, `compatibility`, `metadata`,
+`allowed-tools`) upload anywhere; Claude Code-only fields (`disable-model-invocation`, `context`,
+`paths`...) make claude.ai and Skills API uploads fail, so use them only in skills that never leave
+Claude Code.
 
 **The description is a trigger, not a summary.** It is the only text the agent sees when choosing a
-skill. Name the literal phrases and situations that should reach it and the near-misses that
-shouldn't (`...; not resume editing`). Vague descriptions are the main failure mode.
+skill. Shape: what it does, then `Use for/when` with the literal phrases and situations that should
+reach it, then the near-misses that shouldn't (`...; not resume editing`). Third person ("Drafts
+...", never "I can" or "you can"). Put the key use case first: Claude Code truncates long entries
+and, when the listing is over budget, drops descriptions of the least-used skills. Vague
+descriptions are the main failure mode; ask a fresh agent "when would you use the X skill?" and fix
+what its answer misses.
 
 **Pick the side of invocation.** Heavy workflows a user starts on purpose are explicit-only, or they
 fire as noise. Steering skills that must apply whenever the situation arises stay implicit. Codex
@@ -73,6 +95,11 @@ add only what it doesn't know, and cut any paragraph that doesn't change behavio
   loaded. Cut filler and generic framing.
 - **Compose instead of inflating.** Link to a skill that already defines the vocabulary or
   sub-procedure and say when to reach for it.
+- **Critical rules go first.** After compaction the host may keep only the start of a loaded
+  skill, and an instruction buried mid-file is the one that gets skipped. A rule that must hold on
+  every single action belongs in a hook, not prose.
+- **Name MCP tools fully** (`Server:tool_name`, or the host's `mcp__server__tool` form); a bare tool
+  name fails when several servers are connected.
 - **Avoid** time-sensitive statements, inconsistent terminology, and several tools where one default
   plus an escape hatch will do.
 

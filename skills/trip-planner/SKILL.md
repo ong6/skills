@@ -1,6 +1,6 @@
 ---
 name: trip-planner
-description: Plan or replan trips using live research for routes, hours, parking, food, tolls, and pacing. Use for itineraries and on-the-road questions about stops, parking, or eating.
+description: Plan or replan trips using live research for routes, hours, parking, food, tolls, and pacing. Use for itineraries and on-the-road questions about stops, parking, or eating. Not for: buying travel gear (product-shopping) or general destination facts with no plan.
 ---
 
 # Plan Trip

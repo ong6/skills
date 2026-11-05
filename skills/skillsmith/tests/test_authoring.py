@@ -91,6 +91,40 @@ class LintTests(unittest.TestCase):
         self.assertIn("near-miss", joined)
         self.assertIn("explicit-only", joined)
 
+    def test_spec_rules_from_the_agent_skills_standard(self):
+        with tempfile.TemporaryDirectory() as directory:
+            reserved = write_skill(Path(directory), "claude-helper",
+                                   "name: claude-helper\ndescription: Use for x; not y.")
+            double = write_skill(Path(directory), "pdf--tools",
+                                 "name: pdf--tools\ndescription: Use for x; not y.")
+            self.assertIn("reserved words", "\n".join(lint.lint(reserved)[0]))
+            self.assertIn("single hyphens", "\n".join(lint.lint(double)[0]))
+
+    def test_spec_fields_pass_and_client_only_fields_warn(self):
+        with tempfile.TemporaryDirectory() as directory:
+            spec = write_skill(Path(directory), "spec",
+                               "name: spec\ndescription: Use for x; not y.\nlicense: MIT\n"
+                               "compatibility: Requires git")
+            client = write_skill(Path(directory), "client",
+                                 "name: client\ndescription: Use for x; not y.\n"
+                                 "disable-model-invocation: true")
+            self.assertEqual(([], []), lint.lint(spec))
+            errors, warnings = lint.lint(client)
+        self.assertEqual([], errors)
+        self.assertIn("outside the Agent Skills spec", "\n".join(warnings))
+
+    def test_voice_size_paths_and_readme_warn(self):
+        with tempfile.TemporaryDirectory() as directory:
+            folder = write_skill(Path(directory), "demo",
+                                 "name: demo\ndescription: I can help when you need x; not y.",
+                                 "Run scripts\\run.py first.\n" + "word " * 4000)
+            (folder / "README.md").write_text("# Demo\n", encoding="utf-8")
+            errors, warnings = lint.lint(folder)
+        self.assertEqual([], errors)
+        joined = "\n".join(warnings)
+        for expected in ("third person", "about", "backslash", "README.md inside"):
+            self.assertIn(expected, joined)
+
 
 class ReferenceLayoutTests(unittest.TestCase):
     DESCRIPTION = "name: demo\ndescription: Use for x; not y."
@@ -138,7 +172,7 @@ class ReferenceLayoutTests(unittest.TestCase):
 
     def test_orphan_reference_warns_but_folder_docs_do_not(self):
         _, warnings = self.lint_with("# Skill\n", {"references/orphan.md": "# Orphan\n",
-                                                   "README.md": "# About\n", "tests/fixture.md": "x\n"})
+                                                   "CHANGELOG.md": "# About\n", "tests/fixture.md": "x\n"})
         self.assertEqual(["references/orphan.md is never referenced from SKILL.md"], warnings)
 
 

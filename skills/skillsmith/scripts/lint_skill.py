@@ -16,6 +16,15 @@ LINK_PATTERN = re.compile(r"\]\(([^)\s]+)\)")
 MAX_NAME = 64
 MAX_DESCRIPTION = 1024
 MAX_BODY_LINES = 500
+# The Agent Skills spec recommends a body under 5,000 tokens; words * 4/3 approximates tokens.
+MAX_BODY_TOKENS = 5000
+MAX_COMPATIBILITY = 500
+RESERVED_NAME_WORDS = ("anthropic", "claude")
+# Fields the Agent Skills spec defines. claude.ai uploads and the Skills API reject any other key;
+# Claude Code accepts its own extras (disable-model-invocation, context, paths...), Codex ignores them.
+SPEC_FIELDS = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
+PERSONAL_VOICE = re.compile(r"\b(?:I can|I will|I'll|I help|you can|lets you|we can)\b", re.IGNORECASE)
+BACKSLASH_PATH = re.compile(r"\b[\w.-]+\\[\w.-]+\.(?:md|py|sh|js|ts|json|ya?ml)\b")
 # Claude may preview a long reference with `head -100`, so its scope must show in the first lines.
 TOC_THRESHOLD = 100
 TOC_WINDOW = 30
@@ -190,13 +199,18 @@ def lint(skill_dir: Path) -> tuple[list[str], list[str]]:
 
     name = fields.get("name", "")
     description = fields.get("description", "")
-    extra = sorted(set(fields) - {"name", "description"})
+    extra = sorted(set(fields) - SPEC_FIELDS)
     if extra:
-        warnings.append(f"frontmatter keys beyond name and description: {', '.join(extra)}")
+        warnings.append(f"frontmatter keys outside the Agent Skills spec: {', '.join(extra)}; "
+                        "claude.ai upload and the Skills API reject them")
+    if len(fields.get("compatibility", "")) > MAX_COMPATIBILITY:
+        errors.append(f"compatibility is over {MAX_COMPATIBILITY} chars")
     if not name:
         errors.append("frontmatter needs name")
     elif not NAME_PATTERN.match(name) or len(name) > MAX_NAME:
-        errors.append(f"name must be lowercase letters, digits and hyphens, at most {MAX_NAME} chars")
+        errors.append(f"name must be lowercase letters, digits and single hyphens, at most {MAX_NAME} chars")
+    elif any(word in name for word in RESERVED_NAME_WORDS):
+        errors.append(f"name must not contain the reserved words {' or '.join(RESERVED_NAME_WORDS)}")
     elif name != skill_dir.resolve().name:
         errors.append(f"name {name!r} does not match folder {skill_dir.resolve().name!r}")
     if not description:
@@ -210,10 +224,21 @@ def lint(skill_dir: Path) -> tuple[list[str], list[str]]:
             warnings.append("description reads as a summary; name the requests that should trigger it")
         if not re.search(r"\bnot\b", description, re.IGNORECASE):
             warnings.append("description names no near-miss; add a 'not for ...' clause")
+        if PERSONAL_VOICE.search(description):
+            warnings.append("description should be third person ('Drafts...'), not 'I can' or 'you can'")
 
     body_lines = len(body.splitlines())
     if body_lines > MAX_BODY_LINES:
         errors.append(f"body is {body_lines} lines; split into references past {MAX_BODY_LINES}")
+    body_tokens = len(body.split()) * 4 // 3
+    if body_tokens > MAX_BODY_TOKENS:
+        warnings.append(f"body is about {body_tokens} tokens; the spec recommends under {MAX_BODY_TOKENS}, "
+                        "so move detail into references")
+    if BACKSLASH_PATH.search(body):
+        warnings.append("Windows-style backslash path in the body; use forward slashes")
+    if (skill_dir / "README.md").is_file():
+        warnings.append("README.md inside the skill folder; put agent docs in SKILL.md or references/ "
+                        "and human docs in the repo README")
 
     for target in LINK_PATTERN.findall(body):
         if re.match(r"^[a-z]+:", target) or target.startswith("#"):

@@ -30,7 +30,7 @@ jobs:
           linter=skills/skillsmith/scripts/lint_skill.py
           if [ ! -f "$linter" ]; then echo "skillsmith linter not present; lint skipped"; exit 0; fi
           status=0
-          for dir in skills/*/; do
+          for dir in skills/*/ rarely-used/*/; do
             [ -f "$dir/SKILL.md" ] || continue
             python3 "$linter" "$dir" || status=1
           done

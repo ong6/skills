@@ -160,9 +160,10 @@ All helpers use only the Python standard library and never call a model.
     python3 scripts/lint_skill.py /absolute/repo/.claude/skills/new-skill
 
 The inventory ranks existing skills by overlap with the proposed job; the linter blocks on
-frontmatter, size, and broken-link errors. It warns on weak triggers, long references without a
-contents list, references SKILL.md does not link directly, and script dependencies with no install
-line.
+frontmatter, Agent Skills spec naming, size, and broken-link errors. It warns on weak or
+first-person triggers, frontmatter keys outside the spec, bodies over about 5,000 tokens, long
+references without a contents list, references SKILL.md does not link directly, a README.md inside
+the skill, backslash paths, and script dependencies with no install line.
 
 Evaluation version 3 is the default for new evaluations. Versions 1 and 2 remain accepted for existing bundles.
 New v3 bundles carry gate revision 2 (t interval, concurrency cap, calibration balance, optional
