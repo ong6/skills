@@ -12,8 +12,9 @@ Explain a system's responsibilities and boundaries before naming products.
 ## Use it for
 
 Solution architecture decks, integration proposals, data-flow explanations, security-boundary
-reviews and technical trade-off presentations. Usually 5–8 slides: decision framing, constraints,
-architecture, boundary and failure findings, alternatives, validation steps.
+reviews and technical trade-off presentations. Usually 5–8 slides: the decision and its conditions
+(slide 1 or 2), constraints, architecture, boundary and failure findings, alternatives, validation
+steps, an ask per decision-maker.
 
 ## Workflow
 
@@ -34,7 +35,9 @@ architecture, boundary and failure findings, alternatives, validation steps.
    recommendation is conditional.
 6. State timeout, retry, idempotency, fallback or abstention, observability and rollback behaviour
    where relevant. Missing access enforcement is a **blocking design gap** on a slide, not prose.
-7. Close with validation actions (owner, date) and one specific approval request.
+7. Close with validation actions and one specific approval request per decision-maker (security,
+   platform, budget holder), each with a date. Integration effort the customer carries is costed in
+   people-weeks or stated as a Gap with who will size it.
 
 ## Rules
 
@@ -45,75 +48,87 @@ architecture, boundary and failure findings, alternatives, validation steps.
 | Retrieval before the authorisation check in the flow | Authorise tenant and role before any data is read |
 | A fork drawn as a straight line to fit the shape | Main path on one slide, the branch and failure path on the next |
 | "Integration tested" with no test run | "Integration not yet tested" plus a validation action |
+| A vendor's stated limit ("handles 500 rps") as fact | **Reported** · with the document and date; **Measured** only from a test run |
 
 Stage names under about 35 characters and details under about 180; with five stages, details under
 120 or split. Two options compare best (55 words each at most); three options, 35 words each.
 
 ## Skeleton
 
+Replace every `{{…}}` (`check_deck.py` flags any left).
+
 ```markdown
 ---
-title: "Architecture: boundaries before integrations"
-audience: Platform, security and delivery owners
-decision: Approve a testable design for review
+title: "Architecture: {{system}} for review"
+audience: "{{platform, security and delivery owners}}"
+decision: "Approve {{a testable design}} for {{the next step}}"
+decision-makers:
+  - {{security lead}}
+  - {{platform lead}}
 deck-type: technical-architecture
 ---
 
 <!-- shape: title -->
-ARCHITECTURE / PROPOSAL
+ARCHITECTURE · {{SCOPE}}
 
-# Define the decision the design must support
+# {{Approve a read-only design: access is checked before any data is read}}
 
-Name the workload, the trust model and the non-goals.
+{{The workload, the trust model and the non-goals in one sentence.}}
 
-*Source: TBD — supplied constraints, with dates*
+*Source: {{supplied constraints, with dates}}*
 
 ---
 
-<!-- shape: findings -->
-01 / CONSTRAINTS
+<!-- shape: decision -->
+THE DECISION
 
-## Make unverified constraints explicit
+## {{Approve the design for a test, with two conditions}}
 
-- **Assumption** · Data classification, identity and authorisation requirements. *Source: TBD — security owner*
-- **Assumption** · Latency, capacity, availability and cost needs, with no invented guarantees. *Source: TBD — workload evidence*
+- {{Tenant boundary test passes}}. Owner: {{security lead}}. By: {{date}}
+- {{Workload volumes supplied}}. Owner: {{platform lead}}. By: {{date}}
+
+If no: {{what we change and when we return}}.
 
 ---
 
 <!-- shape: architecture -->
-02 / REQUEST FLOW
+01 / REQUEST FLOW
 
-## Assign a responsibility to every boundary
+## {{Every boundary has one enforcing component}}
 
 1. **Caller** — authenticate identity; define caller trust
 2. **Access boundary** — authorise tenant and role before data retrieval
-3. **Processing** — scope data; define timeout and fallback
-4. **Response and audit** — expose provenance; minimise retained data
+3. **Processing** — scope data; timeout and fallback
+4. **Response and audit** — provenance; minimal retained data
 
-*Source: Proposal — validate against the actual system contracts*
+*Source: Proposal, to validate against the system contracts*
 
 <!-- notes: retention and deletion, retry and idempotency, monitoring, rollback. Branches go on the next slide. -->
 
 ---
 
-<!-- shape: comparison -->
-03 / TRADE-OFFS
+<!-- shape: table -->
+02 / RISKS
 
-## Compare options against the same constraints
+## {{Two unknowns could change the design; both have owners}}
 
-### Current approach
-Operating ownership, security boundaries, failure recovery and constraints, from evidence.
-
-### Proposed change
-Benefits as hypotheses, integration obligations, failure modes, reversibility, validation gaps.
+| Item | Why it matters | Next step | Owner |
+|---|---|---|---|
+| {{Runbook ACLs narrower than tickets}} | {{could leak runbook text}} | {{filter at retrieval}} | {{security lead}} |
+| {{Volumes unknown}} | {{sizing and cost}} | {{share last month's peak}} | {{platform lead}} |
 
 ---
 
-<!-- shape: next-steps -->
-04 / VALIDATION
+<!-- shape: ask -->
+03 / THE ASK
 
-## Approve a testable design, not an implied guarantee
+## {{Two approvals start the test}}
 
-- Review identity, tenant boundary, retention and failure cases. Owner: TBD — security lead. Date: TBD — agree date
-- Validate contracts and workload assumptions before implementation. Owner: TBD — platform lead. Date: TBD — agree date
+### {{Security lead}}
+- {{Review the tenant-boundary test plan}}. Date: {{date}}
+
+### {{Platform lead}}
+- {{Share peak volumes and approve the test environment}}. Date: {{date}}
+
+If no: {{what we change and when we return}}.
 ```

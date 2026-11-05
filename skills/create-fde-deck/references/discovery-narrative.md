@@ -12,7 +12,8 @@ Turn discovery into a decision, not a transcript summary.
 ## Use it for
 
 Customer discovery synthesis, opportunity framing, an executive recap of interviews and workflow
-observations, or deciding whether an opportunity is worth a validation step. Usually 5–7 slides.
+observations, or deciding whether an opportunity is worth a validation step. Usually 5–7 slides,
+with the decision (run the test or not, and on what terms) on slide 1 or 2.
 
 ## Workflow
 
@@ -24,8 +25,10 @@ observations, or deciding whether an opportunity is worth a validation step. Usu
    and participant identifiers out unless authorised.
 3. Arc: current workflow → friction → impact → bounded opportunity → validation plan → decision.
 4. Recommend the **smallest experiment that could disprove the opportunity**: baseline collection,
-   success and stop criteria, an accountable owner and a target date. Missing commitments read
-   `TBD — confirm`; never assign real people without authority.
+   success and stop criteria, what it costs the customer in people-days, an accountable owner and
+   a target date. A commitment only the room can make is the ask itself ("Ops lead: name two
+   operators for a week of timings"); never assign real people without authority, and never show
+   `TBD` on a slide.
 5. Keep nuance and counterevidence in notes, but decision-changing caveats stay on the slide.
 6. List unresolved evidence gaps outside the deck.
 
@@ -37,76 +40,87 @@ observations, or deciding whether an opportunity is worth a validation step. Usu
 | A quote assembled from two interviews | Quotes only verbatim from a cited note, or no quote |
 | Two operators who disagree merged into one finding | Both observations kept, the disagreement shown |
 | "Customers want X" from one interview | Scope stated: "1 of 2 operators, 2026-08-02" |
+| An operator's estimate ("takes about an hour") shown as a finding | **Reported** · with who said it; a timing study measures it |
 | A stakeholder asks for a stronger story than the notes support | Keep the uncertainty; offer the experiment that would earn the stronger claim |
 
 Never invent quotes, sample sizes, savings, benchmarks or customer names.
 
 ## Skeleton
 
-Replace every placeholder; delete a slide rather than fill it with invented content.
+Replace every `{{…}}` (`check_deck.py` flags any left); delete a slide rather than fill it with
+invented content.
 
 ```markdown
 ---
-title: "Discovery: a decision to validate"
-audience: Decision owner and workflow team
-decision: Whether to run a bounded validation step
+title: "Discovery: {{workflow}} worth a bounded test"
+audience: "{{decision owner and workflow team}}"
+decision: "Whether to run {{the smallest test}}"
+decision-makers:
+  - {{decision owner}}
+  - {{workflow lead}}
 deck-type: discovery-narrative
 ---
 
 <!-- shape: title -->
-DISCOVERY / WORKING HYPOTHESIS
+DISCOVERY · {{WORKFLOW}}
 
-# Name the workflow friction worth investigating
+# {{Run a two-week test of X: the friction is real, its size unknown}}
 
-State the audience and the decision this discovery should enable.
+{{What the notes show, and what we ask today.}}
 
-*Source: TBD — which notes, dates and participants this deck draws on*
+*Source: {{which notes, dates and participant roles}}*
+
+---
+
+<!-- shape: decision -->
+THE DECISION
+
+## {{Approve a two-week baseline before any build}}
+
+- {{Name the operators who will log timings}}. Owner: {{workflow lead}}. By: {{date}}
+- {{Agree the success and stop criteria}}. Owner: {{decision owner}}. By: {{date}}
+
+If no: {{what stays as is, and what would reopen the question}}.
 
 ---
 
 <!-- shape: findings -->
 01 / WHAT WE KNOW
 
-## Separate observations from interpretation
+## {{Two of two operators named search; they disagree on its cost}}
 
-- **Evidence** · An observed workflow step, in the participant's terms. *Source: TBD — locator, participant role, date*
-- **Evidence** · A counterexample or unresolved disagreement. *Source: TBD — locator and scope*
-- **Assumption** · The inference you draw from them, stated as unvalidated.
+- **Reported** · {{an observed step, in the participant's terms}}. *Source: {{note, role, date}}*
+- **Reported** · {{a counterexample or disagreement}}. *Source: {{note, role, date}}*
+- **Assumption** · {{the inference drawn, stated as unvalidated}}
+- **Gap** · {{what no one has measured; who could}}
 
-<!-- notes: what would disprove this framing? -->
+Labels: Measured, from data · Reported, stated by a participant · Assumption, ours · Proposal, our plan.
 
 ---
 
 <!-- shape: comparison -->
 02 / THE OPPORTUNITY
 
-## Compare a bounded intervention with the current path
-
-**Proposal**
+## {{A reversible test beats building now}}
 
 ### Current workflow
-Known steps, constraints and observed friction. Leave impact unquantified without a baseline.
+{{Known steps, constraints and friction; impact unquantified without a baseline.}}
 
-### Smallest experiment
-A reversible change, explicit non-goals, and the evidence that would invalidate it.
-
----
-
-<!-- shape: findings -->
-03 / WHAT TO TEST
-
-## Design the next step to challenge the hypothesis
-
-- **Proposal** · Collect a representative baseline before proposing an improvement target.
-- **Proposal** · Agree success and stop criteria with the accountable team.
+### Smallest test (recommended)
+{{A reversible change, its cost in people-days, non-goals, what would invalidate it.}}
 
 ---
 
-<!-- shape: next-steps -->
-04 / THE ASK
+<!-- shape: ask -->
+03 / THE ASK
 
-## Ask for a specific learning commitment
+## {{Two commitments today start the test on a date}}
 
-- Confirm workflow scope and evidence gaps. Owner: TBD — decision owner. Date: TBD — agree date
-- Review the baseline and decide whether to test. Owner: TBD — workflow lead. Date: TBD — agree date
+### {{Decision owner}}
+- {{Approve the test and its stop criteria}}. Date: today
+
+### {{Workflow lead}}
+- {{Name two operators for a week of timings}}. Date: {{date}}
+
+If no: {{what happens instead}}.
 ```

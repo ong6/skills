@@ -33,6 +33,17 @@
         "Flags zero-risk and missing-source claims",
         "Produces slide-specific fixes and verification limits"
       ]
+    },
+    {
+      "name": "Unfinished for the room",
+      "prompt": "Review this 9-slide go/no-go deck text for a VP, a CFO and an IT director. Slide 1: 'Go to all sites once IT gates clear'. The gates are first named on slide 6. Slide 2 source line: 'Source: TBD'. Slide 4 card: 'Not measured' as the big number. Slides 2, 4, 6 and 7 are four-bullet lists tagged EVIDENCE or ASSUMPTION; a manager's 'around 3%' estimate is tagged ASSUMPTION. Slide 8 gives $5,100 a month and says 'no payback claim'. Slide 9 next steps: two owners 'TBD - confirm', nothing for the CFO.",
+      "checks": [
+        "Flags the visible TBDs as blockers and offers the owned-ask, Gap-line or pre-read forms",
+        "Flags the conditions arriving on slide 6 and asks for a decision slide at 1 or 2",
+        "Flags the CFO with no ask and the cost with no payback or break-even frame",
+        "Relabels the manager's estimate as Reported",
+        "Flags the repeated bullet layout and the gap shown as a big number, with a concrete layout fix"
+      ]
     }
   ]
 }
