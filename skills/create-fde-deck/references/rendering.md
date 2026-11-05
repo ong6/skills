@@ -50,7 +50,7 @@ createRoot(document.getElementById("root")!).render(
 |---|---|
 | `title` | `ConsultingSlide` titled with the answer; one short `Panel` per part of the asked scope (Go / Not yet) beside a narrow `KpiTiles` column of the 2–3 deciding facts, with `rows` sized to content (`"auto"`), never one tall panel of centred tiles |
 | `decision` | `HarveyTable` with text columns (condition, owner, by) and `showKey={false}`; `SoWhat` for "decided separately" and `If no:` |
-| `results` | `KpiTiles` with `note` carrying label and source ("Measured · AP audit, 1,500 docs") beside a `StackedBar` when the results are shares of one total |
+| `results` | `KpiTiles` with `note` carrying label and source ("Measured · finance audit, 600 invoices") beside a `StackedBar` when the results are shares of one total |
 | `chart` | `BarChart` with `reference={{ value, label }}` for the gate, `highlight` on the item the headline is about; `SoWhat` beside it |
 | `table` | `HarveyTable` text columns; category tags ("Gate 1") in the row label, `highlight` on one row at most |
 | `comparison` | `HarveyTable`, options as rows, the recommended row `highlight` with `tag: "Recommended"` |

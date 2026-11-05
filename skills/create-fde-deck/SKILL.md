@@ -26,10 +26,11 @@ Copy this checklist into the reply and tick it off:
 ```text
 - [ ] 1. Room, decision, deck type, evidence in hand, constraints
 - [ ] 2. Ledger built; every gap has an owner and a question
-- [ ] 3. Headlines written in order and read alone (the argument)
-- [ ] 4. Deck written from the type's skeleton; check_deck.py clean
-- [ ] 5. Rendered; shoot_deck.py and check_deck.py --rendered clean; every slide looked at
-- [ ] 6. Delivered: deck, open questions, verification limits
+- [ ] 3. Numbers pass: every derived figure recomputed, the customer's numbers tested against each other
+- [ ] 4. Decision facts written once in the frontmatter; headlines read alone (the argument)
+- [ ] 5. Deck written from the type's skeleton; check_deck.py has no flags and every note answered
+- [ ] 6. Rendered and looked at; a fresh reader's CFO read answered
+- [ ] 7. Delivered: deck, open questions, verification limits
 ```
 
 1. **Frame.** Who decides, and what each of them cares about (operations: risk and rollout;
@@ -40,10 +41,15 @@ Copy this checklist into the reply and tick it off:
    otherwise state assumptions and carry on.
 2. **Ledger before slides.** One row per claim: source locator, label (below), date, scope, method,
    sample, caveat. Each gap becomes a row too: what is missing, who can answer it, by when.
-3. **Headlines first.** Write every headline, then read them alone: they must make the argument,
-   and a count in one ("two gates") must match every other slide that counts the same thing.
-4. **Write** from the type's skeleton, then check from this skill's folder and fix every flag
-   without discarding evidence or inventing claims:
+3. **Numbers pass.** Before any number reaches a slide, work it through (see
+   [Numbers pass](#numbers-pass)): recompute every derived figure from its inputs, and test the
+   customer's own figures against each other. A figure that fails the test is a finding, not an
+   input.
+4. **Decision facts, then headlines.** Write the decision facts once in the frontmatter
+   (`conditions:` and `separately:`, see [Deck format](#deck-format)); the decision slide, the plan
+   and the ask are written from them, so a condition, owner, date, price or count reads the same
+   everywhere. Then write every headline and read them alone: they must make the argument.
+5. **Write** from the type's skeleton, then check from this skill's folder:
 
    | Deck type | Reference |
    |---|---|
@@ -55,10 +61,16 @@ Copy this checklist into the reply and tick it off:
    python3 scripts/check_deck.py path/to/deck.md   # stdlib only; exit 1 while flags remain
    ```
 
-5. **Render and look** per [references/rendering.md](references/rendering.md): run
+   A `FLAG` is structural (a missing field, a placeholder, a condition whose owner or date differs
+   from the frontmatter): fix it. A `note` is a question the script cannot answer ("is the saving
+   cash or capacity?"): answer it by reading the slide, and change the content only if the answer
+   is wrong. Never reword a line just to make a note or flag go away, and don't read the script's
+   source to see what it matches; a check passed by wording proves nothing.
+6. **Render and look** per [references/rendering.md](references/rendering.md): run
    `scripts/shoot_deck.py`, then `check_deck.py deck.md --rendered shots/slides.json` (it catches
-   figures the renderer added and appendix navigation), and open every screenshot.
-6. **Deliver** the deck, then outside it: the open questions (each with its owner) to send as a
+   figures the renderer added and appendix navigation), and open every screenshot. Then get a
+   **CFO read** (see [Numbers pass](#numbers-pass)) and fix what it finds.
+7. **Deliver** the deck, then outside it: the open questions (each with its owner) to send as a
    pre-read, and what was not verified (sources, arithmetic, fit).
 
 ## Claim labels
@@ -80,6 +92,40 @@ Labels and method live at the start of a labelled line, in source lines and in c
 prose never restates the method as a disclaimer ("this is an estimate, not a measurement", "to be
 transparent"). A before/after comparison claims no cause ("after", "went from… to"), and the
 caveat that it compares two windows is said once per deck, in a caption or the notes.
+
+## Numbers pass
+
+Judgement errors, not missing slides, are what a CFO catches. Before writing slides:
+
+- **Recompute every derived figure** from its labelled inputs and keep the formula in the ledger
+  (and in a footnote or the appendix). A share's denominator, a run-rate's volume and a net's scope
+  are named. A **break-even** is the cost divided by the value of one unit (`$40k fee ÷ $50k
+  loaded cost = 0.8 of a staff-year`), or the unit value at which cost equals benefit; never the cost
+  split across a count you picked.
+- **Test the customer's numbers against each other** before using any of them:
+  - workload: people × hours they have against volume × time per item (`12 agents × 140 h = 1,680 h
+    a month, but 20,000 tickets × 15 min = 5,000 h`);
+  - shares: the pilot's volume against the share of the total it is said to be;
+  - units: per minute against per case, per field against per document, per week against per
+    month, one site against all;
+  - parts against the whole: segment rates against the overall rate, counts against totals.
+  A figure that fails is not used in the money or the plan. Show the conflict once, as a finding
+  with the arithmetic and the person who can resolve it (`Reported · 15 min a ticket and 12
+  agents cannot both hold (5,000 h of work, 1,680 h available); service lead to confirm`), and size money
+  only on figures that survive, or as a sensitivity.
+- **Gates decide the verdict.** List every pre-agreed gate with its result. A missed hard gate
+  means the answer is not a go for the asked scope; say which gate, by how much, and what retest
+  would settle it.
+- **Money for the decision in the room**: the net row's volume and sites are the scope being
+  decided; a narrower base is labelled as such and the wider one gets its own row or a Gap.
+- **A savings or headcount aim** is checked against the workload arithmetic before it is answered.
+
+**CFO read.** After rendering, give a fresh reader (a subagent with no other context, if the host
+has one; otherwise reread it yourself in a separate pass) only the brief and the deck's visible text
+and notes, and ask it, as the customer's CFO, to list: every number that doesn't recompute; every
+customer figure used without being tested; every fact (condition, owner, date, price, count) that
+differs between slides; and the decision it would still lack. Fix each item in the content, or say
+in the notes why it stands. Don't give it this skill or the ledger.
 
 ## Open items never show as placeholders
 
@@ -113,7 +159,8 @@ approval`).
   grouped by person.
 - **Money in a frame finance can use**: run-rate cost with what the price includes and excludes,
   set against what it replaces or returns, and a **net figure** (benefit minus cost) as a range
-  **a year**, plus payback or break-even, or a Gap naming the missing input and who supplies it.
+  **a year**, plus payback or break-even (cost ÷ value of one unit), or a Gap naming the missing
+  input and who supplies it.
   Each row shows its volume base, and its label names the volume used: a net computed on pilot
   volume says `pilot sites`, never the wider `scope:`; if the scope's volume is unknown, add a
   `Gap ·` for it with its owner. Say whether the saving is **cash or released capacity** (and what
@@ -124,16 +171,20 @@ approval`).
 - **A plan with time**: phases, the gate that opens each, durations or anchored dates; a rollback
   or stop trigger for every metric the deck reports (or "monitored only"); several sites say their
   order (one first, the gate that adds the next) or why they start together.
-- **One fact, one value**: give each condition a short bold name on the decision slide
-  (`**Security review**`) and reuse it; its date, owner and the count of conditions read the same on
-  every slide, rendered ones included. Nothing reads as decided before the room decides:
-  `For decision today`, never `Decided today` or `Approved`.
+- **One fact, one value**: each condition and each thing decided separately (price, headcount,
+  another site) is written once in the frontmatter with its short name, owner and date; the slides
+  reuse the name (`**Security review**`), so its date, owner and the count of conditions read the
+  same on every slide, rendered ones included. Something listed as decided separately is not also
+  asked for today. Nothing reads as decided before the room decides: `For decision today`, never
+  `Decided today` or `Approved`.
 
 ## Deck format
 
 One Markdown file: frontmatter with `title`, `audience`, `decision`, `decision-makers` (a YAML
 list of the people or roles who decide), `asked`, `goals` (a YAML list of `Who: aim`),
-`deck-type` and, when money appears, `scope`; slides separated by `---`. Each slide has
+`deck-type`, when money appears `scope`, and the decision facts: `conditions` (a YAML list of
+`Name | condition | Owner: who | By: when`) and `separately` (a YAML list of `Name | what | Owner:
+who | When: path and date`); slides separated by `---`. Each slide has
 `<!-- shape: … -->`, an optional eyebrow, one `#`/`##` takeaway headline that parses as one claim
 (one sentence, at most one comma, colon or semicolon, at most two figures, under 95 characters),
 at most one supporting sentence, content in the shape's form, and speaker notes as a
@@ -142,7 +193,7 @@ what the slide can't hold: why it matters, the so-what, the trade-off or the ope
 never recites the headline. `Point:` names the figure that carries the claim. `Bridge:` links to
 the next slide, only where the link isn't obvious. Notes never restate or script the slide and add
 no fact the slides lack, so the slides still read alone. A labelled line opens with its label:
-`- **Measured** · 96.8% of fields correct. *Source: AP audit, 1,500 documents, weeks 1–6*`.
+`- **Measured** · 88% of invoices matched first time. *Source: finance audit, 600 invoices, weeks 1–4*`.
 
 | Shape | Content form | Limit |
 |---|---|---|
@@ -164,7 +215,7 @@ to fit. A caveat that changes the decision stays on the slide; notes are hidden 
 ## Words on the slide
 
 - Verdict first: the headline is the finding or the decision; the reason sits under it or in the notes.
-- Numbers stated flat with what they measure (`7 min median handling time, 1,500 tickets`), with
+- Numbers stated flat with what they measure (`7 min median handling time, 2,300 tickets`), with
   no "significant" or "dramatic".
 - One contrast per deck at most, only where it decides something (usually the `Answer:` line).
   Elsewhere state the fact: `18 min → 7 min`.

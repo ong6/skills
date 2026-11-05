@@ -3,6 +3,9 @@
 
 Usage: python3 check_deck.py deck.md [--rendered shots/slides.json]
 Prints one line per finding. Exit 1 when any FLAG is found, 0 when only notes (or nothing) remain.
+FLAGs are structural (fields, placeholders, shapes, owners and dates that differ from the frontmatter
+`conditions:`). Notes are questions a word match cannot settle (is the saving cash or capacity, does
+the rollback cover each metric): answer them by reading, and never reword a line only to silence one.
 Checks structure, labels, placeholders, the decision and ask slides, an `Answer:` covering the
 asked scope, a response to every `goals:` aim, one-claim headlines, the money frame (yearly net on a
 stated volume base that matches its label, Derived not Assumption for arithmetic, cash or capacity,
@@ -275,7 +278,7 @@ def norm(fig):
     return fig.replace(" ", "").rstrip(".")
 
 
-def room_checks(front, slides, visible_all, shapes, appendix_at, scope, flags):
+def room_checks(front, slides, visible_all, shapes, appendix_at, scope, flags, notes):
     """The answer to what was asked, labels on arithmetic, the money base, thresholds, goals."""
     presented = visible_all[:appendix_at - 1] if appendix_at else visible_all
     # 1. Answer the question the room asked, in so many words.
@@ -286,12 +289,12 @@ def room_checks(front, slides, visible_all, shapes, appendix_at, scope, flags):
         flags.append("slides 1-2: no `Answer:` line saying yes, no, or `yes to A, not yet to B` for what was asked "
                      "(%s)" % (asked.group(1)[:60] if asked else "add `asked:` to the frontmatter"))
     elif not VERDICT_YES.search(" ".join(answers)) and not VERDICT_NO.search(" ".join(answers)):
-        flags.append("slides 1-2: the `Answer:` line gives no verdict (yes, no, not yet): %s" % answers[0][:60])
+        notes.append("slides 1-2: the `Answer:` line gives no verdict (yes, no, not yet): %s" % answers[0][:60])
     elif asked and scope:
         beyond = stems(asked.group(1)) - stems(scope.group(1))
         said = " ".join(answers)
         if beyond and (not VERDICT_NO.search(said) or not beyond & stems(said)):
-            flags.append("slides 1-2: the room asked about `%s` but the `Answer:` line only covers `%s`; say what "
+            notes.append("slides 1-2: the room asked about `%s` but the `Answer:` line only covers `%s`; say what "
                          "happens to the rest (`not yet to …, because …; back on <date>`)" % (
                              asked.group(1)[:50], scope.group(1)[:40]))
     # 2. Arithmetic is Derived, not Assumption.
@@ -300,7 +303,7 @@ def room_checks(front, slides, visible_all, shapes, appendix_at, scope, flags):
             cells = [c.strip(" *") for c in line.strip().strip("|").split("|")]
             assumed = re.match(r"^\s*(?:[-*+]|\d+\.)\s+\*\*Assumption\*\*", line) or "Assumption" in cells
             if assumed and ARITHMETIC.search(line) and not re.search(r"\bsensitivity\b", line, re.I):
-                flags.append("slide %d: a calculated figure is labelled Assumption; label it Derived and name its "
+                notes.append("slide %d: a calculated figure is labelled Assumption; label it Derived and name its "
                              "inputs (an invented input stays Assumption): %s" % (number, line.strip()[:60]))
     # 3. Money: base, scope, yearly figure, cash or capacity, named sensitivities.
     money = [i for i, v in enumerate(presented) if len(MONEY.findall(v)) >= 2]
@@ -312,7 +315,7 @@ def room_checks(front, slides, visible_all, shapes, appendix_at, scope, flags):
     heading = re.search(r"^#{1,2}\s+(.+)$", slide, re.M)
     prices = {a for ln in slide.splitlines() if re.search(r"\bprice\b", ln, re.I) for a in amounts(ln)}
     if heading and prices & set(amounts(heading.group(1))) and PAYBACK.search(heading.group(1) + " more than"):
-        flags.append("%s: the headline restates the price as the break-even; lead with what the scope returns "
+        notes.append("%s: the headline restates the price as the break-even; lead with what the scope returns "
                      "(net a year, cash or capacity): %s" % (where, heading.group(1)[:60]))
     pilot = {norm(c) for t in visible_all for ln in t.splitlines() if re.search(r"\bpilot\b", ln, re.I)
              and re.search(r"\bvolume\b|a month|per month|a week", ln, re.I) for c in COUNT.findall(ln)}
@@ -322,21 +325,21 @@ def room_checks(front, slides, visible_all, shapes, appendix_at, scope, flags):
         bases = {norm(c) for c in COUNT.findall(MONEY.sub(" ", ln))}
         names_scope = scope_terms and len(scope_terms & words(ln)) >= max(1, round(len(scope_terms) * 0.6))
         if not bases:
-            flags.append("%s: the net row shows no volume base; put it on the row (`at 3,400 a month, the two pilot "
+            notes.append("%s: the net row shows no volume base; put it on the row (`at 3,400 a month, the two pilot "
                          "sites`) and label the row for the volume it uses: %s" % (where, ln.strip()[:60]))
         elif names_scope and bases & pilot and not re.search(r"\bpilot\b", ln, re.I):
-            flags.append("%s: the net row is labelled for `%s` but uses the pilot volume %s" % (
+            notes.append("%s: the net row is labelled for `%s` but uses the pilot volume %s" % (
                 where, scope.group(1)[:40], "/".join(sorted(bases & pilot))))
         if names_scope:
             for t in visible_all:
                 for calc in t.splitlines():
                     if re.search(r"\bNet\b", calc) and re.search(r"[×=]", calc) and \
                             {norm(c) for c in COUNT.findall(MONEY.sub(" ", calc))} & pilot:
-                        flags.append("%s: the net row is labelled for `%s`, but its arithmetic uses the pilot "
+                        notes.append("%s: the net row is labelled for `%s`, but its arithmetic uses the pilot "
                                      "volume: %s" % (where, scope.group(1)[:40], calc.strip()[:60]))
         if not YEARLY.search(ln) and not any(YEARLY.search(o) and re.search(r"\bnet\b", o, re.I)
                                              for o in slide.splitlines()):
-            flags.append("%s: give the net a year for the approved scope, not only a month: %s" % (where, ln.strip()[:60]))
+            notes.append("%s: give the net a year for the approved scope, not only a month: %s" % (where, ln.strip()[:60]))
         quoted = " ".join(re.findall(r"[“\"]([^”\"]+)[”\"]", ln))
         known = set()
         for i, t in enumerate(presented):
@@ -356,10 +359,10 @@ def room_checks(front, slides, visible_all, shapes, appendix_at, scope, flags):
                 fig = norm(corner)
                 key = "£%d" % round(float(re.sub(r"[^\d.]", "", fig))) if fig[0] in "£$€¥" else fig
                 if fig not in known and key not in known and not re.search(r"\bsensitivity\b", ln, re.I):
-                    flags.append("%s: range corner %s appears nowhere in the evidence; show it as a named "
+                    notes.append("%s: range corner %s appears nowhere in the evidence; show it as a named "
                                  "sensitivity with its input (`Sensitivity: …`): %s" % (where, corner, ln.strip()[:50]))
     if not CASH.search(slide):
-        flags.append("%s: say whether the saving is cash or released capacity (and what turns capacity into "
+        notes.append("%s: say whether the saving is cash or released capacity (and what turns capacity into "
                      "cash, e.g. posts changing)" % where)
 
 
@@ -395,7 +398,7 @@ def segment_checks(visible_all, shapes, appendix_at, flags):
                                  number, cells[0]))
 
 
-def goal_checks(front, visible_all, appendix_at, flags):
+def goal_checks(front, visible_all, appendix_at, flags, notes):
     """Every stated goal (`goals:`) gets a direct response: the holder named, a path, and when."""
     goals = frontmatter_list(front, "goals")
     if goals is None:
@@ -420,8 +423,66 @@ def goal_checks(front, visible_all, appendix_at, flags):
                 if named and aim_stems & stems(line) and TIME_ANCHOR.search(line):
                     hit = True
         if not hit:
-            flags.append("deck: `%s` gets no direct response; name them with a path, its condition and when "
+            notes.append("deck: `%s` gets no direct response; name them with a path, its condition and when "
                          "(`decided separately` alone is not an answer)" % goal[:70])
+
+
+def parse_fact(item):
+    """`Name | text | Owner: who | By: when` -> dict; missing parts are empty."""
+    parts = [p.strip() for p in item.split("|")]
+    owner = next((re.sub(r"^Owner:\s*", "", p) for p in parts if re.match(r"^Owner:", p, re.I)), "")
+    due = next((re.sub(r"^(?:By|When|Date):\s*", "", p) for p in parts
+                if re.match(r"^(?:By|When|Date):", p, re.I)), "")
+    name = parts[0].strip("* ")
+    return {"name": " ".join(name.split()[:5]), "terms": words(name), "line": item, "number": None,
+            "bold": True, "owner": owner, "due": due, "date": (dates(due) or [None])[0],
+            "text": parts[1] if len(parts) > 1 else ""}
+
+
+def fact_checks(front, slides, shapes, appendix_at, conds, flags, notes):
+    """Decision facts are written once in the frontmatter; the slides must agree with them."""
+    listed = frontmatter_list(front, "conditions")
+    separate = frontmatter_list(front, "separately") or []
+    if "decision" in shapes and listed is None:
+        flags.append("deck: frontmatter needs `conditions:` (each condition once: `Name | condition | "
+                     "Owner: who | By: when`; write `conditions: []` for an unconditional answer)")
+    if not listed:
+        return conds
+    facts = [parse_fact(i) for i in listed if i.strip() not in ("[]", "")]
+    for f in facts:
+        if not f["owner"] or not f["due"]:
+            flags.append("deck: frontmatter condition `%s` needs `Owner:` and `By:`" % f["name"])
+    on_slide = {c["name"].lower(): c for c in conds}
+    for f in facts:
+        match = next((c for c in conds if f["name"].lower() in c["line"].lower()), None)
+        if conds and not match:
+            flags.append("decision slide: frontmatter condition `%s` is not listed" % f["name"])
+        elif match:
+            if f["owner"] and match["owner"] and not (matches(f["owner"], [match["owner"]])
+                                                     or matches(match["owner"], [f["owner"]])):
+                flags.append("decision slide: `%s` is owned by %s in the frontmatter but %s on the slide" % (
+                    f["name"], f["owner"][:30], match["owner"][:30]))
+            if f["date"] and match["date"] and f["date"] != match["date"]:
+                flags.append("decision slide: `%s` is due %s in the frontmatter but %s on the slide" % (
+                    f["name"], show(f["date"]), show(match["date"])))
+    for f in facts:
+        others = set().union(*[o["terms"] for o in facts if o is not f]) if len(facts) > 1 else set()
+        f["unique"] = {t for t in f["terms"] - others if len(t) >= 6}
+    if conds and len(conds) != len(facts):
+        flags.append("decision slide: lists %d conditions; the frontmatter has %d" % (len(conds), len(facts)))
+    end = appendix_at - 1 if appendix_at else len(slides)
+    for item in separate:
+        name = parse_fact(item)["name"]
+        if len(name) < 3:
+            continue
+        for number, (slide, shape) in enumerate(zip(slides[:end], shapes[:end]), 1):
+            if shape not in ("ask", "next-steps"):
+                continue
+            for line in COMMENT.sub("", slide).splitlines():
+                if name.lower() in line.lower() and re.search(r"\btoday\b", line, re.I):
+                    flags.append("slide %d: `%s` is listed under `separately:` but asked for today: %s" % (
+                        number, name, line.strip()[:60]))
+    return facts
 
 
 def check(path, rendered=None):
@@ -513,13 +574,13 @@ def check(path, rendered=None):
                              "said it): %s" % (where, line.strip()[:60]))
             if label and label.group(1).lower() in ("measured", "reported", "evidence") \
                     and "Source:" not in line and not slide_source:
-                flags.append("%s: %s claim without a source: %s" % (where, label.group(1), line.strip()[:60]))
+                notes.append("%s: %s claim without a source: %s" % (where, label.group(1), line.strip()[:60]))
         if shape == "results":
             header = [c.strip(" *").lower() for c in table[0].strip().strip("|").split("|")] if table else []
             col = header.index("metric") if "metric" in header else 1
             for line in rows or items:
                 if "Source:" not in line and not slide_source:
-                    flags.append("%s: metric without provenance (source, sample, window): %s" % (
+                    notes.append("%s: metric without provenance (source, sample, window): %s" % (
                         where, line.strip()[:60]))
                 if not ANY_LABEL.search(line):
                     flags.append("%s: metric without a label (Measured, Reported...): %s" % (
@@ -594,7 +655,7 @@ def check(path, rendered=None):
     framed = [line for line in text.splitlines() if PAYBACK.search(line)
               and (re.search(r"\d", line) or re.search(r"\bGap\b", line))]
     if MONEY.search(text) and not framed:
-        flags.append("deck: money appears but no payback, break-even or ROI frame (or a `Gap ·` naming "
+        notes.append("deck: money appears but no payback, break-even or ROI frame (or a `Gap ·` naming "
                      "the missing input), with a number or a range")
     money = [i for i, v in enumerate(visible_all) if len(MONEY.findall(v)) >= 2
              and (not appendix_at or i < appendix_at - 1)]
@@ -608,7 +669,7 @@ def check(path, rendered=None):
             notes.append("slide %d: net stated as a Gap; give a range under assumed inputs if any are "
                          "defensible" % (main + 1))
         elif not nets:
-            flags.append("slide %d: the money slide states no net figure; add `Net (benefit − cost), <scope>: "
+            notes.append("slide %d: the money slide states no net figure; add `Net (benefit − cost), <scope>: "
                          "£a–£b a month` as a range under the stated assumptions" % (main + 1))
         if not scope:
             flags.append("deck: money appears; add `scope:` to the frontmatter (exactly what today's ask "
@@ -620,12 +681,13 @@ def check(path, rendered=None):
                              and len(need & words(ln)) >= max(1, round(len(need) * 0.6))
                              for ln in visible_all[main].splitlines())
             if need and best < max(1, round(len(need) * 0.6)) and not gap_volume:
-                flags.append("slide %d: no net row for exactly the requested scope (`%s`); show that row first, "
+                notes.append("slide %d: no net row for exactly the requested scope (`%s`); show that row first, "
                              "wider scope only as context" % (main + 1, scope.group(1)))
 
-    room_checks(front, slides, visible_all, shapes, appendix_at, scope, flags)
-    segment_checks(visible_all, shapes, appendix_at, flags)
-    goal_checks(front, visible_all, appendix_at, flags)
+    room_checks(front, slides, visible_all, shapes, appendix_at, scope, flags, notes)
+    segment_checks(visible_all, shapes, appendix_at, notes)
+    goal_checks(front, visible_all, appendix_at, flags, notes)
+    conds = fact_checks(front, slides, shapes, appendix_at, conds, flags, notes)
 
     # Conditions: one date, one owner and one count everywhere.
     owners = (people or []) + [c["owner"] for c in conds if c["owner"]]
@@ -650,7 +712,7 @@ def check(path, rendered=None):
         else:
             for name, keys in metrics:
                 if keys and not any(re.search(r"\b%s" % k[:5], rule) for k in keys):
-                    flags.append("deck: the rollback rule has no trigger for reported metric `%s`; add one, or "
+                    notes.append("deck: the rollback rule has no trigger for reported metric `%s`; add one, or "
                                  "say it is monitored only" % name[:50])
 
     if rendered:

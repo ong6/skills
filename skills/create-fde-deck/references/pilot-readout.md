@@ -40,7 +40,8 @@ Merge or drop rows for a shorter meeting; never drop slides 1, 2, the money or t
    baseline, cohort, sample, window, exclusions, method, cost and incidents.
 2. Build the **measurement ledger**: metric, numerator and denominator, unit, baseline (and whether
    it was measured or reported), observed value, window, source, caveat. Absent data is a Gap with
-   an owner, never zero.
+   an owner, never zero. Then run the numbers pass in SKILL.md: the customer's workload, share,
+   unit and part-whole figures tested against each other before any reaches the money or the plan.
 3. Check comparability: cohort shifts, different units (per field versus per document), windows,
    manual assistance. No causal or population-wide claim from an uncontrolled pilot. Show any
    computed figure's formula in the notes or a footnote.
@@ -98,8 +99,9 @@ Finance needs to judge the price against something. Show, on one slide:
   overtime change; name what would turn it into cash. Tie it to any redeployment aim.
 - **Sensitivities by name.** A corner not in the evidence (a lower rate elsewhere, half a reported
   cost) goes in a `Sensitivity:` row naming the input, so the evidenced figure stays the headline.
-- **Payback or break-even** as a range from stated inputs. When a key input is missing (a loaded
-  salary, a volume), give the break-even in that input ("pays back if it frees at least one
+- **Payback or break-even** as a range from stated inputs: cost ÷ the value of one unit (a
+  staff-year, a case), so the answer is how many units pay for it. When a key input is missing (a
+  loaded salary, a volume), give the break-even in that input ("pays back if it frees at least one
   staff-year at a loaded cost of $48k or more") or a short sensitivity across plausible values
   labelled Assumption, and add a Gap with the person who supplies the real number. Never present a
   saving that depends on an undecided headcount change as committed; show it as a scenario.
@@ -122,6 +124,10 @@ decision-makers:
   - {{role or name 2}}
 deck-type: pilot-readout
 scope: "{{exactly what today's ask approves: sites, lines, cohort}}"
+conditions:
+  - "{{Short name}} | {{condition}} | Owner: {{role}} | By: {{date or anchor}}"
+separately:
+  - "{{Short name, e.g. Price}} | {{what is not decided today}} | Owner: {{role}} | When: {{path and date}}"
 ---
 
 <!-- shape: title -->

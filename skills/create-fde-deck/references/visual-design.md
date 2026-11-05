@@ -63,7 +63,7 @@ really is a set of separate observations.
   for the headline.
 - **Borrow the customer's style** when they have a recognisable one; otherwise a neutral light
   theme reads best on projectors and prints.
-- **Sources the audience recognises** ("AP audit, 1,500 documents, weeks 1–6"); file paths go in
+- **Sources the audience recognises** ("finance audit, 600 invoices, weeks 1–4"); file paths go in
   the notes.
 - **Numbers a listener can check.** Columns add up when read aloud; say the arithmetic in a
   footnote when two numbers look contradictory.
