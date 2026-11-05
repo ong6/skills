@@ -21,9 +21,19 @@ countries** (Track C). Run whichever the ask needs.
   [references/cross-country.md](references/cross-country.md) and follow it.
 - **"Where can I buy X"** → Where to buy, below; then offer Track A or B.
 
-Before shortlisting, read the owner's **brand exclusions** in the host repo's shopping notes (its
-folder manual, e.g. `AGENTS.md`, says where notes go) and never recommend an excluded brand, even
-as a budget backup.
+**Start from what the owner already has.** Before the first question or search, read the host
+repo's shopping notes (its folder manual, e.g. `AGENTS.md`, or shopping index says where notes go):
+brand exclusions and buying preferences; the domain note that lists what is **owned and wanted** in
+this category (a wardrobe, skincare or devices note); and recorded **sizes**. Then:
+
+- Never recommend an excluded brand, even as a budget backup.
+- Don't re-recommend something owned; pick what fills a listed gap or pairs with owned items, and
+  say which owned item it pairs with or replaces. Don't ask what the notes already answer.
+- Give sizes from the recorded measurements and fit notes, not a generic chart.
+- When the owner reports buying something, mark it bought in the wanted list and add it to the
+  owned list in the same session. Tell them where you wrote it.
+
+If the repo keeps none of these notes, ask about owned items and sizes in the Step 1 question.
 
 # Track A: decide what to buy
 

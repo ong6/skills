@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: product-shopping-owned
+context:
+  scaffold_script: fixture.sh

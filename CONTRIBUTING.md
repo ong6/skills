@@ -25,6 +25,9 @@ only that skill's cases, once each, with no baseline arm:
 claude plugin eval . --tag <skill> --ablation none --runs 1 --no-publish --trust-plugin
 ```
 
+Behaviour cases in `evals/behavior/` build a fixture repo: add `--scaffold` and
+`--ablation with-without` to compare against the no-plugin baseline.
+
 Rules:
 
 - Keep personal information out: no home paths, accounts, emails, phone numbers, prices or names.
