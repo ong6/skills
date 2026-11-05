@@ -93,7 +93,10 @@ Copy this checklist into the reply and tick it off:
    The hero's largest object is the product doing its job with real-looking data: a
    `DemoPlayer` with no prompts (steps mode) whose step `screen`s hold `ScheduleGrid`,
    `DataTable`, `FileTable`, `ItemList` or `RecordCard`, the last screen the fullest; or a
-   `ProductWindow` around one of them. Show the mechanism as one `WorkedExample` with the brief's
+   `ProductWindow` around one of them. When the product is a thing (a device, a kit, a label) or
+   makes a picture (a scan, a map, a print), also pass `StarHero media={<ProductShot>}`: the thing
+   or its picture, drawn from roles, above the demo (worked example:
+   `examples/web-starter/device.tsx`). Show the mechanism as one `WorkedExample` with the brief's
    numbers (input, rule, arithmetic, result), not an icon flow, and a before/after as
    `Proof compare`. Bespoke markup is fine when no part fits, as long as it reads roles. Never an
    empty demo pane, a chat composer for a product that isn't a chat, or icon-in-a-box nodes.
@@ -104,16 +107,20 @@ Copy this checklist into the reply and tick it off:
    the same steps); `GlassNav cta={{ label, short, href }}` so a phone keeps a short CTA beside
    Menu; a label per plan in `PricingPlans` (only the `featured` one repeats the goal);
    `ProductWindow source="Sample rates"` instead of a footer that only names the source;
-   `priority: "low"` on supporting `DataTable` columns; `WorkedExample` values with `unit`. Leave
-   `theme` unset so the page follows the system; for `?style=1|2|3` style links, inline
-   `styleBootScript({ aliases })` in `<head>` instead of a hand-written script.
+   `priority: "low"` on supporting `DataTable` columns and `"key"` on the one the page is about;
+   `WorkedExample` values with `unit`; `StarHero facts` for two or three plain facts under the
+   actions; `FAQ intro` and `aside` so its head column isn't empty; `Proof caveat` for how the
+   numbers were measured. Leave `theme` unset so the page follows the system; for `?style=1|2|3`
+   style links, use `styleBootPlugin({ aliases })` in vite.config and `readStyle({ aliases })` in
+   main, as the starter does, instead of a hand-written script.
 
 6. **Review.** For each layer, does a swap of the other two leave it intact? Then render it at
    1440 and 390 (390 at device scale 2), light and dark, with reduced motion (the finished state),
    `waitUntil: "load"` and a 60-second timeout per shot; no slow scroll loops. Use a headless
    browser you launch yourself (a Playwright script against a preview you started). Never drive or
    resize a browser or tab the user has open. Then look at the shots and ask: is the largest object
-   above the fold full and specific to this product? Does every figure show the brief's numbers?
+   above the fold full and specific to this product, and could a stranger tell what the product is
+   (a physical one shown, not only its table)? Does every figure show the brief's numbers?
    At 390, is the primary CTA in the header and does nothing wrap into narrow columns or crop the
    marked data? Fix and reshoot at least twice. If you can't render, say so plainly instead of
    guessing.
