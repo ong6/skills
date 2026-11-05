@@ -1,6 +1,10 @@
 {
   "name": "ong6-skills",
-  "owner": { "name": "Jun Xiong Ong", "url": "https://github.com/ong6" },
+  "owner": {
+    "name": "Jun Xiong Ong",
+    "url": "https://github.com/ong6"
+  },
+  "description": "Jun Xiong Ong's public agent skills for Claude Code and Codex, each linted and proven against a no-skill baseline",
   "plugins": [
     {
       "name": "skills",

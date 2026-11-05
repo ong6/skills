@@ -26,3 +26,6 @@ Rules:
 - Never shell out to another AI CLI (`claude -p`, `codex exec`) from a skill. Use the host's own
   subagents.
 - `bin/skills` stays a single stdlib-only file that runs on Python 3.7.
+- The plugin manifests set no `version` on purpose: a version pins installs until it is bumped, and
+  this repo publishes continuously, so installs track the commit instead. `claude plugin validate .`
+  warns about it; that warning is expected.
