@@ -1,6 +1,9 @@
 ---
 name: youtube-transcript
-description: Fetch clean transcripts or captions from YouTube URLs or video IDs. Use when the user shares a YouTube link or asks to transcribe, summarize, cite, or read a video. Not for: filing a video as a library note (save-video) or non-YouTube media.
+description: >-
+  Fetch clean transcripts or captions from YouTube URLs or video IDs. Use when the user shares a
+  YouTube link or asks to transcribe, summarize, cite, or read a video. Not for: filing a video as
+  a library note (save-video) or non-YouTube media.
 ---
 
 # YouTube Transcript

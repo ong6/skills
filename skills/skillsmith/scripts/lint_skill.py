@@ -73,6 +73,10 @@ def parse_frontmatter(text: str) -> tuple[dict[str, str], str]:
         elif len(value) >= 2 and value[0] == value[-1] and value[0] in "'\"":
             fields[key] = value[1:-1]
         else:
+            # Real YAML parsers (claude.ai upload, the Skills API) reject or truncate these.
+            if ": " in value or value.endswith(":") or " #" in value:
+                raise ValueError(f"{key}: plain value holds ': ' or ' #', which strict YAML rejects; "
+                                 "quote it or use a '>-' block scalar")
             fields[key] = value
     if block is not None:
         fields[key] = (" " if folded else "\n").join(part for part in block if part)
@@ -149,8 +153,14 @@ def third_party_imports(script: Path, skill_root: Path) -> list[str]:
         return []
     local = {path.stem for path in script.parent.glob("*.py")}
     local.update(path.stem for path in skill_root.parent.glob("*/scripts/*.py"))
+    # Imports under `if TYPE_CHECKING:` are for type checkers only, never needed at run time.
+    type_only = {id(child) for node in ast.walk(tree) if isinstance(node, ast.If)
+                 and ast.unparse(node.test).endswith("TYPE_CHECKING") for stmt in node.body
+                 for child in ast.walk(stmt)}
     names = set()
     for node in ast.walk(tree):
+        if id(node) in type_only:
+            continue
         if isinstance(node, ast.Import):
             names.update(alias.name.split(".")[0] for alias in node.names)
         elif isinstance(node, ast.ImportFrom) and node.module and not node.level:
@@ -178,7 +188,9 @@ def dependencies(skill_dir: Path, skill_text: str) -> list[str]:
                     "invoke it with `uv run`"
                 )
             continue
-        packages = third_party_imports(script, root)
+        # A module the instructions name as another skill is composed, not installed.
+        packages = [name for name in third_party_imports(script, root)
+                    if not re.search(rf"`?{re.escape(name)}`? skill\b", instructions)]
         if packages and not INSTALL_HINT.search(instructions) and not INSTALL_HINT.search(text):
             warnings.append(
                 f"{relative} imports {', '.join(packages)}; give the install line next to the script"

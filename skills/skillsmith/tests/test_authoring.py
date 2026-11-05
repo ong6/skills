@@ -33,6 +33,10 @@ class FrontmatterTests(unittest.TestCase):
         self.assertEqual({"name": "demo", "description": "one two"}, fields)
         self.assertEqual("body", body)
 
+    def test_plain_value_with_colon_space_is_rejected(self):
+        with self.assertRaises(ValueError):
+            lint.parse_frontmatter("---\nname: demo\ndescription: Use for x. Not for: y.\n---\n")
+
     def test_unclosed_frontmatter_is_rejected(self):
         with self.assertRaises(ValueError):
             lint.parse_frontmatter("---\nname: demo\n")
@@ -186,6 +190,14 @@ class DependencyTests(unittest.TestCase):
             (folder / "scripts" / "run.py").write_text(script, encoding="utf-8")
             (folder / "scripts" / "helper.py").write_text("VALUE = 1\n", encoding="utf-8")
             return lint.lint(folder)
+
+    def test_import_named_as_a_skill_is_composed(self):
+        self.assertEqual(([], []), self.lint_with(
+            "Run scripts/tool.py; it loads the `othertool` skill's scripts.\n", "import othertool\n"))
+
+    def test_type_checking_imports_are_not_dependencies(self):
+        script = "from typing import TYPE_CHECKING\nif TYPE_CHECKING:\n    from othertool import Thing\n"
+        self.assertEqual(([], []), self.lint_with("Run scripts/tool.py.\n", script))
 
     def test_third_party_import_needs_an_install_line(self):
         script = "import json\nimport httpx\nfrom helper import VALUE\nimport bpy\n"
