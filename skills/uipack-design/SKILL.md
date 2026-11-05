@@ -28,8 +28,8 @@ Copy this checklist into the reply and tick it off:
 
 ```text
 - [ ] 1. Medium and claim: one sentence the visual must make a reader conclude
-- [ ] 2. Writing: content as data, per writing.md (given facts only, gaps pinned to the data or left out; "after", not "lifted"; exact qualifiers; verdict titles; notes that add why/so-what/bridge; each point once; reader's words; ask or one CTA)
-- [ ] 2b. Reread as the audience against writing.md rule 11's checklist; revise once
+- [ ] 2. Writing: content as data from the given facts only, per writing.md
+- [ ] 2b. Reread as the audience against writing.md rule 11; revise once
 - [ ] 3. Layout: archetype or pattern from layout.md that fits the claim's shape
 - [ ] 4. Style: a named UiPack style through its swap API; roles only, no literals
 - [ ] 5. Build with real exports (web: start from examples/web-starter; check the index/README before using a prop)
@@ -39,34 +39,33 @@ Copy this checklist into the reply and tick it off:
 1. **Claim.** If you can't write it in one sentence, ask or split the visual. For a deck, write
    the line leadership should repeat a week later.
 2. **Writing.** Write the words as a typed object first (`DeckSlide[]`, a preset spec, a page
-   content object), using only the facts given. A missing fact is never filled in, and finished
-   copy never shows `TODO`. Never state a gap as a fact about the team ("we haven't costed a fix",
-   "nothing else changed"): leave it out, or, only when the decision needs it, pin it to the data
-   in the notes ("the brief has no cost for a fix"). A before/after says "after", "since", "went
-   from… to", never "lifted", "cut" or "because", and says once that it is two windows, not a
-   controlled test. Copy qualifiers exactly ("up to 15 minutes", "about"). A stated purpose gives
-   the consequence ("so it ships in spring": later misses spring). Then run the medium's checks.
-   Decks go through `lintDeck` and `storylineOf` from `uipack/deck`. Fix findings before layout; a
-   `template-beats` gap the facts can't fill stays a gap. Words read as a person's: plain
-   statements and numbers, none of writing.md's AI tells (corrective "X, not Y", kickers, triads,
-   inline disclaimers). Slides are presented by default: a 2-5
-   word spoken verdict title ("Android crashes down by two thirds", "Start time: 0.2 s slower"; a
-   bare label only on agenda, section or mechanism slides), 2-4 fragment points carrying the
-   numbers, no eyebrow or lede. Notes add what the slide can't hold: why it matters, the so-what
-   for this audience, the trade-off if the answer is no, the bridge. Reason from the given facts;
-   add none. A note restating its slide fails (`notes-echo`). The ask slide names action, object,
-   cost, owner, date and what a no means (`ask-scope`). Each slide adds something: no point,
-   number or ask repeated across slides or between a title and its points.
-   Full-sentence titles only for a read-alone deck (`lintDeck` `mode`). Public and user copy uses
-   the reader's words (no "main thread", no tool names, no internal metrics such as conversion or
-   ticket counts: what the customer notices), keeps scope ("on Android") and has short plain
-   section heads. A figure draws the system in at most six nodes, arrows along the flow saying what
-   moves, results in a sub-label or the caption; a before/after figure draws both states.
+   content object), from the facts given and nothing else. `writing.md` holds the rules; these
+   are the ones that decide most drafts:
+   - **Leave out what the facts don't say.** No filled-in fact, no `TODO`, and no announced gap
+     ("still to confirm", "not yet known", "we haven't costed it"). Mention a gap only when the
+     decision turns on it, once, in a sentence in the notes.
+   - **Each caveat has one home.** Sources sit in one source line per piece (the evidence slide,
+     the figure), listing each number's source and "source not given" for a number the input left
+     bare. A before/after says "after" or "went from… to" everywhere, and the evidence slide's
+     notes say once, plainly, that it compares two windows.
+   - **Keep the numbers' own words**: a median stays a median, "about" stays.
+   - **Presented slides**: a 2-5 word title you'd say aloud, in varied forms, over 2-4 fragments
+     that carry the numbers; no eyebrow or lede. Notes are a few cue lines with what the slide
+     can't hold (why it matters, what follows for this audience), never the slide again.
+   - **End on the ask**: action and object, cost, owner and date, plus what a no means when the
+     facts say.
+   - **Pages speak to their reader** in the reader's words, with one call to action that is the
+     reader's own next step. A figure draws the system in at most six nodes, with what moves on
+     the arrows and results in sub-labels.
+
+   Decks then go through `lintDeck` and `storylineOf` from `uipack/deck`; fix findings before
+   layout. A `template-beats` gap the facts can't fill stays a gap.
 
    **2b. Review and revise.** Reread the draft cold as the person who must act on it, against
-   rule 11's checklist in `writing.md` (titles that state a point and hide nothing, unambiguous
-   points, notes beyond the slide, a full ask, exact qualifiers, nothing invented, no AI tells,
-   both states in a before/after). Fix every miss in one pass, then lint again.
+   rule 11's checklist in `writing.md`, fix every miss in one pass, then lint again. On the way,
+   read the last sentence of each note, caption and paragraph: if it restates what came before
+   or sums up, delete it. The finished copy holds only the reader's words: no role tags, no
+   field labels ("So-what:"), no notes to the builder.
 3. **Layout.** Choose from the medium's archetype or pattern table. A deck is a sequence of
    archetypes picked by slide role. A web page keeps its own section order in every style.
 4. **Style.** Pick from the style list in `style.md` and apply it with the `uiStyle` prop (`Figure`,
@@ -123,14 +122,14 @@ Copy this checklist into the reply and tick it off:
 | Bad | Required |
 | --- | --- |
 | `color: #205f49`, `font-family: "IBM Plex Sans"` in consumer code | A style role or the `uiStyle` prop |
-| Slide titled "Results", "Crash rate" or "Slower starts?" | A spoken verdict: "Freshness: 40 → 6 min"; the deck ends on an ask with owner, date (year included) and what a miss costs |
+| Slide titled "Results", "Crash rate" or "Slower starts?"; three titles shaped "Topic: a → b" | Titles you'd say aloud, in varied forms ("Crashes down by two thirds", "Starts got a bit slower"); the deck ends on an ask with owner and date (year included) |
 | Indigo accent, centred hero, three icon cards, logo strip, pricing, FAQ for the owner's own page | The owner's style, led by the product's real output and a worked mechanism |
 | A hero demo pane that is mostly empty, a chat prompt for a rota or a ledger, a four-box icon flow ("database, robot, wrench") | A filled `ScheduleGrid`/`DataTable` in the hero; the mechanism as `WorkedExample` ("84 covers ÷ 14 = 6 servers") |
 | A different section order or hero per style to show range | One layout; range from each style's treatment of the same parts |
 | Sentences inside diagram nodes, unlabelled or vague arrows ("user sessions"), metric nodes, nine boxes | At most six 2–3 word nodes drawing the system, arrows along the flow saying what moves ("decoded image"), results in a sub-label or the caption |
-| A statistic on an arrow, a branch that ends nowhere | The statistic once, in the sub-label of the node it measures; every path ends at an outcome or a `Not yet known` node |
-| A guessed reassurance, "we haven't costed a fix", "nothing else changed", or `TODO` in finished copy | Only the input's facts; a needed gap pinned to the data ("the brief has no cost for a fix"), else left out |
-| "Cached cards lifted checkout", "a short while" for "up to 15 minutes" | "Checkout: 61.2% → 63.0% since caching", once "two windows, not a controlled test"; exact qualifiers |
+| A statistic on an arrow; a `Not yet known` box or an invented route | The statistic once, in the sub-label of the node it measures; a branch the facts don't follow ends at its last known node |
+| A guessed reassurance, `TODO`, or "still to confirm" and "not yet known" across the copy | Only the input's facts; a gap the decision needs, once, in the notes ("iOS isn't in these numbers"); otherwise silence |
+| "Cached cards lifted checkout", "a short while" for "up to 15 minutes", "not a controlled test" on every piece | "Checkout went from 61.2% to 63.0% after caching"; exact qualifiers; no stock method phrase |
 | Notes that restate the slide ("Cost: one engineer for three weeks"); "Approve by 15 January 2027" | Notes with the why and the cost of a no ("If no, they meet the price change on the old bot"); "Approve Spanish and French by 15 January 2027" with "1 engineer ~3 weeks + 400-article review" |
 | The same number on slide 1, slide 3, the hero and a section; "Crashlytics", "main thread" or ticket counts on a user page | Each fact once per piece; the reader's words and scope ("Images now load in the background", "on Android") |
 | Restyling a figure to fit a slide | The figure keeps the diagram style; the slide gives it the body region |
