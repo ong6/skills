@@ -107,7 +107,8 @@ Judgement errors, not missing slides, are what a CFO catches. Before writing sli
     a month, but 20,000 tickets × 15 min = 5,000 h`);
   - shares: the pilot's volume against the share of the total it is said to be;
   - units: per minute against per case, per field against per document, per week against per
-    month, one site against all;
+    month, one site against all; a price's billing unit (every call answered, or only those
+    resolved): when the evidence doesn't say, compute both and name the one the money uses;
   - parts against the whole: segment rates against the overall rate, counts against totals.
   A figure that fails is not used in the money or the plan. Show the conflict once, as a finding
   with the arithmetic and the person who can resolve it (`Reported · 15 min a ticket and 12
@@ -124,7 +125,9 @@ Judgement errors, not missing slides, are what a CFO catches. Before writing sli
 has one; otherwise reread it yourself in a separate pass) only the brief and the deck's visible text
 and notes, and ask it, as the customer's CFO, to list: every number that doesn't recompute; every
 customer figure used without being tested; every fact (condition, owner, date, price, count) that
-differs between slides; and the decision it would still lack. Fix each item in the content, or say
+differs between slides; every owned action on a slide that the closing ask leaves out; every owner,
+date or threshold shown as agreed that the brief doesn't give; and the decision it would still
+lack. Fix each item in the content, or say
 in the notes why it stands. Don't give it this skill or the ledger.
 
 ## Open items never show as placeholders
@@ -139,7 +142,10 @@ customer slide. Each gap takes one of three forms:
 
 Owners are roles or named people with authority (`the customer's security lead`), never `TBD`. Dates are
 calendar dates or anchored events (`before the first new site goes live`, `2 weeks after
-approval`).
+approval`). An owner, date, threshold or next meeting the evidence doesn't give is your proposal:
+say so once where the room first meets it (`Proposed owners and dates, for you to confirm today`),
+label a trigger you set `Proposal` and give its basis in the notes (why 12%, why 4 weeks), and
+never call proposed dates agreed or owned.
 
 ## What the room needs
 
@@ -156,14 +162,17 @@ approval`).
   never "monitored only" for a group a gate line was drawn against. Draw a gate only on the unit
   it governs (a per-site gate is not a customer segment's bar).
 - **A specific ask for every decision-maker** named in `decision-makers:`, on the closing slide,
-  grouped by person.
+  grouped by person. The closing ask is the complete action list: each condition, each
+  `separately:` item's next step, and every owned gap or action named on any earlier slide, our own
+  team's included; it adds nothing the earlier slides and the frontmatter don't carry.
 - **Money in a frame finance can use**: run-rate cost with what the price includes and excludes,
   set against what it replaces or returns, and a **net figure** (benefit minus cost) as a range
   **a year**, plus payback or break-even (cost ÷ value of one unit), or a Gap naming the missing
   input and who supplies it.
   Each row shows its volume base, and its label names the volume used: a net computed on pilot
   volume says `pilot sites`, never the wider `scope:`; if the scope's volume is unknown, add a
-  `Gap ·` for it with its owner. Say whether the saving is **cash or released capacity** (and what
+  `Gap ·` for it with its owner and give the net per unit of volume (`net £2.46 per answered
+  call at £4 a staff call`), so the room can size the scope as soon as the volume arrives. Say whether the saving is **cash or released capacity** (and what
   turns capacity into cash). A range corner that is not in the evidence (a lower rate, half a
   reported cost) sits in a `Sensitivity:` with its input. The money headline says what the scope
   returns, not the price restated as break-even. Wider scope appears only as context. A proposed

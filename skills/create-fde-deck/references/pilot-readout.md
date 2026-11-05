@@ -93,8 +93,9 @@ Finance needs to judge the price against something. Show, on one slide:
   the `scope:` being approved, with its volume base on the row ("Net, invoice line at two new
   sites, 14,000 invoices a month: $480k–$1.1M a year at $3–$6 an invoice"). Label it **Derived**.
   When the scope's volume is unknown, give the net at the volume you have, labelled for that volume
-  ("pilot sites"), and a `Gap ·` for the scope's volume with its owner; never stretch a pilot
-  base to the wider label. A wider-scope run-rate may follow as context, labelled as such.
+  ("pilot sites"), a `Gap ·` for the scope's volume with its owner, and the net per unit of
+  volume (per call, per document) so the scope can be sized when its volume arrives; never stretch
+  a pilot base to the wider label. A wider-scope run-rate may follow as context, labelled as such.
 - **Cash or capacity.** Say which: staff time freed is capacity, worth cash only if posts or
   overtime change; name what would turn it into cash. Tie it to any redeployment aim.
 - **Sensitivities by name.** A corner not in the evidence (a lower rate elsewhere, half a reported
