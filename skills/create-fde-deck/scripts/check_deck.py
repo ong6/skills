@@ -476,6 +476,13 @@ def fact_checks(front, slides, shapes, appendix_at, conds, flags, notes):
         if len(name) < 3:
             continue
         for number, (slide, shape) in enumerate(zip(slides[:end], shapes[:end]), 1):
+            if shape == "plan":
+                for line in COMMENT.sub("", slide).splitlines():
+                    gate = re.search(r"\bGate:\s*(.+?)(?:\bWhen:|$)", line)
+                    if gate and re.search(r"\b%s\b" % re.escape(name.lower()), gate.group(1).lower()):
+                        flags.append("slide %d: `%s` is listed under `separately:` but gates a phase; make it a "
+                                     "condition or drop it from the gate: %s" % (number, name, line.strip()[:60]))
+                continue
             if shape not in ("ask", "next-steps"):
                 continue
             for line in COMMENT.sub("", slide).splitlines():

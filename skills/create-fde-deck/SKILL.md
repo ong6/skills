@@ -102,6 +102,9 @@ Judgement errors, not missing slides, are what a CFO catches. Before writing sli
   are named. A **break-even** is the cost divided by the value of one unit (`$40k fee ÷ $50k
   loaded cost = 0.8 of a staff-year`), or the unit value at which cost equals benefit; never the cost
   split across a count you picked.
+- **Keep the evidence's definitions.** A metric keeps the name and meaning the source gives ("not
+  resolved" stays not resolved, never "passed to staff"); a figure built on a stronger reading is
+  an upper bound, labelled with that assumption.
 - **Test the customer's numbers against each other** before using any of them:
   - workload: people × hours they have against volume × time per item (`12 agents × 140 h = 1,680 h
     a month, but 20,000 tickets × 15 min = 5,000 h`);
@@ -156,7 +159,9 @@ never call proposed dates agreed or owned.
   answer means.
 - **A response to every stated aim**: each `goals:` entry is answered on a presented slide that
   names its holder, with a path, its condition and when (`VP Operations: log handling time for
-  8 weeks, then decide the redeployment`). `Decided separately` alone is not an answer.
+  8 weeks, then decide the redeployment`). `Decided separately` alone is not an answer. The path is
+  your proposal, labelled as such; never put a plan or position in a named person's mouth beyond
+  what the evidence says they said.
 - **A remedy for the weak segment**: a group below a gate gets its own fix (another channel or
   route, an owner, a review trigger), and the rollback applies the same threshold the chart draws,
   never "monitored only" for a group a gate line was drawn against. Draw a gate only on the unit
@@ -184,7 +189,11 @@ never call proposed dates agreed or owned.
   another site) is written once in the frontmatter with its short name, owner and date; the slides
   reuse the name (`**Security review**`), so its date, owner and the count of conditions read the
   same on every slide, rendered ones included. Something listed as decided separately is not also
-  asked for today. Nothing reads as decided before the room decides: `For decision today`, never
+  asked for today and never gates a phase: if it blocks a go-live, it is a condition. A phase gate
+  is a named condition, a result threshold (a Proposal) or the previous phase holding its triggers.
+  A condition with several steps keeps one due date everywhere (its last step); earlier steps
+  appear only as steps of that named condition. A threshold has one role (a gate or a review
+  trigger) and one duration on every slide. Nothing reads as decided before the room decides: `For decision today`, never
   `Decided today` or `Approved`.
 
 ## Deck format
