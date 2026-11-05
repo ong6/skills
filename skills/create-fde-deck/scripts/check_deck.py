@@ -468,8 +468,8 @@ def check(path, rendered=None):
                 flags.append("%s: headline %s; rewrite it as one clean claim: %s" % (where, problem, title[:70]))
         note = NOTES.search(slide)
         if note and not appendix_at and len(note.group(1).split()) > 75:
-            flags.append("%s: notes run %d words; write cues the presenter talks from (Say: the claim. "
-                         "Point: the number. Bridge: the next slide), under 60 words" % (
+            flags.append("%s: notes run %d words; write cues the presenter talks from (Say: what the slide "
+                         "can't hold. Point: the figure. Bridge: only if not obvious), under 60 words" % (
                              where, len(note.group(1).split())))
         if shape not in SHAPES:
             flags.append("%s: add `<!-- shape: ... -->` (one of %s)" % (where, ", ".join(sorted(SHAPES))))
