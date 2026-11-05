@@ -110,7 +110,7 @@ If no: {{what we change and when we return}}.
 <!-- shape: table -->
 02 / RISKS
 
-## {{Two unknowns could change the design; both have owners}}
+## {{Two unknowns could change the design, each with an owner}}
 
 | Item | Why it matters | Next step | Owner |
 |---|---|---|---|

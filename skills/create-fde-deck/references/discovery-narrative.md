@@ -64,7 +64,7 @@ deck-type: discovery-narrative
 <!-- shape: title -->
 DISCOVERY · {{WORKFLOW}}
 
-# {{Run a two-week test of X: the friction is real, its size unknown}}
+# {{Run a two-week test of X to size the friction operators report}}
 
 {{What the notes show, and what we ask today.}}
 
@@ -87,7 +87,7 @@ If no: {{what stays as is, and what would reopen the question}}.
 <!-- shape: findings -->
 01 / WHAT WE KNOW
 
-## {{Two of two operators named search; they disagree on its cost}}
+## {{Both operators named search and disagree on its cost}}
 
 - **Reported** · {{an observed step, in the participant's terms}}. *Source: {{note, role, date}}*
 - **Reported** · {{a counterexample or disagreement}}. *Source: {{note, role, date}}*

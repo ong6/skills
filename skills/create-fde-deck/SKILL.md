@@ -76,6 +76,11 @@ Define the labels once where the audience first meets them (a key line on the fi
 uses them). A mechanism claim (where errors concentrate, what the product does on low confidence,
 what retention options exist) is Measured only when a source says so; otherwise label it or cut it.
 
+Labels and method live at the start of a labelled line, in source lines and in captions. Slide
+prose never restates the method as a disclaimer ("this is an estimate, not a measurement", "to be
+transparent"). A before/after comparison claims no cause ("after", "went from… to"), and the
+caveat that it compares two windows is said once per deck, in a caption or the notes.
+
 ## Open items never show as placeholders
 
 `TBD`, `TBC`, `TODO`, `??`, `confirm`, `{{…}}` and empty owner or date fields never appear on a
@@ -132,9 +137,11 @@ list of the people or roles who decide), `asked`, `goals` (a YAML list of `Who: 
 `<!-- shape: … -->`, an optional eyebrow, one `#`/`##` takeaway headline that parses as one claim
 (one sentence, at most one comma, colon or semicolon, at most two figures, under 95 characters),
 at most one supporting sentence, content in the shape's form, and speaker notes as a
-final `<!-- notes: … -->`. Notes are cues the presenter talks from, not a script, under 60 words:
-`Say:` the claim, `Point:` the number to point at, `Bridge:` to the next slide. They add no fact
-the slides lack, so the slides still read alone. A labelled line opens with its label:
+final `<!-- notes: … -->`. Notes are cues the presenter talks from, under 60 words. `Say:` adds
+what the slide can't hold: why it matters, the so-what, the trade-off or the open question; it
+never recites the headline. `Point:` names the figure that carries the claim. `Bridge:` links to
+the next slide, only where the link isn't obvious. Notes never restate or script the slide and add
+no fact the slides lack, so the slides still read alone. A labelled line opens with its label:
 `- **Measured** · 96.8% of fields correct. *Source: AP audit, 1,500 documents, weeks 1–6*`.
 
 | Shape | Content form | Limit |
@@ -153,6 +160,20 @@ the slides lack, so the slides still read alone. A labelled line opens with its 
 Every deck ends on an `ask` (or `next-steps`: `- Action. Owner: who. Date: when`). Slides other
 than the title stay under 135 visible words; split rather than compress, and never erase evidence
 to fit. A caveat that changes the decision stays on the slide; notes are hidden when exported.
+
+## Words on the slide
+
+- Verdict first: the headline is the finding or the decision; the reason sits under it or in the notes.
+- Numbers stated flat with what they measure (`7 min median handling time, 1,500 tickets`), with
+  no "significant" or "dramatic".
+- One contrast per deck at most, only where it decides something (usually the `Answer:` line).
+  Elsewhere state the fact: `18 min → 7 min`.
+- No kicker or aphorism; a short line carries a number or a verdict.
+- No run of three where one item carries the point, and no balanced semicolon pairs.
+- No invented reassurance ("nothing reached users") and no gap stated as a fact about the world;
+  state it as a fact about the data: `Gap · site B sample size not reported`.
+- Length follows the facts: two facts make two lines, whatever the shape's limit allows. Em dashes
+  are fine (the `architecture` format uses them).
 
 ## Variety and density
 

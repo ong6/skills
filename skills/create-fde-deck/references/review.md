@@ -54,7 +54,7 @@ result to rollout.
 
 **Evidence quality.** Trace each material claim to its source. Check the label (measured,
 reported, assumption, proposal, gap) against what the source supports: a person's estimate is
-Reported, not Measured and not our Assumption; a calculation from other figures is an Assumption
+Reported, not Measured and not our Assumption; a calculation from other figures is
 Derived (not Assumption) with its formula shown; a mechanism claim the source does not make is unsupported; and check units, denominators, baselines,
 windows, exclusions, scope and arithmetic (rerun it). Check every money figure's volume base
 against its label (pilot volume under a site-wide label is a finding), and that any invented range
@@ -73,7 +73,9 @@ blocker.
 over 135 (a heuristic, not measured overflow); competing ideas on one slide; more than five
 findings, five architecture stages, three options, four metrics or six actions on a slide;
 unexplained acronyms; a headline that does not parse as one claim (two sentences, strung
-clauses, more than two figures). Layout, judged as rendered: three slides in a row with the same layout, one frame on most slides, bullet lists on more
+clauses, more than two figures). Wording: a method disclaimer in slide prose ("this is an
+estimate, not a measurement"), a before/after caveat repeated beyond once, a kicker, a second
+"X, not Y" contrast, notes that recite the headline or a bare stage direction ("Point at the 9"). Layout, judged as rendered: three slides in a row with the same layout, one frame on most slides, bullet lists on more
 than a third of the deck, cards or panels less than about two thirds full, a gap set as a headline number,
 segments against a gate shown as cards instead of a chart. Propose a specific cut, merge or layout
 that keeps sources and caveats.
@@ -119,7 +121,7 @@ ask, a `Gap ·` line, or move to the notes or the pre-read.
 
 ### Blockers
 - **Slide 3 (outcomes)** · evidence · "Ready for production" — no baseline and access control
-  untested (both only in notes). **Fix:** retitle "Two easy tasks ran; readiness not assessed" and
+  untested (both only in notes). **Fix:** retitle "Pilot ran two easy tasks with no baseline" and
   move both caveats on-slide. *Checked against:* the slide notes.
 
 ### Important
