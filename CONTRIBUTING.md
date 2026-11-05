@@ -17,6 +17,14 @@ bin/skills guard .
 python3 skills/skillsmith/scripts/lint_skill.py skills/<name>   # when skillsmith is present
 ```
 
+When you change a skill's `description`, add or update its trigger cases in
+`evals/triggers/<skill>-*` (one request that should load it, one near-miss that shouldn't) and run
+only that skill's cases, once each, with no baseline arm:
+
+```sh
+claude plugin eval . --tag <skill> --ablation none --runs 1 --no-publish --trust-plugin
+```
+
 Rules:
 
 - Keep personal information out: no home paths, accounts, emails, phone numbers, prices or names.
