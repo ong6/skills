@@ -12,9 +12,11 @@ description: >-
 
 UiPack (`github:ong6/uipack`) draws explanations in three independent layers: **style** (how it
 looks), **writing** (what it says) and **layout** (where things sit). Its spec lives in the repo's
-`docs/system/`: `README.md` (philosophy, contract, recipes), `style.md`, `writing.md`,
-`layout.md`. Each has a section per medium. Read the overview, then only your medium's section in
-each of the three files. Jump by heading rather than reading whole files. They hold the values, so
+`docs/system/`: `README.md` (philosophy, contract), `style.md`, `writing/` (one file per kind of
+text, rules in `writing/general.md`) and `layout/` (one file per page type). Each site has its own
+spec (`docs/specs/registry.md`); read it first. The per-job skills (page, diagram, copy, spec,
+review) ship in the package's `skills/` and match the installed code: when one fits, follow it.
+Read the overview, then only your medium's files. Jump by heading rather than reading whole files. They hold the values, so
 don't work from memory. Find the docs in the consumer's `node_modules/uipack`, a local clone (look
 for a `uipack` folder near the user's other projects), or GitHub.
 
@@ -28,9 +30,9 @@ Copy this checklist into the reply and tick it off:
 
 ```text
 - [ ] 1. Medium and claim: one sentence the visual must make a reader conclude
-- [ ] 2. Writing: content as data, per writing.md (given facts only, gaps pinned to the data or left out; "after", not "lifted"; exact qualifiers; verdict titles; notes that add why/so-what/bridge; each point once; reader's words; ask or one CTA)
-- [ ] 2b. Reread as the audience against writing.md rule 11's checklist; revise once
-- [ ] 3. Layout: archetype or pattern from layout.md that fits the claim's shape
+- [ ] 2. Writing: content as data, per `writing/general.md` (given facts only, gaps pinned to the data or left out; "after", not "lifted"; exact qualifiers; verdict titles; notes that add why/so-what/bridge; each point once; reader's words; ask or one CTA)
+- [ ] 2b. Reread as the audience against `writing/general.md` rule 9's checklist; revise once
+- [ ] 3. Layout: archetype from `layout/` (the site's spec picks it) that fits the claim's shape
 - [ ] 4. Style: a named UiPack style through its swap API; roles only, no literals
 - [ ] 5. Build with real exports (web: start from examples/web-starter; check the index/README before using a prop)
 - [ ] 6. Review the three layers and the largest object; two screenshot-and-fix passes
@@ -48,7 +50,7 @@ Copy this checklist into the reply and tick it off:
    the consequence ("so it ships in spring": later misses spring). Then run the medium's checks.
    Decks go through `lintDeck` and `storylineOf` from `uipack/deck`. Fix findings before layout; a
    `template-beats` gap the facts can't fill stays a gap. Words read as a person's: plain
-   statements and numbers, none of writing.md's AI tells (corrective "X, not Y", kickers, triads,
+   statements and numbers, none of the AI tells in `writing/general.md` (corrective "X, not Y", kickers, triads,
    inline disclaimers). Slides are presented by default: a 2-5
    word spoken verdict title ("Android crashes down by two thirds", "Start time: 0.2 s slower"; a
    bare label only on agenda, section or mechanism slides), 2-4 fragment points carrying the
@@ -64,17 +66,16 @@ Copy this checklist into the reply and tick it off:
    moves, results in a sub-label or the caption; a before/after figure draws both states.
 
    **2b. Review and revise.** Reread the draft cold as the person who must act on it, against
-   rule 11's checklist in `writing.md` (titles that state a point and hide nothing, unambiguous
+   rule 9's checklist in `writing/general.md` (titles that state a point and hide nothing, unambiguous
    points, notes beyond the slide, a full ask, exact qualifiers, nothing invented, no AI tells,
    both states in a before/after). Fix every miss in one pass, then lint again.
 3. **Layout.** Choose from the medium's archetype or pattern table. A deck is a sequence of
    archetypes picked by slide role. A web page keeps its own section order in every style.
-4. **Style.** Pick from the style list in `style.md` and apply it with the `uiStyle` prop (`Figure`,
-   `DeckPlayer`, `SlideStarter`, `WebSurface`, `Section`), `<WebPage uiStyle sections>` for a whole
-   page, or `data-ui-style`. Technical is the
-   default for every medium and is the owner's own look. Graphical is for a bold poster page.
-   Landing is the product-marketing look (label stock: ivory, kraft, ledger green, ruled forms),
-   used only when asked for. On the web, keep the page's own
+4. **Style.** Technical (Cyanotype) is the one implemented style and the default for every
+   medium. Another site's look comes from that site's spec; a spec with no values yet (`TODO:`)
+   keeps those values out of the code, and you say which ones blocked you. A registered style is
+   applied with the `uiStyle` prop (`Figure`, `DeckPlayer`, `SlideStarter`, `WebSurface`,
+   `Section`), `<WebPage uiStyle sections>` or `data-ui-style`. On the web, keep the page's own
    section order and layout in every style (`WebPage`'s default); a swap changes how parts are
    drawn (cards, numbering, stats, quote, cells, density), never where they sit. Don't pass
    `layout="style"` unless the owner asks. Colours, faces and radii come from roles. A one-off
@@ -83,7 +84,7 @@ Copy this checklist into the reply and tick it off:
 
    | Medium | Executor |
    | --- | --- |
-   | Diagram | `system-diagram` (its targets and review), values from `style.md#diagrams` |
+   | Diagram | `system-diagram` (its targets and review), values from `docs/components/diagrams.md` |
    | Deck | `uipack/deck` per `docs/deck.md`; customer FDE decks via `create-fde-deck` |
    | Web page | `uipack/web` parts; `frontend-design` for direction, `ux-design` for the usability pass |
    | 3D | `3d-design`, then `blender-authoring` if it picks Blender |
@@ -105,8 +106,8 @@ Copy this checklist into the reply and tick it off:
    Menu; a label per plan in `PricingPlans` (only the `featured` one repeats the goal);
    `ProductWindow source="Sample rates"` instead of a footer that only names the source;
    `priority: "low"` on supporting `DataTable` columns; `WorkedExample` values with `unit`. Leave
-   `theme` unset so the page follows the system; for `?style=1|2|3` style links, inline
-   `styleBootScript({ aliases })` in `<head>` instead of a hand-written script.
+   `theme` unset so the page follows the system; set the style before first paint with
+   `styleBootScript()` in `<head>` instead of a hand-written script.
 
 6. **Review.** For each layer, does a swap of the other two leave it intact? Then render it at
    1440 and 390 (390 at device scale 2), light and dark, with reduced motion (the finished state),
