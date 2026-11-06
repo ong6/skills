@@ -134,7 +134,7 @@ CI fails when they drift.
 | [`council`](skills/council/SKILL.md) | Put work through fresh reviewer agents that pick metrics and score it until it meets the target. |
 | [`write-a-brief`](skills/write-a-brief/SKILL.md) | Write or tighten a one-to-two-page brief for a meeting with a professional, quotes included. |
 | [`markdown-to-pdf`](skills/markdown-to-pdf/SKILL.md) | Turn a Markdown note into a checked, print-ready A4 PDF. |
-| [`uipack-design`](skills/uipack-design/SKILL.md) | Build slides, pages and figures in the UiPack design system, swapping its styles cleanly. |
+| [`uipack-design`](skills/uipack-design/SKILL.md) | Route UiPack work (pages, decks, diagrams, copy, site specs, reviews) to the skills shipped inside the installed uipack. |
 | [`system-diagram`](skills/system-diagram/SKILL.md) | Turn a real system flow into a polished, readable SVG figure. |
 | [`ux-design`](skills/ux-design/SKILL.md) | Audit or design a page's UX against a usability checklist before visual polish. |
 | [`3d-design`](skills/3d-design/SKILL.md) | Choose the right authoring and browser workflow for a 3D object or animation. |
@@ -193,7 +193,7 @@ _Diagrams, interfaces, 3D and visual judgment._
 
 | Skill | Does |
 |---|---|
-| [`uipack-design`](skills/uipack-design/SKILL.md) | Build or restyle a visual in the owner's UiPack design system: slides or a talk deck, a landing or product page, a diagram for a site or article, a motion explainer or a 3D hero. Use for "make slides", "landing page", "in our style", "on brand", "use uipack", "swap the style", "make it not look AI-generated", or any visual in a repo that depends on uipack. Not for: data charts alone (dataviz), a UX audit alone (ux-design), Blender installs. |
+| [`uipack-design`](skills/uipack-design/SKILL.md) | Build, restyle or review a visual in the owner's UiPack design system: slides or a talk deck, a landing, product, docs or dashboard page, a diagram for a site or article, a motion explainer or a 3D hero, its copy, or a site's style spec. Use for "make slides", "landing page", "in our style", "on brand", "use uipack", "swap the style", "make it not look AI-generated", "new site", "review this page", or any visual in a repo that depends on uipack. Not for: data charts alone (dataviz), a UX audit alone (ux-design), Blender installs. |
 | [`system-diagram`](skills/system-diagram/SKILL.md) | Draw a polished system or architecture diagram as hand-authored inline SVG: request flows, agent pipelines, queues, service maps, before/after. Use for "system diagram", "architecture diagram", "draw the flow", a figure for a site, README or note. Not for: data charts (dataviz), UI mockups, one-hop relationships. |
 | [`ux-design`](skills/ux-design/SKILL.md) | Audit or design a page or app's UX against a usability checklist (navigation, states, touch targets, focus, contrast, motion, mobile), then hand visuals to frontend-design. Use for "UX pass", "audit the UX", "make this usable on mobile", "accessibility check". Not for: aesthetics alone (frontend-design), charts (dataviz). |
 | [`3d-design`](skills/3d-design/SKILL.md) | Choose and run a 3D workflow (Blender, Three.js, CSS, model-viewer and others) for illustrations, models, character animation and interactive web scenes. Use for "3D design", "model this", "Blender or Three.js", "seamless loop", "make the movement natural". Not for: page layout, 2D diagrams, Blender install issues. |
@@ -257,7 +257,7 @@ _Customer-facing decks for forward-deployed work._
 
 | Skill | Does |
 |---|---|
-| [`create-fde-deck`](skills/create-fde-deck/SKILL.md) | Draft or review a customer-facing field-engineering deck: discovery, architecture or pilot readout, every claim labelled evidence, assumption or proposal. Use for "turn these notes into slides", "pilot readout", "go/no-go deck", "review this deck", "fact-check my slides". Not for: interview practice. |
+| [`create-fde-deck`](skills/create-fde-deck/SKILL.md) | Draft or review a customer-facing field-engineering deck: discovery, architecture or pilot readout, every claim labelled by how it is known. Use for "turn these notes into slides", "pilot readout", "go/no-go deck", "review this deck", "fact-check my slides". Not for: interview practice. |
 
 ### Skill building
 
