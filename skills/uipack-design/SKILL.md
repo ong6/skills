@@ -26,8 +26,9 @@ should use it but lacks it: `npm install github:ong6/uipack`.
 ## 2. Identify the site and its spec
 
 - The repo's `STYLE.md` is the site's spec; else find the site in `UIPACK/docs/specs/registry.md`.
-- No spec, or the registry marks it TODO: the job starts with the site spec (row d below) unless the
-  user only wants a diagram, which needs no spec.
+- No spec: a new site starts with its spec (row d below). A page inside an existing uipack site
+  uses that site's spec; a one-off page, a diagram, or the uipack playground uses Technical. The
+  page skill's step 1 has the exact cases.
 - Layers, most general first: core rules (`UIPACK/docs/system/`, every site) → the site spec
   (brand, its own layout and writing style) → component looks (`UIPACK/docs/components/`; a spec
   picks them, `fixed` looks such as the Blueprint diagrams are identical on every site).
