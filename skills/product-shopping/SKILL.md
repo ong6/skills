@@ -1,17 +1,21 @@
 ---
 name: product-shopping
 description: >-
-  Recommend what product to buy, find the best legitimate price for a chosen model, compare its
-  landed cost across countries (SG vs US and others, in SGD), or say where to buy it. Use for "which
-  X should I get", "is X worth it", cheapest price, deal checks, price history, "should I buy this
-  overseas", "where can I buy X". Not for: property (evaluate-condo).
+  Recommend what product to buy, judge an item the owner is looking at in a shop, find the best
+  legitimate price for a chosen model, compare its landed cost across countries (SG vs US and
+  others, in SGD), or say where to buy it. Use for "which X should I get", "is X worth it", a photo
+  of a price tag, shelf card or product in a store, "I'm in the shop looking at X", "should I buy
+  this", cheapest price, deal checks, price history, "should I buy this overseas", "where can I buy
+  X". Not for: property (evaluate-condo).
 ---
 
 # Compare Products
 
 Decide **what** to get (Track A), then find the best **price** (Track B), or compare it **across
-countries** (Track C). Run whichever the ask needs.
+countries** (Track C); judge an item **in a shop** (In-shop mode). Run whichever the ask needs.
 
+- **In a shop** (a photo of a price tag, shelf card or product taken in a store, or "I'm in the
+  shop looking at X") → In-shop mode, below. No Track A interview.
 - **Model not pinned down** ("what should I get", "compare these", "is X worth it") → Track A,
   which hands the winner to Track B for the **Before you buy** line.
 - **Exact model known** ("where's it cheapest", "is this deal good", "price history", "good time
@@ -23,17 +27,44 @@ countries** (Track C). Run whichever the ask needs.
 
 **Start from what the owner already has.** Before the first question or search, read the host
 repo's shopping notes (its folder manual, e.g. `AGENTS.md`, or shopping index says where notes go):
-brand exclusions and buying preferences; the domain note that lists what is **owned and wanted** in
-this category (a wardrobe, skincare or devices note); and recorded **sizes**. Then:
+brand exclusions and buying preferences; the category's note of what is **owned, wanted, tried and
+considered** (a wardrobe, skincare or devices note), with any recorded **criteria** for an item;
+and recorded **sizes**. Then:
 
 - Never recommend an excluded brand, even as a budget backup.
 - Don't re-recommend something owned; pick what fills a listed gap or pairs with owned items, and
   say which owned item it pairs with or replaces. Don't ask what the notes already answer.
 - Give sizes from the recorded measurements and fit notes, not a generic chart.
-- When the owner reports buying something, mark it bought in the wanted list and add it to the
-  owned list in the same session. Tell them where you wrote it.
+- When the owner reports buying or trying something, write it to the category note in the same
+  session: a purchase is marked bought in the wanted list and added to owned; a try-on is a dated
+  line with the size and the fit they reported. Tell them where you wrote it.
 
 If the repo keeps none of these notes, ask about owned items and sizes in the Step 1 question.
+
+# In-shop mode
+
+The owner is standing in the shop: about ten short lines, verdict first, no tables, source lists or
+side tips (tax refunds, care) unless asked.
+
+1. **Pin the model** from the tag: model code, variant, colourway. If the photo doesn't settle it,
+   ask for the code on the tag; don't guess.
+2. **Read the notes** above, then reply in this shape:
+   - **Verdict:** buy, skip, or try it on first.
+   - **Criteria:** one line per recorded criterion: pass / fail / can't tell, and why.
+   - **Size to ask for:** from recorded measurements and fit notes.
+   - **Price:** the in-shop price check the host's preferences note defines, if it has one (follow
+     it there); otherwise the shown price against the home-country price for the same model. One
+     line per price, with its source and date inline.
+3. **Source every size, fit and tried statement**: "you said, <date>", the note it is recorded in,
+   or "not recorded" plus a question. A photo, even of the owner wearing the item, is not a try-on
+   report.
+
+   | Bad | Required |
+   |---|---|
+   | "M fits you well" (from a mirror photo) | "Ask for M (sizes note). No try-on of this model recorded: how does it fit?" |
+   | "You tried these last week" (it was a photo) | "Considered list: photo on <date>, not tried." |
+4. **Write back before finishing:** record the shown price (Track B step 3), and write any reported
+   try-on or purchase to the category note (above).
 
 # Track A: decide what to buy
 
@@ -110,8 +141,11 @@ exists. In order:
 4. **Your own logged-in session** (Playwright) where the owner has an account. Legitimate access,
    not evasion.
 
-Record findings: `$PC record <source> <category> "<title>" <lo> <hi> --currency <CUR> [--url <link>] [--condition new|refurb|used]`.
-**Always pass `--currency`**; without it prices can't be compared across regions.
+**Record first-hand prices only:** a tag or shelf photo, or a page loaded this session; never an
+approximate, converted or recalled figure. `$PC record "<shop, branch or site>" <category> "<brand
+model code variant>" <lo> <hi> --currency <CUR> [--url <link>] [--condition new|refurb|used] [--date
+YYYY-MM-DD]`. The source is the actual shop and branch, never "a shop in <city>"; the title carries
+the exact model code; `--currency` always; `--date` when the observation is older than today.
 
 On CAPTCHA / bot-detection / paywall, stop and report (`web-extract`'s hard stop) and try another
 source. Never auto-solve CAPTCHAs or rotate identities/proxies.
@@ -160,10 +194,7 @@ List the venues that fit the item and the buyer's region, not a generic web sear
 - **Legitimate sources only:** real retailers, official refurb/used marketplaces, valid public
   coupons. No leaked keys, dubious grey-market, coupon fraud, or scraping against a site's terms.
 
-# Companion skills
-- **`web-extract`**: web search and page reads, Firecrawl first while its credits last.
-- **`youtube-transcript`**: mine video reviews for real-world failure modes (Track A).
-
-See [references/cross-country.md](references/cross-country.md) for Track C and
+Companion skills: **`web-extract`** for web search and page reads; **`youtube-transcript`** to mine
+video reviews for real-world failure modes (Track A). See [references/cross-country.md](references/cross-country.md) for Track C and
 [REFERENCE.md](REFERENCE.md): §1 dimension checklist, §2 category blind spots, §3 source
 rubric, §4 output template, §5 worked example, §6 pricing reference.
