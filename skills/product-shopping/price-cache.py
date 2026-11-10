@@ -70,8 +70,11 @@ def load(path):
         return json.load(f)
 
 
-def save(path, cache, when):
-    cache["_meta"]["updated"] = when
+def save(path, cache):
+    """Write the cache. `updated` is the day the file was written, never a --date backfill:
+    per-product `seen` carries the observation date."""
+    when = date.today().isoformat()
+    cache.setdefault("_meta", {})["updated"] = when
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
     with open(path, "w") as f:
         json.dump(cache, f, indent=2, ensure_ascii=False)
@@ -82,13 +85,33 @@ def _bucket(cache, source, category):
     return cache.setdefault("sources", {}).setdefault(source, {}).setdefault(category, [])
 
 
+def _backfill(it, lo, hi, avail, when):
+    """File an observation older than the current one into history, sorted by date."""
+    entry = {"d": when, "lo": lo, "hi": hi, "a": avail}
+    hist = it.setdefault("history", [])
+    for i, h in enumerate(hist):
+        if h.get("d") == when:
+            if h == entry:
+                return "unchanged"
+            hist[i] = entry
+            return "backfilled"
+    hist.append(entry)
+    hist.sort(key=lambda h: h.get("d") or "")
+    return "backfilled"
+
+
 def upsert(cache, source, category, t, lo, hi, avail, when,
            currency=None, url=None, condition=None):
     """Insert or update one product; append to history only when price/availability
-    changes. currency/url/condition are kept as current metadata (latest wins)."""
+    changes. currency/url/condition are kept as current metadata (latest wins).
+
+    A `when` older than the product's `seen` is a backfill: it goes into history in date
+    order and leaves the current price, `seen` and metadata alone."""
     items = _bucket(cache, source, category)
     for it in items:
         if it["t"] == t:
+            if it.get("seen") and when < it["seen"]:
+                return _backfill(it, lo, hi, avail, when)
             changed = it.get("lo") != lo or it.get("hi") != hi or it.get("a") != avail
             it.update(lo=lo, hi=hi, a=avail, seen=when)
             if currency is not None:
@@ -133,7 +156,7 @@ def cmd_import(args):
     cache = load(args.cache)
     when = today(args)
     n = _import_blob(cache, args.source, args.file, args.currency, when)
-    save(args.cache, cache, when)
+    save(args.cache, cache)
     print(f"imported {n} products from {args.file} under source '{args.source}'"
           + (f" ({args.currency})" if args.currency else ""))
 
@@ -144,9 +167,11 @@ def cmd_record(args):
     status = upsert(cache, args.source, args.category, args.title,
                     args.lo, args.hi, args.avail, when,
                     currency=args.currency, url=args.url, condition=args.condition)
-    save(args.cache, cache, when)
+    save(args.cache, cache)
     cur = f"{args.currency} " if args.currency else ""
     print(f"{status}: [{args.source}/{args.category}] {args.title}  {cur}{args.lo}-{args.hi}")
+    if status == "backfilled":
+        print(f"  note: {when} is older than the current price; filed in history, current price kept.")
     if not args.currency:
         print("  note: no --currency recorded; prices without a currency can't be compared across regions.")
 
