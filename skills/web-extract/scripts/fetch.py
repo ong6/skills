@@ -28,7 +28,12 @@ def html_to_markdown(html: str) -> str:
     import markdownify
     import readabilipy.simple_json
 
-    ret = readabilipy.simple_json.simple_json_from_html_string(html, use_readability=True)
+    try:
+        ret = readabilipy.simple_json.simple_json_from_html_string(html, use_readability=True)
+    except Exception:
+        # Readability.js needs node and a one-time `npm install` inside readabilipy; where that
+        # fails (no node, a registry mirror missing a package), use its pure-Python extractor.
+        ret = readabilipy.simple_json.simple_json_from_html_string(html, use_readability=False)
     if not ret["content"]:
         return "<error>Page failed to be simplified from HTML</error>"
     return markdownify.markdownify(ret["content"], heading_style=markdownify.ATX)
