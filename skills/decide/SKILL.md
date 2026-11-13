@@ -16,7 +16,7 @@ written down, failure imagined in advance), then commit to one answer the user c
 
 | Decision | Treatment |
 |---|---|
-| Cheap and reversible (a week or less to undo, little money) | Pick, say why in two lines, name the cheap test. Stop. |
+| Cheap and reversible (a week or less to undo, little money) | Pick, say why briefly, name the cheap test. Stop. |
 | Costs months, more than about 10k in money, or is hard to undo | Full pass below. |
 
 If the user already leans one way, argue the strongest case against it before you agree. Agreeing
@@ -59,7 +59,7 @@ Work these silently; the reply shows only what changes the call.
 ```text
 **Take <option>.** <one or two sentences: what carries it.>
 
-<3-6 bullets or a small table: the numbers and checks that decided it, assumptions marked>
+<the numbers and checks that decided it, as bullets or a small table, assumptions marked>
 
 **What would flip it:** <fact> — <how to find out, cheaply>
 **Pre-mortem:** <top failure cause> → <fix before starting>

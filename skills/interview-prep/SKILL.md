@@ -4,7 +4,7 @@ description: >-
   Interview practice from the candidate's own resume and target-company notes: mocks, STAR
   answers, system-design walkthroughs, timed DSA reps by due pattern, debriefs of real interviews.
   Use for "mock interview", "give me a rep", "what's due", "I just had an interview". Not for:
-  live rounds (interview-live), resumes (cv), job hunting.
+  live or mock coding rounds as they happen, resume writing, job hunting.
 ---
 
 # Interview prep

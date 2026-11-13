@@ -71,7 +71,7 @@ with bpy.context.temp_override(active_object=obj, selected_objects=[obj],
 
    ```python
    import bpy
-   print("Blender", bpy.app.version_string)   # e.g. (5, 2, 0)
+   print("Blender", bpy.app.version_string)   # e.g. 5.2.0
    ```
 
 2. **Start from a clean, deterministic scene.** Blender's default file ships a

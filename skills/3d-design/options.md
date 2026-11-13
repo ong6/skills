@@ -16,9 +16,9 @@ license and export requirements for the task. Prefer the existing stack when it 
 | Blender-rendered still / video | Fixed camera visuals where final lighting and low runtime cost matter | No true object manipulation; compare transfer size, browser playback, transparency and static fallback |
 | CAD authoring, e.g. OpenSCAD | Dimension-driven hard-surface parts or parametric product forms | Poor default for organic characters; tessellation and materials need review for web delivery |
 
-A mixed route is often appropriate: Blender builds the player and racket, a web renderer plays the
-clip, and HTML supplies accessible labels and controls. Trading data can remain runtime-generated
-beside an imported frame. Choose each layer for its job without duplicating scene ownership.
+A mixed route is often appropriate: Blender builds the character and props, a web renderer plays the
+clip, and HTML supplies accessible labels and controls. Live data can stay runtime-generated
+beside an imported model. Choose each layer for its job without duplicating scene ownership.
 
 ## Primary documentation
 

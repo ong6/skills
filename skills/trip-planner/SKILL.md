@@ -48,8 +48,8 @@ The user is in a car/at a stop and needs an answer NOW. Optimize for phone-reada
 1. Establish **current time, position, ETA, and the next hard deadline** (booking, car
    return, flight). Check the actual local time; don't trust the stated schedule.
 2. Research ONLY what the decision needs, but always verify the killers:
-   - **kitchen closing times** (UK pubs stop food 21:00–21:30, so an ETA after 20:30 changes
-     the answer)
+   - **kitchen closing times** (often well before the venue closes; compare last food orders
+     with the ETA)
    - **parking that actually works**: fits the vehicle, no gate lock-in, evening rules
    - whether the venue is even open on arrival
 3. Answer in this shape: **one recommendation + one fallback + the action to take from the
@@ -65,8 +65,7 @@ The user is in a car/at a stop and needs an answer NOW. Optimize for phone-reada
   explicitly marked as "check the sign / call ahead".
 - Every stop names its parking. Every dinner names a booking action.
 - State the arrival-time consequence of every option ("lands you at the next stop ~23:10").
-- Groups >6: restaurants must be called ahead; note which cuisines absorb big tables late
-  (Indian/Italian > village gastropub).
+- Groups >6: restaurants must be called ahead; note which nearby kitchens take a big table late.
 - Data gaps are listed honestly. Never invent a price, an opening hour, or a distance.
 
 ## After the trip

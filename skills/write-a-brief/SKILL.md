@@ -26,7 +26,7 @@ This is the whole skill. Every candidate item goes in exactly one bucket:
 | Bucket | Contains | Written as |
 |---|---|---|
 | **Where I stand** | Decisions the owner has made and intends to hold, with the one-line reason. | Plain statements, no bold lead-ins. Include what a pushback must contain to change the answer. Only decisions the owner actually stated; never a verdict they didn't give ("I wouldn't sign this"). |
-| **Ask them** | Only items passing the test below. | Numbered questions. **Hard cap ~8.** |
+| **Ask them** | Only items passing the test below. | Numbered questions. **About eight at most; past that the sheet is unsorted.** |
 | **Should be in the quote anyway** | Everything a competent pro does by default, drawn from the quote or background, not a generic trade checklist. | One short paragraph the owner can scan; say it aloud only if an item is missing from the quote. |
 
 **A question earns a slot only if it is one of:**
@@ -123,7 +123,7 @@ Bring                                        plain list, only what isn't already
   meeting.
 - **Inferences are questions, not facts.** A timing or cost guess the papers don't state becomes a
   question ("Does a December date clear the January busy period?").
-- **Each item appears once.** The whole brief fits about two phone screens. Link the background
+- **Each item appears once.** Link the background
   note in one line under the title when there is one; a Related line at the end, if any.
 
 ## Step 4: check before handing over
@@ -136,7 +136,6 @@ Return to Step 1 on any fail.
 - [ ] No item appears twice; no slot-label headings; no `TODO:` for something already known.
 - [ ] No bold lead-in bullets, no "X, not Y" line, no kicker line under a position or question.
 - [ ] No inference stated as fact: guesses about timing or cost are questions.
-- [ ] Bold spans in the longest section ≤ ~5.
 - [ ] Every fact traces to the background note or a source. Never invent a price, a
       standard, a lead time.
 - [ ] Two pages or fewer at print size.

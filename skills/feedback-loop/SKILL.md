@@ -38,7 +38,7 @@ owner never repeats feedback and never maintains the log.
 6. **Keep it lean.** Move superseded entries, and entries applied more than 30 days ago, verbatim
    to `archive/feedback/YYYY-MM.md` (the entry's month) in the host repo. **Live rules** keeps one
    row per rule still in force, wherever its entry now sits; a superseded entry loses its row.
-7. **Reply in one or two lines:** what changed and the absolute path of the file.
+7. **Reply briefly:** what changed and the absolute path of the file.
 
 ## Log entry
 

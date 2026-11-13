@@ -30,7 +30,7 @@ to the targets below, never an Artifact unasked); do not restate it.
 4. **Lay out on a grid** (spec below). Compute positions in code or a scratch table; never nudge by
    eye.
 5. **Render and look at it.** Screenshot at the size it will be shown, in light and dark. Then ask
-   the four questions in [Review](#review). Fix, re-render, repeat. Two passes minimum.
+   the four questions in [Review](#review). Fix and re-render until all four answers are yes.
 6. **Caption.** A `figcaption` stating the claim in one sentence. Explanations live there, not in
    the drawing.
 

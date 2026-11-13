@@ -71,7 +71,8 @@ really is a set of separate observations.
   as appendix in their eyebrow and navigation. No near-empty divider slide.
 - **Emphasis is scarce.** Bold or highlight one row per table at most, the one the headline is
   about; status tags ("Gate 1") sit in the row label in normal weight.
-- **Get an outside review.** A fresh reviewer looks at every rendered slide before it ships.
+- **Outside read.** The CFO read (SKILL.md, Numbers pass) is the outside review; the rendered
+  slides you check yourself, every PNG.
 
 ## Finished, not drafted
 

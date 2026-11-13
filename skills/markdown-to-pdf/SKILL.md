@@ -38,7 +38,7 @@ readers that trust the embedded program drop scattered letters (`significant` â†
 while every terminal check passes.
 
 **Rule: plain, static `.ttf` only.** `/System/Library/Fonts/Supplemental/` is nearly all plain
-TTFs; `/System/Library/Fonts/` holds the collections. For this machine, default to **Arial** body
+TTFs; `/System/Library/Fonts/` holds the collections. On macOS, default to **Arial** body
 and **Andale Mono** code. A bundled static open font such as Noto Sans or Inter is also acceptable
 for a cross-machine artifact, but verify that the exact files exist, embed them explicitly with
 `@font-face`, and reject variable-font or OS-fallback substitutions. Never silently switch font

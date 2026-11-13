@@ -1,12 +1,11 @@
 ---
 name: product-shopping
 description: >-
-  Recommend what product to buy, judge an item the owner is looking at in a shop, find the best
-  legitimate price for a chosen model, compare its landed cost across countries (SG vs US and
-  others, in SGD), or say where to buy it. Use for "which X should I get", "is X worth it", a photo
-  of a price tag, shelf card or product in a store, "I'm in the shop looking at X", "should I buy
-  this", cheapest price, deal checks, price history, "should I buy this overseas", "where can I buy
-  X". Not for: property (evaluate-condo).
+  Recommend what to buy, judge an item the owner is looking at in a shop (a photo of a price tag,
+  shelf card or product counts), find the best legitimate price or price history for a chosen
+  model, compare landed cost across countries in SGD, or say where to buy it. Use for "which X
+  should I get", "is X worth it", "I'm in the shop looking at X", "is this a good deal", "should I
+  buy this overseas", "where can I buy X". Not for: property (evaluate-condo).
 ---
 
 # Compare Products
@@ -43,8 +42,9 @@ If the repo keeps none of these notes, ask about owned items and sizes in the St
 
 # In-shop mode
 
-The owner is standing in the shop: about ten short lines, verdict first, no tables, source lists or
-side tips (tax refunds, care) unless asked.
+The owner is standing in the shop reading on a phone: verdict first, short enough to take in at the
+shelf, as plain lines rather than tables; leave out source lists and side tips (tax refunds, care)
+unless asked.
 
 1. **Pin the model** from the tag: model code, variant, colourway. If the photo doesn't settle it,
    ask for the code on the tag; don't guess.

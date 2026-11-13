@@ -16,7 +16,7 @@ spread yourself; extra countries come from the request ("add JP and KR").
 
 ## Regions and currency
 
-- **Always SG and US.** Add any country the user names (`--add jp kr cn hk` or plain words).
+- **Always SG and US.** Add any country the user names ("add JP and KR").
 - **Report in SGD**, local price → SGD alongside. SGD is the decision currency.
 - **Fetch live FX every run**; never reuse rates from a previous session or file. State rates and
   date at the bottom.

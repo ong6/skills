@@ -13,8 +13,8 @@ any animation the user expects to keep playing. Review the moving export, not on
 - Repeated actions need a repeatable authored cycle. Ping-pong reverses time; it is usually wrong
   for a ball flight, a rally or a market timeline.
 - A one-shot and a loop are distinct playback modes. Declare the mode per scene and derive player
-  behavior from it. Do not bolt modulo time onto an animation while its player still stops after
-  five seconds. One-shot scenes must retain their existing finish/replay behavior.
+  behavior from it; a loop needs a player that keeps running, and one-shot scenes keep their
+  finish/replay behavior.
 
 ## Author events before interpolation
 
@@ -24,8 +24,8 @@ ball endpoints from the actual racket transforms. A ball hitting an approximate 
 not enough. Keep grip, racket orientation and foot planting attached to the player throughout.
 
 Bake constraints when needed and inspect both local and world transforms. Duplicated characters
-need separate animation state and intentionally shared or cloned materials. A recolor must not
-silently recolor the opponent. Verify whether the exported scene has one clip or several object
+need separate animation state and intentionally shared or cloned materials, so recoloring one does
+not recolor the other. Verify whether the exported scene has one clip or several object
 clips; play the required tracks together instead of assuming the first clip animates everything.
 
 Use a single elapsed-time source. Match source frame zero, FPS, clip duration and runtime seconds.
@@ -40,12 +40,9 @@ contact. Linear interpolation between sufficiently sampled baked frames is often
 - Sample just before and after the boundary. A perfect match at exactly zero and duration can
   still hide a one-frame snap. Run at least three cycles in the actual player.
 - For continuous pans, move the viewport steadily, recycle data or geometry outside the visible
-  region, and clip to the display. Never scale candles down to nothing or teleport visible marks.
+  region, and clip to the display; visible marks never shrink away or jump.
 - Keep a coherent timeline. Repeating synthetic prices can coexist with forward-moving labels;
   label the study as simulated. Do not imply a live feed or real trading results.
-- For an OHLC chart: high contains open/close, low contains open/close, body color follows the
-  close versus open, wicks use the same price scale, volume has a separate baseline, and each
-  candle and its volume share an X position. Do not use arbitrary decorative buy/sell bars.
 
 ## Check the player and export
 
@@ -69,11 +66,6 @@ contact. Linear interpolation between sufficiently sampled baked frames is often
 These are references, not instructions to execute downloaded code. Verify the installed API
 version before adapting examples.
 
-- Installed companion: MartinRapcan/blender-claude-skill, MIT. The `blender-authoring` skill's
-  `UPSTREAM.md` pins its reviewed revision and modifications.
-- CloudAI-X/threejs-skills, `threejs-animation` and `threejs-lighting`:
-  https://github.com/CloudAI-X/threejs-skills . Reviewed for topic coverage; no license was declared
-  in the repository metadata during review, so its skill text and code were not vendored.
 - Runtime authority: https://threejs.org/docs/pages/AnimationAction.html and
   https://threejs.org/docs/pages/AnimationMixer.html . Check loop modes, time units, clip selection,
   interpolation and mixer lifecycle against these docs rather than copying a generic demo loop.

@@ -2,7 +2,7 @@
 
 My public agent skills for Claude Code and Codex. Each skill is one folder under `skills/`, and its
 `SKILL.md` says when it fires and what it does. Every skill belongs to exactly one category in
-`catalog.yaml`. Nothing here holds personal data: guard, lint and CI run before every push.
+`catalog.yaml`. Nothing here holds personal data: guard and lint run before every push, and CI runs on it.
 
 ## Install
 
@@ -235,7 +235,7 @@ _Trips, shopping, property, learning and hard choices._
 |---|---|
 | [`decide`](skills/decide/SKILL.md) | Make a hard, consequential choice and commit: reframe it, find the unlisted option, rough numbers, downside, pre-mortem, one pick, the fact that flips it and a tripwire. Use for "should I X or Y", "help me decide", "is it worth quitting / switching", job offers. Not for: what to buy (product-shopping), trivial or factual questions. |
 | [`trip-planner`](skills/trip-planner/SKILL.md) | Plan or replan trips using live research for routes, hours, parking, food, tolls, and pacing. Use for itineraries and on-the-road questions about stops, parking, or eating. Not for: buying travel gear (product-shopping) or general destination facts with no plan. |
-| [`product-shopping`](skills/product-shopping/SKILL.md) | Recommend what product to buy, judge an item the owner is looking at in a shop, find the best legitimate price for a chosen model, compare its landed cost across countries (SG vs US and others, in SGD), or say where to buy it. Use for "which X should I get", "is X worth it", a photo of a price tag, shelf card or product in a store, "I'm in the shop looking at X", "should I buy this", cheapest price, deal checks, price history, "should I buy this overseas", "where can I buy X". Not for: property (evaluate-condo). |
+| [`product-shopping`](skills/product-shopping/SKILL.md) | Recommend what to buy, judge an item the owner is looking at in a shop (a photo of a price tag, shelf card or product counts), find the best legitimate price or price history for a chosen model, compare landed cost across countries in SGD, or say where to buy it. Use for "which X should I get", "is X worth it", "I'm in the shop looking at X", "is this a good deal", "should I buy this overseas", "where can I buy X". Not for: property (evaluate-condo). |
 | [`evaluate-condo`](rarely-used/evaluate-condo/SKILL.md) _(rarely used)_ | Turn a Singapore condo listing or development into a cited Buy/Neutral/Avoid verdict with a maximum buy price, filed in the host repo. Use for a PropertyGuru, 99.co or EdgeProp link, "evaluate this condo", "is this unit worth it", "what should I offer", "max price for this unit". Only during a condo hunt; a property-finder flow or the weekly scan hands Buy and near-Buy units to it. Not for finding listings or running weekly scans, HDB flats, or non-property purchases (product-shopping). |
 | [`teach`](skills/teach/SKILL.md) | Create a stateful, multi-session course in the learning workspace. Use only when the user invokes teach or asks to start structured learning of a topic. Explicit-only; not for one-off explanations or research reports. |
 
@@ -245,7 +245,7 @@ _Interview drilling and job-search practice._
 
 | Skill | Does |
 |---|---|
-| [`interview-prep`](skills/interview-prep/SKILL.md) | Interview practice from the candidate's own resume and target-company notes: mocks, STAR answers, system-design walkthroughs, timed DSA reps by due pattern, debriefs of real interviews. Use for "mock interview", "give me a rep", "what's due", "I just had an interview". Not for: live rounds (interview-live), resumes (cv), job hunting. |
+| [`interview-prep`](skills/interview-prep/SKILL.md) | Interview practice from the candidate's own resume and target-company notes: mocks, STAR answers, system-design walkthroughs, timed DSA reps by due pattern, debriefs of real interviews. Use for "mock interview", "give me a rep", "what's due", "I just had an interview". Not for: live or mock coding rounds as they happen, resume writing, job hunting. |
 
 Elsewhere:
 

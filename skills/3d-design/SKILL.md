@@ -45,11 +45,10 @@ Read [options.md](options.md) for tradeoffs and official documentation. Start he
 | Designer-owned visual editing and handoff | Evaluate Spline or PlayCanvas Editor | Account, export, runtime or ownership constraints prevent a portable result |
 | Game-like scene with extensive interaction or physics | Evaluate the existing engine, Babylon.js or PlayCanvas | A smaller Three.js scene already meets the needs |
 
-State the chosen authoring tool, delivery method, reason and one switching condition in a short
-paragraph. Compare only credible alternatives for this task. Do not ask the user to select a
+Give the recommendation as four fields: **Route** (authoring tool, delivery method and why),
+**First proof**, **Fallback** (the condition that would switch routes) and **Release checks**. Compare only credible alternatives for this task. Do not ask the user to select a
 framework when their requirements already decide it. Do not migrate an engine merely to add a model.
-For a recommendation or audit, lead with four explicit fields: **Route**, **First proof**,
-**Fallback**, and **Release checks**. Keep proposed work separate from results actually rendered or
+Keep proposed work separate from results actually rendered or
 measured; never imply that an asset, browser path, or device budget passed when it was not run.
 
 When Blender is selected, load the `blender-authoring` skill. For any
@@ -82,13 +81,12 @@ until the replacement passes review. Tool changes must not silently change the r
 ## 4. Build reusable assets and playback
 
 Follow the host's component ownership rules. In a UI Pack workflow, author/register significant
-visuals in UI Pack before the homepage consumes them. Keep source models or reproducible scripts,
+visuals in UI Pack before a consuming page uses them. Keep source models or reproducible scripts,
 exports, metadata and fallbacks with the owning library. Consumers supply content and theme.
 
 For Blender:
 
-- Use a separate output directory per asset; inspect any starter runner before executing it.
-  Do not overwrite a previous design with a demo script.
+- Use a separate output directory per asset so a new script cannot overwrite an earlier design.
 - Retain an editable `.blend` or a complete reproducible generation script. Deliver a camera
   preview alongside the web export. Use deliberate scale, origins and named animation clips.
 - Bake constraints/simulations only as supported by the target format. Check deformation,
@@ -118,8 +116,8 @@ cannot support one, stop the animation within five seconds and leave the poster 
    static fallback. Include keyboard/touch access and the existing expanded-canvas behavior.
 3. Measure cold-load size and runtime behavior on a representative mobile viewport/device.
    A desktop screenshot does not prove smooth mobile animation; say what was actually measured.
-4. Run repository checks and verify the built library in its consumer. Returning to step 3 is
-   required when the movement still looks wrong even if automated checks pass.
+4. Run repository checks and verify the built library in its consumer. If the movement still
+   looks wrong, go back to section 3 (prove the hardest visual beat), even when automated checks pass.
 5. Report the chosen route, editable source, delivered output, visual evidence, checks and any
    remaining limitation. Keep implemented, proposed and published status distinct.
 

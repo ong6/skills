@@ -83,7 +83,8 @@ in [references/research.md](references/research.md).
   any heldout treatment critical failure reported by any judge fails. A failed heldout deterministic
   grader or heldout trigger test also fails.
 - A failed candidate starts a bounded improve-and-retest loop; it is not the terminal action by
-  itself. Default to at most three serious candidate revisions unless the user sets another bound.
+  itself. Default to at most three serious candidate versions, the initial one included, unless the user sets another
+  bound.
   A serious revision must address observed behavior, not merely rewrite wording to chase a noisy
   judge score. Count candidate versions, not only valid decisions: once a materially distinct
   candidate is tested, an invalid or contaminated evaluation does not refund that revision slot.
@@ -190,8 +191,7 @@ transcripts, and outputs; keep them out of public repositories unless reviewed.
 
     python3 scripts/lifecycle_gate.py --manifest lifecycle.json --evidence-root evaluation-directory
 
-Paths above are relative to this skill's base directory. Skillsmith is linked into a repository
-like any other skill; there is no separate installed copy to keep in step with a checkout.
+Paths above are relative to this skill's base directory.
 
 ## Failure patterns
 

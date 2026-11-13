@@ -44,7 +44,7 @@ developer stock, not a subsale.
 **realsmart.sg** (preferred: cleanest structured project data). The **public page**
 carries everything the logged-in view does:
 ```bash
-firecrawl scrape "https://realsmart.sg/p/<slug>" -f markdown,json --only-main-content
+firecrawl scrape "https://realsmart.sg/p/<slug>" -f markdown,json --only-main-content -o "$SCRATCHPAD/realsmart-<slug>.json"
 ```
 Slug unknown? Search `site:realsmart.sg/p <project name>` through `web-extract` rather than
 enumerating the sitemap. The page carries REALSCORE, annualized profit, % profitable,

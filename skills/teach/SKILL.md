@@ -56,8 +56,9 @@ concepts, edges are prerequisites, nodes the probe showed they hold are marked. 
 of the lesson. Draw it every time, even for a topic you think you know; you cannot draw it without
 working out what depends on what.
 
-**Fan out verification subagents** in parallel (the host's own subagent mechanism) to fact-check
-every claim the lesson will make and find the primary source. One confidently wrong explanation
+**Fact-check every claim** the lesson will make against a primary source before teaching it. When a
+lesson has many independent claims, split the checking across the host's own subagents in parallel;
+a handful is quicker checked inline. One confidently wrong explanation
 costs more than the session gained.
 
 ### Phase 3: teach

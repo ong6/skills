@@ -18,12 +18,12 @@ folder's own manual and index (note shape, category table, tag vocabulary) befor
    opened, and mark anything unverified with `TODO:`.
 2. **Check for a duplicate**: `grep -l "<video id>" <videos>/*.md`. If it exists, append to that
    note instead of creating another.
-3. **Pick the category** from the index's category table (one value). **Pick 3–6 tags**, reusing
+3. **Pick the category** from the index's category table (one value). **Pick a few tags**, reusing
    the existing vocabulary first (`grep -h '^tags:' <videos>/*.md`). New category → add its index
    row.
-4. **Write the note** at `<videos>/<slug>.md` in the shape the folder manual gives: overview,
-   5–10 takeaways from the transcript, "Why I saved it" (owner's words, else `TODO:`), optional
-   timestamps. Takeaways are the video's claims, not your commentary; keep the note under ~60 lines.
+4. **Write the note** at `<videos>/<slug>.md` in the shape the folder manual gives (overview,
+   takeaways, "Why I saved it" in the owner's words, else `TODO:`, optional timestamps). Takeaways
+   are the video's claims, not your commentary; the note is a scan-able summary, not a transcript.
 5. **Index it**: add one line under the category heading in the folder index (create the heading
    if it's the category's first video), replacing any "empty" placeholder.
 6. **Reply** with the absolute path, category, tags, and the three strongest takeaways. No recap
