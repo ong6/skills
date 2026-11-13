@@ -100,7 +100,7 @@ learning records, pick the most mission-relevant thing that fits the ZPD, teach 
 - **Quiz answers all the same number of words** (and characters where possible). No formatting
   clues.
 - Before delivering lessons and reference documents, remove generic filler, preserve all sourced
-  facts and links, and open the file with a CLI command if possible.
+  facts and links, and open the file for the user.
 
 ## Reference documents
 
