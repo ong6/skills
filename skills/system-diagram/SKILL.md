@@ -36,7 +36,7 @@ to the targets below, never an Artifact unasked); do not restate it.
 
 ## Taste spec
 
-When the target uses UiPack, its `docs/system/style.md#diagrams` and `layout.md#diagrams` are canonical and win over this table. This table matches them for figures drawn without UiPack. Numbers are for a `viewBox` roughly 960 wide. Scale proportionally.
+When the target uses UiPack, its `docs/system/style.md#diagrams` is canonical and wins over this table. This table matches it for figures drawn without UiPack. Numbers are for a `viewBox` roughly 960 wide. Scale proportionally.
 
 | Element | Rule |
 |---|---|

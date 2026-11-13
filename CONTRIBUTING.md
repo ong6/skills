@@ -31,7 +31,8 @@ Behaviour cases in `evals/behavior/` build a fixture repo: add `--scaffold` and
 Rules:
 
 - Keep personal information out: no home paths, accounts, emails, phone numbers, prices or names.
-  `bin/skills guard` enforces this in CI and before `bin/skills publish` pushes.
+  `bin/skills guard` checks for it in CI and before `bin/skills publish` pushes (paths, emails,
+  phone numbers, keys and the owner's private terms list); prices and other names are on you.
 - Make skills location-independent. Refer to other skills by name. Find the working repo with
   `git rev-parse --show-toplevel`, and never resolve a script's own symlink to find siblings.
 - Never shell out to another AI CLI (`claude -p`, `codex exec`) from a skill. Use the host's own

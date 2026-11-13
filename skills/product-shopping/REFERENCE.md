@@ -155,7 +155,7 @@ Looked at Roomba but heard they're loud."
 needed? (#3), self-empty dock vs budget (#2/#10), app/ecosystem prefs (#7), pet-hair
 tangle (a #4/durability concern), noise threshold (#6, they raised it).
 
-**Clarify (Step 3, via AskUserQuestion):**
+**Clarify (Step 3, structured questions):**
 - Mostly hard floors, carpet, or mixed? *(decides brush type & suction)*
 - Need mopping too, or vacuum only? *(halves the field)*
 - Self-emptying dock worth eating into the $400, or spend it all on the robot? *(TCO vs upfront)*

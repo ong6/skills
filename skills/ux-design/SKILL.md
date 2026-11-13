@@ -25,6 +25,8 @@ Only Critical, High and Medium rules on the relevant platform are in scope by de
    at 1440 and 390 in both themes, and check with scripts rather than by eye:
    - horizontal overflow: `document.documentElement.scrollWidth > innerWidth`
    - target size: every `a, button, [role=button]` bounding box ≥ 44 px on the short side at 390
+     (the house standard for phones; rule 104's 24 px is the conformance floor, so report 24–44 as
+     Medium and under 24 as a failure)
    - focus: Tab through the page; every stop must be visible
    - contrast: compute muted-text and link ratios against their actual background, 4.5:1 body
    - anchors under a sticky header: `scroll-margin-top` set

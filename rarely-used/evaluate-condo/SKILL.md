@@ -1,6 +1,6 @@
 ---
 name: evaluate-condo
-description: Turn a Singapore condo listing or development into a cited Buy/Neutral/Avoid verdict with a maximum buy price, filed in the host repo. Use for a PropertyGuru, 99.co or EdgeProp link, "evaluate this condo", "is this unit worth it", "what should I offer", "max price for this unit". Only during a condo hunt; a property-finder flow or the weekly scan hands Buy and near-Buy units to it. Not for finding listings or running weekly scans, HDB flats, or non-property purchases (product-shopping).
+description: Turn a Singapore condo listing or development into a cited Buy/Neutral/Avoid verdict with a maximum buy price, filed in the host repo. Use for a PropertyGuru, 99.co or EdgeProp link, "evaluate this condo", "is this unit worth it", "what should I offer", "max price for this unit". Only during a condo hunt; a listing-scan run may hand Buy and near-Buy units to it. Not for finding listings or running weekly scans, HDB flats, or non-property purchases (product-shopping).
 ---
 
 # Evaluate Condo
@@ -17,7 +17,7 @@ to pay. What this adds over plain web research:
 - **Remembered.** The note, research-list row and re-look trigger are filed and cross-linked
   (§5), so a "no" stays findable and reopens at the right price.
 
-**Called from a property-finder flow or the weekly scan?** That run already holds the listing
+**Called from a listing-scan run (a property finder or a weekly scan)?** That run already holds the listing
 facts and the valuation: reuse them, skip the matching parts of §2–3, and go straight to §4's
 checks and §5's filing.
 
@@ -31,12 +31,12 @@ notes, ask the buyer for budget, financing and purpose before scoring anything. 
 
 ## 2 · Gather data (three sources, in parallel where possible)
 
-**Listing page**, through Firecrawl (see the `web-extract` skill):
+**Listing page**, with the `web-extract` skill (its credit check and blocked-page fallbacks apply). While Firecrawl has credits:
 ```bash
 firecrawl scrape "<url1>" "<url2>" -f markdown,json --only-main-content -o "$SCRATCHPAD/"
 ```
 Pass every listing URL in one call. PropertyGuru and 99.co sit behind Cloudflare; if a page
-comes back thin, retry with `--wait-for 5000`, then stop and say so. Listing sites ship JSON-LD,
+comes back thin, follow `web-extract`'s blocked-page route, and say so if that fails too. Listing sites ship JSON-LD,
 which is cleaner than the rendered text. Record: type, sqft, asking, psf, floor/stack, TOP
 date, and **who is selling**: "developer's appointed sales team / VVIP discount" = unsold
 developer stock, not a subsale.

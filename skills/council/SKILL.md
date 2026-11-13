@@ -5,7 +5,7 @@ description: >-
   reviewer subagents that pick their own metrics, score it out of 10 against references, and drive
   fix-and-rescore rounds until every member meets the target and every stated constraint (default
   8/10, at most 3 rounds). Use only when the user says "council", "use the council" or "put this
-  through the council". Not for a single quick edit, an ordinary PR or diff review (code-review),
+  through the council". Not for a single quick edit, an ordinary PR or diff review,
   or feedback about agent behaviour (feedback-loop).
 ---
 

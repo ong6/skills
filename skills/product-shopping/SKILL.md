@@ -89,7 +89,7 @@ Ask the **2–4 highest-leverage unknowns in one round** with the structured use
 available, else one compact message. Every question has concrete pre-filled options; never force a
 long typed answer.
 - Most-likely / recommended option first.
-- `multiSelect: true` when several answers can be true at once.
+- Allow multiple selections when several answers can be true at once.
 - For a factor the buyer likely didn't know mattered, fold a one-line *why it matters* into the
   question.
 - Second round only if an answer opens a fork that changes the shortlist.
