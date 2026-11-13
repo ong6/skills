@@ -14,7 +14,7 @@ class WorkflowContractTests(unittest.TestCase):
         cls.contract_flat = " ".join(cls.contract.split())
 
     def test_default_bound_is_three_serious_revisions(self):
-        self.assertIn("at most three serious candidate revisions", self.skill)
+        self.assertIn("at most three serious candidate versions, the initial one included", self.skill_flat)
         self.assertIn('"maximum_serious_revisions": 3', self.contract)
 
     def test_failure_uses_development_evidence_before_revision(self):
