@@ -56,7 +56,7 @@ If `UIPACK/skills/` is missing (an older pinned uipack), read `UIPACK/AGENTS.md`
 The uipack skill owns the design rules; these execute when it hands off: `system-diagram` for a
 hand-authored SVG figure, `create-fde-deck` for customer field-engineering decks, `frontend-design`
 and `ux-design` for web direction and the usability pass, `3d-design` then `blender-authoring` for
-3D.
+3D. When an executor is not installed, do its step yourself from the uipack rules.
 
 ## Never
 

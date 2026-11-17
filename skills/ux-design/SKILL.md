@@ -41,7 +41,8 @@ Only Critical, High and Medium rules on the relevant platform are in scope by de
    and every mechanical Medium in the same session. Leave taste calls and copy for the owner,
    listed.
 4. **Looks**: if building or reshaping, invoke `frontend-design` now with the design read from
-   step 1 as the brief. Its token plan must not undo a fix from step 3.
+   step 1 as the brief; when that skill is not installed, do the visual pass yourself from the
+   same brief. The token plan must not undo a fix from step 3.
 5. **Verify**: lint and build green, re-screenshot at both widths, re-run the step 2 scripts.
    A fix that isn't re-checked isn't done; go back to step 3 on any regression.
 
