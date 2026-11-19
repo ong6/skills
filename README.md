@@ -130,7 +130,7 @@ CI fails when they drift.
 | [`web-extract`](skills/web-extract/SKILL.md) | Web search and page reads, spending Firecrawl credits first. |
 | [`youtube-transcript`](skills/youtube-transcript/SKILL.md) | Fetch clean captions from a YouTube video. |
 | [`save-video`](skills/save-video/SKILL.md) | File a YouTube video as a searchable note with takeaways, category and tags. |
-| [`datastore`](skills/datastore/SKILL.md) | Keep structured records as append-only JSONL with a local SQLite cache for SQL. |
+| [`datastore`](rarely-used/datastore/SKILL.md) _(rarely used)_ | Keep structured records as append-only JSONL with a local SQLite cache for SQL. |
 | [`council`](skills/council/SKILL.md) | Put work through fresh reviewer agents that pick metrics and score it until it meets the target. |
 | [`write-a-brief`](skills/write-a-brief/SKILL.md) | Write or tighten a one-to-two-page brief for a meeting with a professional, quotes included. |
 | [`markdown-to-pdf`](skills/markdown-to-pdf/SKILL.md) | Turn a Markdown note into a checked, print-ready A4 PDF. |
@@ -144,7 +144,7 @@ CI fails when they drift.
 | [`product-shopping`](skills/product-shopping/SKILL.md) | Decide what to buy, judge an item in a shop, find its best legitimate price, or compare it across countries. |
 | [`evaluate-condo`](rarely-used/evaluate-condo/SKILL.md) _(rarely used)_ | Evaluate a Singapore condo listing or development and file a cited verdict. |
 | [`teach`](skills/teach/SKILL.md) | Run a stateful, multi-session course on a topic in a learning workspace. |
-| [`interview-prep`](skills/interview-prep/SKILL.md) | Mock interviews from your own resume, with spoken-plan grading, drills, debriefs, system design. |
+| [`interview-prep`](rarely-used/interview-prep/SKILL.md) _(rarely used)_ | Mock interviews from your own resume, with spoken-plan grading, drills, debriefs, system design. |
 | [`create-fde-deck`](skills/create-fde-deck/SKILL.md) | Write or review evidence-labelled field-engineering decks: discovery, architecture, pilot readout. |
 | [`skill-search`](skills/skill-search/SKILL.md) | Find a skill for a job across loaded, rarely used, retired and external skills. |
 | [`skillsmith`](skills/skillsmith/SKILL.md) | Make a skill from the repo, then keep it only if it beats the same model without it. |
@@ -163,7 +163,7 @@ _Getting text and data out of the web and video._
 | [`web-extract`](skills/web-extract/SKILL.md) | Search the web and read or extract pages, spending Firecrawl's monthly credits first and switching to the host's native search and a local readability fetch while they are at zero. Use for web searches, reading a URL, JavaScript-heavy or Cloudflare pages, public PDFs, structured extraction or page interaction. Not for YouTube (youtube-transcript) or LinkedIn (off-limits). |
 | [`youtube-transcript`](skills/youtube-transcript/SKILL.md) | Fetch clean transcripts or captions from YouTube URLs or video IDs. Use when the user shares a YouTube link or asks to transcribe, summarize, cite, or read a video. Not for: filing a video as a library note (save-video) or non-YouTube media. |
 | [`save-video`](skills/save-video/SKILL.md) | Save a YouTube video into the video library of the host repo as a note with overview, key takeaways, category and tags, indexed for later search. Use for "save this video", "add this to my videos", a YouTube link with "keep/remember/save", or "what videos do I have on X" (search the library). Not for a one-off summary the owner only wants to read now (youtube-transcript alone). |
-| [`datastore`](skills/datastore/SKILL.md) | Keep many same-shaped rows as a git-backed dataset: append-only JSONL as truth, a local SQLite cache for SQL. Use for "track X over time", "store these as a table", "query my jobs/prices/workouts", daily ingest scripts or durable machine state. Not for: prose notes, small Markdown tables, secrets. |
+| [`datastore`](rarely-used/datastore/SKILL.md) _(rarely used)_ | Keep many same-shaped rows as a git-backed dataset: append-only JSONL as truth, a local SQLite cache for SQL. Use for "track X over time", "store these as a table", "query my jobs/prices/workouts", daily ingest scripts or durable machine state. Not for: prose notes, small Markdown tables, secrets. |
 
 Elsewhere:
 
@@ -245,7 +245,7 @@ _Interview drilling and job-search practice._
 
 | Skill | Does |
 |---|---|
-| [`interview-prep`](skills/interview-prep/SKILL.md) | Interview practice from the candidate's own resume and target-company notes: mocks, STAR answers, system-design walkthroughs, timed DSA reps by due pattern, debriefs of real interviews. Use for "mock interview", "give me a rep", "what's due", "I just had an interview". Not for: live or mock coding rounds as they happen, resume writing, job hunting. |
+| [`interview-prep`](rarely-used/interview-prep/SKILL.md) _(rarely used)_ | Interview practice from the candidate's own resume and target-company notes: mocks, STAR answers, system-design walkthroughs, timed DSA reps by due pattern, debriefs of real interviews. Use for "mock interview", "give me a rep", "what's due", "I just had an interview". Not for: live or mock coding rounds as they happen, resume writing, job hunting. |
 
 Elsewhere:
 
