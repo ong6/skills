@@ -1,57 +1,22 @@
-# Guides to fetch
+# What the current guides say
 
-Read the pages for the model and harness you are running on before editing. Use the host's web
-fetch tool or the repo's own web skill. Most of these sites serve Markdown when `.md` is appended
-to the URL, and each has an `llms.txt` index for finding a page that moved.
+This file is the fetch. A pass reads the digest and does not open the web; fetching the pages on
+every run costs more than the rest of the pass. Refresh it only when the user asks ("refresh
+guides"): read the sources below for the model in use, update the digest, and keep the covered
+line current.
+
+Covered: Claude Fable 5.2 and Claude Opus 5.5 in Claude Code, and Codex with the GPT-6.2 family,
+read in November 2026. On another model, use the digest as it stands and say in the report that
+the model is not covered.
 
 ## Contents
 
-- [Find your model's page](#find-your-models-page)
-- [Sources](#sources)
-- [Digest](#digest): what the guides said when this file was last checked
+- [Digest](#digest)
 - [Where the guides disagree or are silent](#where-the-guides-disagree-or-are-silent)
-
-## Find your model's page
-
-- **Claude.** The prompting best-practices page has a table that maps each model to its own
-  prompting page. Read the general page and the page for the model named in your system prompt.
-  When the repository's prompts are run by other models too (subagents, a cheaper tier), read
-  those pages as well: advice differs between tiers.
-- **OpenAI.** The "latest model" guide names the current family and links its prompting guidance;
-  the Codex docs have a prompting page per model.
-- **Another vendor or harness.** Search its docs for the prompting guide and the instruction-file
-  page, and treat the lists below as the questions to answer.
-
-## Sources
-
-| Area | URL | Applies to |
-|---|---|---|
-| Prompting, general and per-model table | https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices | Claude |
-| Manuals: CLAUDE.md, AGENTS.md, rules, imports, limits | https://code.claude.com/docs/en/memory | Claude Code |
-| What belongs in a manual; habits to stop | https://code.claude.com/docs/en/best-practices | Claude Code |
-| Skills: frontmatter, listing budget, lifecycle | https://code.claude.com/docs/en/skills | Claude Code |
-| Subagents: what they see, descriptions | https://code.claude.com/docs/en/sub-agents | Claude Code |
-| Hooks: session-start context and its cap | https://code.claude.com/docs/en/hooks | Claude Code |
-| What loads when; what survives compaction | https://code.claude.com/docs/en/context-window | Claude Code |
-| Skill authoring | https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices | Claude |
-| Agent Skills spec | https://agentskills.io/specification | any |
-| AGENTS.md format | https://agents.md | any |
-| Writing an effective AGENTS.md (format steward's blog) | https://aaif.io/blog/writing-an-effective-agents-md | any |
-| Codex AGENTS.md: discovery order, byte cap | https://developers.openai.com/codex/guides/agents-md | Codex |
-| Codex skills | https://developers.openai.com/codex/skills | Codex |
-| Current OpenAI model guidance | https://developers.openai.com/api/docs/guides/latest-model | OpenAI |
-| Context engineering; delegation briefs | https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents and https://www.anthropic.com/engineering/multi-agent-research-system | any |
-| Indexes | https://code.claude.com/docs/llms.txt, https://platform.claude.com/llms.txt, https://developers.openai.com/llms.txt | |
-
-Some of these redirect; follow the redirect and use the page it lands on. Hosts may also ship
-their own auditors (Claude Code has `/doctor`, a prompt audit and `claude plugin validate`; the
-skills spec has `skills-ref validate`). When one exists, suggest it or run it rather than
-re-deriving its checks.
+- [Sources](#sources), for a refresh
 
 ## Digest
 
-A fallback for when a page cannot be fetched, and a list of what to look for when it can. The
-live page outranks this section wherever they differ.
 
 **Manuals**
 - Keep/cut test: could the agent find this by reading the code, and would it go and look? If
@@ -104,3 +69,32 @@ live page outranks this section wherever they differ.
   layout is misleading.
 - **READMEs, repo layout and fresh-session handoffs** have no official guide. The defaults in
   surfaces.md and prompts.md are judgment; the repository's existing convention outranks them.
+
+## Sources
+
+| Area | URL | Applies to |
+|---|---|---|
+| Prompting, general and per-model table | https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices | Claude |
+| Manuals: CLAUDE.md, AGENTS.md, rules, imports, limits | https://code.claude.com/docs/en/memory | Claude Code |
+| What belongs in a manual; habits to stop | https://code.claude.com/docs/en/best-practices | Claude Code |
+| Skills: frontmatter, listing budget, lifecycle | https://code.claude.com/docs/en/skills | Claude Code |
+| Subagents: what they see, descriptions | https://code.claude.com/docs/en/sub-agents | Claude Code |
+| Hooks: session-start context and its cap | https://code.claude.com/docs/en/hooks | Claude Code |
+| What loads when; what survives compaction | https://code.claude.com/docs/en/context-window | Claude Code |
+| Skill authoring | https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices | Claude |
+| Agent Skills spec | https://agentskills.io/specification | any |
+| AGENTS.md format | https://agents.md | any |
+| Writing an effective AGENTS.md (format steward's blog) | https://aaif.io/blog/writing-an-effective-agents-md | any |
+| Codex AGENTS.md: discovery order, byte cap | https://developers.openai.com/codex/guides/agents-md | Codex |
+| Codex skills | https://developers.openai.com/codex/skills | Codex |
+| Current OpenAI model guidance | https://developers.openai.com/api/docs/guides/latest-model | OpenAI |
+| Context engineering; delegation briefs | https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents and https://www.anthropic.com/engineering/multi-agent-research-system | any |
+| Indexes | https://code.claude.com/docs/llms.txt, https://platform.claude.com/llms.txt, https://developers.openai.com/llms.txt | |
+
+Most of these sites serve Markdown when `.md` is appended to the URL. For Claude, the prompting
+page has a table that maps each model to its own page; for OpenAI, the latest-model guide names
+the current family. Some URLs redirect; use the page they land on. Hosts may also ship
+their own auditors (Claude Code has `/doctor`, a prompt audit and `claude plugin validate`; the
+skills spec has `skills-ref validate`). When one exists, suggest it or run it rather than
+re-deriving its checks.
+

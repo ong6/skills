@@ -1,5 +1,5 @@
 ---
-description: A kickoff prompt for another session reaches repo-cleanup
+description: A kickoff prompt for another session no longer reaches repo-cleanup
 tags: [trigger, repo-cleanup]
 max_turns: 4
 runs: 1

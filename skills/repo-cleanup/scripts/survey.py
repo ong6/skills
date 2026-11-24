@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
 """Survey a repository's agent-facing surface. Read-only, standard library only, never calls a model.
 
-    python3 survey.py /path/to/repo [--json]
+    python3 survey.py /path/to/repo [--json] [--mark]
 
-Prints what every session loads, the agent-facing files with sizes, and mechanical findings
-(broken links, paths that do not exist, text duplicated across manuals, emphasis and older-model
-phrasing, dated attributions, folders without an index). Findings are leads to check, not verdicts.
+Prints what every session loads, what changed since the last recorded pass, the agent-facing files
+with sizes, and mechanical findings (broken links, paths that do not exist, text duplicated across
+manuals, procedures and folder-specific rules sitting in the root manual, overlapping skill
+descriptions, emphasis and older-model phrasing, dated attributions, folders without an index).
+Findings are leads to check, not verdicts. --mark records this pass in the repository's git
+directory (never committed) so the next run can report what changed since.
 """
 import json
 import os
 import re
+import subprocess
 import sys
+import time
 
 SKIP_DIRS = {".git", "node_modules", ".venv", "venv", "__pycache__", "dist", "build", "target", ".next",
              ".pytest_cache", ".mypy_cache", "vendor", ".tox", ".idea", ".gradle", "Pods", ".terraform"}
@@ -126,6 +131,98 @@ def session_hooks(root):
                         out.append({"config": cfg, "event": event, "command": cmd[:200]})
     return out
 
+SKILL_ROOTS = (".claude/skills", ".agents/skills", ".codex/skills", "skills")
+STOP = set("this that with from when what your into over then than they them have will only also each uses used using user users skill skills agent agents not for the and use any ask asks asked make makes need needs want wants about should does page pages file files".split())
+
+
+def linked_skills(root, seen_real):
+    """Skills reached through a link folder. os.walk does not follow symlinked folders, so look here too."""
+    rows = []
+    for base in SKILL_ROOTS:
+        d = os.path.join(root, base)
+        if not os.path.isdir(d):
+            continue
+        for name in sorted(os.listdir(d)):
+            f = os.path.join(d, name, "SKILL.md")
+            if not os.path.isfile(f):
+                continue
+            real = os.path.realpath(f)
+            if real in seen_real:
+                seen_real[real]["links"] += 1
+                continue
+            text = read(f)
+            meta, body = frontmatter(text)
+            row = {"path": os.path.join(base, name, "SKILL.md"), "bytes": len(text.encode("utf-8")), "lines": text.count("\n") + 1,
+                   "tokens": tokens(text), "name": meta.get("name", ""), "description": meta.get("description", ""),
+                   "description_chars": len(meta.get("description", "")), "body_lines": body.count("\n") + 1, "links": 1,
+                   "outside_repo": not real.startswith(os.path.realpath(root) + os.sep)}
+            seen_real[real] = row
+            rows.append(row)
+    return rows
+
+
+def word_set(text):
+    return {re.sub(r"(ing|ed|es|s)$", "", w) for w in re.findall(r"[a-z][a-z0-9-]{3,}", text.lower()) if w not in STOP}
+
+
+def numbered_runs(text):
+    """Longest run of numbered steps in a file: a task procedure sitting in an always-loaded manual."""
+    best, start, count, first = (0, 0), 0, 0, 0
+    for n, line in enumerate(text.split("\n"), 1):
+        if re.match(r"\s*\d+[.)]\s+\S", line):
+            if count == 0:
+                first = n
+            count += 1
+            if count > best[0]:
+                best = (count, first)
+        elif line.strip() and not re.match(r"\s+\S", line):
+            count = 0
+    return best
+
+
+def git(root, *args):
+    try:
+        r = subprocess.run(["git", "-C", root] + list(args), capture_output=True, text=True, timeout=20)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return r.stdout.strip() if r.returncode == 0 else None
+
+
+def state_path(root):
+    d = git(root, "rev-parse", "--absolute-git-dir")
+    return os.path.join(d, "repo-cleanup.json") if d else None
+
+
+def since_last_pass(root, agent_files):
+    """What changed in the agent-facing surface since the pass recorded by --mark."""
+    sp = state_path(root)
+    if sp is None:
+        return {"status": "no git repository: treat this as a full pass"}
+    try:
+        with open(sp, encoding="utf-8") as fh:
+            st = json.load(fh)
+    except (OSError, ValueError):
+        return {"status": "no earlier pass recorded: treat this as a full pass"}
+    names = git(root, "diff", "--name-only", st.get("head", ""), "HEAD")
+    if names is None:
+        return {"status": "the earlier pass's commit is gone: treat this as a full pass", "last": st}
+    dirty = git(root, "status", "--porcelain") or ""
+    changed = set(n for n in names.split("\n") if n) | set(l[3:].split(" -> ")[-1].strip('"') for l in dirty.split("\n") if l.strip())
+    surface = set(agent_files)
+    hits = sorted(c for c in changed if c in surface or os.path.basename(c).lower() == "readme.md"
+                  or c.startswith((".claude/", ".codex/", ".agents/", ".cursor/", ".github/copilot")))
+    return {"status": "routine pass", "last": st, "changed_agent_facing": hits, "changed_total": len(changed)}
+
+
+def mark(root, loaded_tokens):
+    sp = state_path(root)
+    if sp is None:
+        return "not recorded (no git repository)"
+    st = {"head": git(root, "rev-parse", "HEAD") or "", "date": time.strftime("%Y-%m-%d"), "always_loaded_tokens": loaded_tokens}
+    with open(sp, "w", encoding="utf-8") as fh:
+        json.dump(st, fh)
+    return "recorded in %s" % sp
+
 
 def survey(root):
     files = list(walk(root))
@@ -141,12 +238,23 @@ def survey(root):
             manuals.append(row)
         elif base == "SKILL.md":
             meta, body = frontmatter(text)
-            row.update(name=meta.get("name", ""), description_chars=len(meta.get("description", "")), body_lines=body.count("\n") + 1)
+            row.update(name=meta.get("name", ""), description=meta.get("description", ""), description_chars=len(meta.get("description", "")),
+                       body_lines=body.count("\n") + 1, links=1, outside_repo=False)
             skills.append(row)
         elif base.lower() == "readme.md":
             readmes.append(row)
         elif PROMPT_HINT.search(f):
             prompts.append(row)
+
+    seen_real = {os.path.realpath(os.path.join(root, s["path"])): s for s in skills}
+    skills.extend(linked_skills(root, seen_real))
+
+    by_name = {}
+    for sk in list(skills):
+        first = by_name.setdefault(sk.get("name") or sk["path"], sk)
+        if first is not sk and first.get("description") == sk.get("description"):
+            first["links"] = first.get("links", 1) + 1
+            skills.remove(sk)
 
     root_manuals = [m for m in manuals if "/" not in m["path"] or m["path"].startswith((".claude/CLAUDE.md", ".claude/rules/", ".github/"))]
     loaded, seen = [], set()
@@ -159,8 +267,25 @@ def survey(root):
     listing = sum(s["description_chars"] + len(s["name"]) for s in skills)
 
     findings = {"broken_links": [], "missing_paths": [], "emphasis": [], "older_model_phrasing": [], "dated_or_attributed": [],
-                "duplicated_across_manuals": [], "oversize": [], "folders_without_index": [], "unlinked_from_index": []}
-    agent_facing = [m["path"] for m in manuals] + [s["path"] for s in skills] + [p["path"] for p in prompts]
+                "duplicated_across_manuals": [], "procedure_in_root_manual": [], "folder_rules_in_root_manual": [],
+                "overlapping_skill_descriptions": [], "oversize": [], "folders_without_index": [], "unlinked_from_index": []}
+    agent_facing = [m["path"] for m in manuals] + [s["path"] for s in skills if not s.get("outside_repo")] + [p["path"] for p in prompts]
+    tops = sorted(d for d in os.listdir(root) if os.path.isdir(os.path.join(root, d)) and not d.startswith(".") and d not in SKIP_DIRS)
+    for m in root_manuals:
+        text = read(os.path.join(root, m["path"]))
+        n, first = numbered_runs(text)
+        if n >= 8:
+            findings["procedure_in_root_manual"].append("%s:%d a %d-step procedure loads every session (a skill or a linked doc would load it on demand)" % (m["path"], first, n))
+        for d in tops:
+            hits = sum(1 for line in text.split("\n") if re.search(r"(^|[\s`(])%s/" % re.escape(d), line))
+            if hits >= 4 and not os.path.exists(os.path.join(root, d, os.path.basename(m["path"]))):
+                findings["folder_rules_in_root_manual"].append("%s: %d lines about `%s/` (a manual in that folder loads only when working there)" % (m["path"], hits, d))
+    named = [s for s in skills if s.get("description")]
+    for i, a in enumerate(named):
+        for b in named[i + 1:]:
+            wa, wb = word_set(a["description"]), word_set(b["description"])
+            if wa and wb and len(wa & wb) / float(len(wa | wb)) >= 0.4:
+                findings["overlapping_skill_descriptions"].append("%s and %s (%d%% of their words shared)" % (a["name"] or a["path"], b["name"] or b["path"], round(100.0 * len(wa & wb) / len(wa | wb))))
     for f in agent_facing + [r["path"] for r in readmes]:
         text = read(os.path.join(root, f))
         for n, t in broken_links(root, f, text):
@@ -218,7 +343,10 @@ def survey(root):
             lost = [n for n in others if n not in text]
             if lost and len(lost) <= 12:
                 findings["unlinked_from_index"].append("%s: %s" % (os.path.join(d, index), ", ".join(lost)))
-    return {"root": os.path.abspath(root), "always_loaded": {"files": loaded, "tokens": sum(x["tokens"] for x in loaded),
+    for sk in skills:
+        sk.pop("description", None)
+    return {"root": os.path.abspath(root), "since_last_pass": since_last_pass(root, agent_facing),
+            "always_loaded": {"files": loaded, "tokens": sum(x["tokens"] for x in loaded),
             "skill_listing_chars": listing, "session_hooks": session_hooks(root)},
             "manuals": manuals, "skills": skills, "prompts_and_briefs": prompts, "readmes": readmes, "findings": findings}
 
@@ -230,6 +358,13 @@ def render(r):
     out += ["- %s (~%d tokens)" % (f["path"], f["tokens"]) for f in r["always_loaded"]["files"]]
     for h in r["always_loaded"]["session_hooks"]:
         out.append("- hook %s in %s: `%s` (its output is loaded too; run it to measure)" % (h["event"], h["config"], h["command"]))
+    sl = r["since_last_pass"]
+    out += ["", "## Since the last pass", sl["status"].capitalize() + "."]
+    if sl.get("last"):
+        out.append("Last pass %s at %s, when the manuals loaded ~%s tokens." % (sl["last"].get("date"), (sl["last"].get("head") or "")[:8], sl["last"].get("always_loaded_tokens")))
+    if "changed_agent_facing" in sl:
+        out.append("%d files changed since, %d of them agent-facing:" % (sl["changed_total"], len(sl["changed_agent_facing"])))
+        out += ["- " + c for c in sl["changed_agent_facing"][:40]] or ["- none"]
     for title, key in (("Manuals", "manuals"), ("Skills", "skills"), ("Prompts, briefs and handoffs", "prompts_and_briefs"), ("READMEs", "readmes")):
         rows = r[key]
         out += ["", "## %s (%d)" % (title, len(rows))]
@@ -241,6 +376,10 @@ def render(r):
                 extra += "; symlink"
             if "description_chars" in row:
                 extra += "; description %d chars" % row["description_chars"]
+                if row.get("links", 1) > 1:
+                    extra += "; linked from %d folders" % row["links"]
+                if row.get("outside_repo"):
+                    extra += "; lives outside this repository"
             out.append("- %s: %d lines, ~%d tokens%s" % (row["path"], row["lines"], row["tokens"], extra))
         if len(rows) > 40:
             out.append("- ... %d more (use --json for all)" % (len(rows) - 40))
@@ -261,6 +400,8 @@ def render(r):
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     if not args or not os.path.isdir(args[0]):
-        sys.exit("usage: survey.py /path/to/repo [--json]")
+        sys.exit("usage: survey.py /path/to/repo [--json] [--mark]")
     result = survey(args[0])
     print(json.dumps(result, indent=1) if "--json" in sys.argv else render(result))
+    if "--mark" in sys.argv:
+        print("\nPass %s." % mark(args[0], result["always_loaded"]["tokens"]))

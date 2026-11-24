@@ -101,5 +101,5 @@ record too: it keeps its stale paths and old wording.
 - Before removing a file, search for references to it, in this repository and in any sibling
   repository the manual says depends on it.
 - A move is finished when links resolve from both ends and the index one level up is updated.
-- Git history rewrites, force pushes, branch deletion and anything published are the user's
-  decision each time.
+- Merged or abandoned local branches and stale worktrees are fair to remove. Git history rewrites,
+  force pushes and anything published are the user's decision each time.
