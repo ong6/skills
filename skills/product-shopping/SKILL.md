@@ -3,9 +3,11 @@ name: product-shopping
 description: >-
   Recommend what to buy, judge an item the owner is looking at in a shop (a photo of a price tag,
   shelf card or product counts), find the best legitimate price or price history for a chosen
-  model, compare landed cost across countries in SGD, or say where to buy it. Use for "which X
-  should I get", "is X worth it", "I'm in the shop looking at X", "is this a good deal", "should I
-  buy this overseas", "where can I buy X". Not for: property (evaluate-condo).
+  model, compare landed cost across countries in SGD, say where to buy it, or record what was
+  bought. Use for "which X should I get", "what kind of X should I buy", "what do I need to buy
+  for X", "is X worth it", "I'm in the shop looking at X", "is this a good deal", "should I buy
+  this overseas", "where can I buy X", "I bought X", "reconcile what I bought today". Not for:
+  property (evaluate-condo), tidying shopping notes, brokers or investments.
 ---
 
 # Compare Products

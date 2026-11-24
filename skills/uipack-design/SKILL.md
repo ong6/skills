@@ -1,12 +1,14 @@
 ---
 name: uipack-design
 description: >-
-  Build, restyle or review a visual in the owner's UiPack design system: slides or a talk deck, a
-  landing, product, docs or dashboard page, a diagram for a site or article, a motion explainer or
-  a 3D hero, its copy, or a site's style spec. Use for "make slides", "landing page", "in our
-  style", "on brand", "use uipack", "swap the style", "make it not look AI-generated", "new site",
-  "review this page", or any visual in a repo that depends on uipack. Not for: data charts alone
-  (dataviz), a UX audit alone (ux-design), Blender installs.
+  Build, restyle, fix or review a visual in the owner's UiPack design system: slides, a
+  presentation or a talk deck, a landing, product, docs or dashboard page, a diagram for a site or
+  article, a motion explainer or a 3D hero, its copy, or a site's style spec. Use for "make
+  slides", "a presentation for X", "landing page", "in our style", "on brand", "use uipack", "swap
+  the style", "make it not look AI-generated", "new site", "review this page", "improve the UI of
+  my site", "this page looks off" (width, spacing, alignment), work on UiPack itself, or any
+  visual in a repo that depends on uipack, such as the owner's personal site and blog. Not for:
+  opening a preview, data charts alone (dataviz), a UX audit alone (ux-design), Blender installs.
 ---
 
 # UiPack design (router)

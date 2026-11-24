@@ -2,9 +2,10 @@
 name: 3d-design
 description: >-
   Choose and run a 3D workflow (Blender, Three.js, CSS, model-viewer and others) for
-  illustrations, models, character animation and interactive web scenes. Use for "3D design",
-  "model this", "Blender or Three.js", "seamless loop", "make the movement natural". Not for: page
-  layout, 2D diagrams, Blender install issues.
+  illustrations, models, character animation and interactive web scenes, new or already on a page.
+  Use for "3D design", "model this", "Blender or Three.js", "seamless loop", "make the movement
+  natural", "improve the 3D elements on this page", "the 3D is laggy", a 3D floor plan or room
+  layout viewer. Not for: page layout, 2D diagrams, Blender install issues.
 ---
 
 # 3D design
