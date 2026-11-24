@@ -25,6 +25,8 @@ jobs:
         run: python3 tests/test_skills_cli.py
       - name: skillsmith tests (SKILL.md wording, eval and lifecycle gates)
         run: python3 -m unittest discover -s skills/skillsmith/tests -q
+      - name: web-extract tests (offline; the extractor is stubbed)
+        run: python3 skills/web-extract/tests/test_fetch.py
       - name: Public-safety guard
         run: python3 bin/skills guard skills/ && python3 bin/skills guard .
       - name: Lint every skill (skillsmith linter, when present)
