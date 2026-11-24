@@ -20,6 +20,7 @@ import sys
 SKIPPED = {"__pycache__", "tests", "evals", "node_modules", ".venv", "venv", ".DS_Store"}
 DECISIONS = ("keep", "retire", "restore")
 # Worst first: this is the order in which skills need the gate again.
+UNKNOWN = "unknown"
 STATES = ("never proven", "other model", "edited since proof", "current")
 
 
@@ -79,18 +80,20 @@ def stale(ledger: Path, roots: list[Path], models: list[str], usage: dict | None
     for name, folder in discover(roots).items():
         proof = latest.get(name)
         missing = sorted(set(models) - set(proof["models"])) if proof else sorted(models)
+        # A backfilled proof may carry no recoverable hash; then nothing can be said about edits.
+        edited = None if proof is None or proof["sha256"] == UNKNOWN else proof["sha256"] != skill_hash(folder)
         if proof is None:
             state = "never proven"
         elif missing:
             state = "other model"
-        elif proof["sha256"] != skill_hash(folder):
+        elif edited is not False:
             state = "edited since proof"
         else:
             state = "current"
         used = (usage or {}).get(name, {})
         rows.append({"skill": name, "state": state, "proven_on": proof["models"] if proof else [],
                      "proven_date": proof["date"] if proof else None, "unproven_models": missing,
-                     "edited": bool(proof) and proof["sha256"] != skill_hash(folder),
+                     "edited": edited,
                      "days_used": used.get("days_used", 0), "last_used": used.get("last"),
                      "path": str(folder)})
     rows.sort(key=lambda r: (STATES.index(r["state"]), -r["days_used"], r["skill"]))

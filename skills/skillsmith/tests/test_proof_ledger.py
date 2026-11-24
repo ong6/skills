@@ -85,6 +85,12 @@ class ProofLedgerTests(unittest.TestCase):
         ledger.record(self.book, folder, ["m"], "keep", "evals/b", "2026-01-02")
         self.assertEqual(2, len(json.loads(self.book.read_text())["proofs"]))
 
+    def test_a_proof_without_a_hash_cannot_vouch_for_current_content(self):
+        folder = skill(self.skills, "demo")
+        ledger.record(self.book, folder, ["m"], "keep", "evals/a", "2026-01-01", sha256="unknown")
+        row = ledger.stale(self.book, [self.skills], ["m"])[0]
+        self.assertEqual(("edited since proof", None), (row["state"], row["edited"]))
+
     def test_a_ledger_of_another_shape_is_refused(self):
         self.book.write_text('{"version": 9}')
         skill(self.skills, "demo")
