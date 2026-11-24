@@ -149,6 +149,7 @@ CI fails when they drift.
 | [`skill-search`](skills/skill-search/SKILL.md) | Find a skill for a job across loaded, rarely used, retired and external skills. |
 | [`skillsmith`](skills/skillsmith/SKILL.md) | Make a skill from the repo, then keep it only if it beats the same model without it. |
 | [`feedback-loop`](skills/feedback-loop/SKILL.md) | Record feedback and patch the skill or rule that caused it in the same session. |
+| [`repo-cleanup`](skills/repo-cleanup/SKILL.md) | Audit and fix a repo's agent manuals, skills, prompts, READMEs and structure against the current guides, and write short briefs for other sessions. |
 <!-- SKILL INDEX END -->
 
 ## Catalog
@@ -268,6 +269,7 @@ _Making, testing and improving the skills themselves._
 | [`skill-search`](skills/skill-search/SKILL.md) | Find whether a skill exists for a job, including unloaded ones: rarely used, retired (private archive) and external skills in the catalog. Use for "do we have a skill for...", "is there a skill like X", or a skill named but not loaded. Not for: writing or revising a skill (skillsmith). |
 | [`skillsmith`](skills/skillsmith/SKILL.md) | Make or revise an agent skill grounded in the current repo, then prove it beats the same model without it: gate, inventory, draft, lint, blinded baseline-vs-skill eval, keep or retire. Use to add, write, revise, merge, review or prove a skill, or to turn the work of a session into one ("skillify this", "make that a skill"). Not for: typo-only edits, AGENTS.md rules, hooks. |
 | [`feedback-loop`](skills/feedback-loop/SKILL.md) | Log the owner's feedback on how the agent, a skill, hook, rule or reply behaved in feedback.md, and patch its target in the same session. Fires on "don't do X", "stop doing", "next time", "I prefer", "that was wrong", "always"/"never" about the agent. Not for: feedback on the owner's writing or a one-off instruction. |
+| [`repo-cleanup`](skills/repo-cleanup/SKILL.md) | Reviews and cleans up what agents read in a repository: AGENTS.md and CLAUDE.md manuals, skills, prompts, READMEs, docs layout and folder structure, checked against the current official guides for the running model, then fixed. Also trims what every session loads, and writes or shortens a kickoff prompt, brief or handoff for another session. Use for "clean up this repo", "tidy the agent docs", "audit AGENTS.md", "make the repo easier for agents", "session context is too heavy", "clean up this prompt", "write a prompt for a new session", "write a handoff". Not for: freeing disk space, tidying downloads, lists or note content, closing shells and worktrees, a code refactor with no docs angle, writing a new skill, or logging feedback about agent behaviour. |
 
 Elsewhere:
 

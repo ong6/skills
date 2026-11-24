@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repo cleanup"
+  short_description: "Audit and fix a repo's agent manuals, skills, prompts, READMEs and structure against current guides"
+  default_prompt: "Use $repo-cleanup to review this repository's agent-facing docs and structure and fix what it finds."
