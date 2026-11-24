@@ -1,7 +1,7 @@
 #!/usr/bin/env -S uv run --quiet --script
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["httpx", "readabilipy", "markdownify", "protego"]
+# dependencies = ["httpx", "trafilatura>=2.0", "markdownify", "protego"]
 # ///
 """Read one page that sits behind a Cloudflare browser challenge, through a local FlareSolverr.
 
@@ -35,7 +35,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from fetch import MIN_USEFUL_CHARS, UA_AUTONOMOUS, blocked_host, html_to_markdown, robots_url  # noqa: E402
+from fetch import MIN_USEFUL_CHARS, UA_AUTONOMOUS, ExtractError, blocked_host, html_to_markdown, robots_url  # noqa: E402
 
 IMAGE = "ghcr.io/flaresolverr/flaresolverr:v3.5.2"
 CONTAINER = "web-extract-flaresolverr"
@@ -161,7 +161,10 @@ def read(base: str, a) -> int:
         raise FlareError("challenge", "the page returned is still the challenge screen; a human has to pass it, or try Wayback.", 4)
     if status >= 400:
         raise FlareError("error", f"{a.url} returned status {status}", 2)
-    content = raw if a.raw else html_to_markdown(raw)
+    try:
+        content = raw if a.raw else html_to_markdown(raw, sol.get("url") or a.url)
+    except ExtractError as e:
+        raise FlareError("error", f"readable extraction failed ({e}); re-run with --raw, or try Wayback.", 2) from e
     total = len(content)
     if not a.raw and len(content.strip()) < MIN_USEFUL_CHARS:
         raise FlareError("thin", f"only {total} readable characters came back; re-run with --raw, or try Wayback.", 3)
