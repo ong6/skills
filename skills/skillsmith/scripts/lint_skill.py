@@ -38,6 +38,14 @@ INSTALL_HINT = re.compile(
     r"pip3? install|uv (?:run|pip|tool)|pipx|brew install|npm (?:i|install)|npx |"
     r"requirements\.txt|auto-?install|bootstraps?|venv", re.IGNORECASE)
 INLINE_DEPENDENCIES = re.compile(r"^# /// script$", re.MULTILINE)
+# Claude Code shows description plus when_to_use in the skill listing, cut at this many characters.
+MAX_LISTING = 1536
+# Anthropic's prompting guide: models since Opus 4.5 follow the prompt closely, so wording written to
+# stop an older model under-triggering ("CRITICAL: You MUST...", "If in doubt, use...") now over-triggers.
+SHOUTED = re.compile(r"\b(?:CRITICAL|IMPORTANT|MUST(?: NOT)?|NEVER|ALWAYS|MANDATORY)\b")
+SHOUTED_LIMIT = 3
+OVERTRIGGER = re.compile(r"\b(?:if|when) in doubt,? (?:use|invoke|call|load|run|trigger)\b", re.IGNORECASE)
+FENCE = re.compile(r"^(```|~~~).*?^\1[^\n]*$", re.DOTALL | re.MULTILINE)
 PROHIBITION = re.compile(r"\b(?:not|never|don't|avoid)\b", re.IGNORECASE)
 # Modules the host application provides when it runs the script; pip cannot install them.
 HOST_MODULES = {"bpy", "bmesh", "mathutils", "bpy_extras", "gpu", "gpu_extras", "blf", "aud",
@@ -238,6 +246,19 @@ def lint(skill_dir: Path) -> tuple[list[str], list[str]]:
             warnings.append("description names no near-miss; add a 'not for ...' clause")
         if PERSONAL_VOICE.search(description):
             warnings.append("description should be third person ('Drafts...'), not 'I can' or 'you can'")
+
+    listing = len(description) + len(fields.get("when_to_use", ""))
+    if fields.get("when_to_use") and listing > MAX_LISTING:
+        warnings.append(f"description plus when_to_use is {listing} chars; Claude Code cuts the listing "
+                        f"at {MAX_LISTING}")
+    prose = FENCE.sub("", body)
+    shouted = SHOUTED.findall(prose)
+    if len(shouted) >= SHOUTED_LIMIT:
+        warnings.append(f"{len(shouted)} shouted directives ({', '.join(sorted(set(shouted)))}); current models "
+                        "over-apply emphasis written for older ones, so state the rule plainly with its reason")
+    if OVERTRIGGER.search(prose) or OVERTRIGGER.search(description):
+        warnings.append("'if in doubt, use ...' wording makes current models over-trigger; name the "
+                        "situations that should reach the skill instead")
 
     body_lines = len(body.splitlines())
     if body_lines > MAX_BODY_LINES:

@@ -142,6 +142,31 @@ class ReferenceLayoutTests(unittest.TestCase):
                 path.write_text(text, encoding="utf-8")
             return lint.lint(folder)
 
+    def test_shouted_directives_and_overtrigger_wording_warn(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            body = ("# Skill\n\nCRITICAL: You MUST run the check. NEVER skip it.\n"
+                    "If in doubt, use this skill.\n")
+            folder = write_skill(Path(tmp), "loud", "name: loud\ndescription: Use for x; not y.", body)
+            errors, warnings = lint.lint(folder)
+            self.assertEqual([], errors)
+            self.assertTrue(any("shouted directives" in w for w in warnings))
+            self.assertTrue(any("over-trigger" in w for w in warnings))
+
+    def test_plain_rules_and_fenced_output_do_not_warn(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            body = ("# Skill\n\nRun the check before saving, because a bad save is not undoable. "
+                    "One MUST is fine.\n\n```text\nCRITICAL MUST NEVER ALWAYS\n```\n")
+            folder = write_skill(Path(tmp), "calm", "name: calm\ndescription: Use for x; not y.", body)
+            _, warnings = lint.lint(folder)
+            self.assertFalse(any("shouted" in w or "over-trigger" in w for w in warnings))
+
+    def test_listing_cap_counts_when_to_use(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            front = "name: wide\ndescription: Use for x; not y.\nwhen_to_use: " + "trigger phrase " * 120
+            folder = write_skill(Path(tmp), "wide", front)
+            _, warnings = lint.lint(folder)
+            self.assertTrue(any("cuts the listing" in w for w in warnings))
+
     def test_long_reference_needs_a_contents_list(self):
         long_text = "# Guide\n" + "line\n" * 120
         _, warnings = self.lint_with("See [guide](references/guide.md).\n",
