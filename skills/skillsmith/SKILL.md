@@ -3,8 +3,8 @@ name: skillsmith
 description: >-
   Make or revise an agent skill grounded in the current repo, then prove it beats the same model
   without it: gate, inventory, draft, lint, blinded baseline-vs-skill eval, keep or retire. Use to
-  add, write, revise, merge, review or prove a skill. Not for: typo-only edits, AGENTS.md rules,
-  hooks.
+  add, write, revise, merge, review or prove a skill, or to turn the work of a session into one
+  ("skillify this", "make that a skill"). Not for: typo-only edits, AGENTS.md rules, hooks.
 ---
 
 # Skillsmith
@@ -147,6 +147,8 @@ in [references/research.md](references/research.md).
     validation. When the bound is exhausted, archive a new skill under the repository's documented
     no-delete policy. For a failed revision of an existing skill, restore the saved last proven
     version instead and retain the failed candidates and evidence outside active discovery.
+    Record every decision in the repo's proof ledger with `scripts/proof_ledger.py record`, naming
+    each model the gate ran on.
 11. **Report.** Give the decision, every attempted revision and the evidence-driven change it made,
     the stopping reason and bound, heldout sets retired or replaced, heldout scores and delta,
     score dispersion, per-case winners,
@@ -190,6 +192,13 @@ are documented in references/judge-contract.md. Evaluation artifacts may contain
 transcripts, and outputs; keep them out of public repositories unless reviewed.
 
     python3 scripts/lifecycle_gate.py --manifest lifecycle.json --evidence-root evaluation-directory
+
+    python3 scripts/proof_ledger.py stale --ledger proofs.json --skills /absolute/skills --model <model-id>
+
+The ledger holds one entry per gate decision: the skill's content hash, the models and the date.
+`stale` lists the skills on disk that are never proven, proven on another model or edited since,
+most used first when given `--usage`. Run it when the model that runs the skills changes, and
+re-gate from the top of the list.
 
 Paths above are relative to this skill's base directory.
 

@@ -118,6 +118,7 @@ Whenever a skill is edited, check it for:
 - **Staleness**: hardcoded dates, prices, versions, dead links, retired skill names.
 - **Size**: grown past a checklist, so split or cut.
 - **Model drift**: wording written for an older or weaker model can make a stronger one worse.
-  When the default model changes, rerun the gate and cut what it no longer needs.
+  When the default model changes, rerun the gate and cut what it no longer needs;
+  `scripts/proof_ledger.py stale` lists which skills that is.
 
 A material behavior change goes back through the prove half before it stays active.
